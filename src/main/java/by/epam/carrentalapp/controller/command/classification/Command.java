@@ -1,4 +1,4 @@
-package by.epam.carrentalapp.controller;
+package by.epam.carrentalapp.controller.command;
 
 public interface Command {
     void execute();
