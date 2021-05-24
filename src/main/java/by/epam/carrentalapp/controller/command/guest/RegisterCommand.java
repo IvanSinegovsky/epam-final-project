@@ -1,10 +1,10 @@
-package by.epam.carrentalapp.controller.command;
+package by.epam.carrentalapp.controller.command.guest;
 
 import by.epam.carrentalapp.controller.command.Command;
 
 public class RegisterCommand implements Command {
     @Override
-    public void execute() {
-
+    public String execute() {
+        return null;
     }
 }
