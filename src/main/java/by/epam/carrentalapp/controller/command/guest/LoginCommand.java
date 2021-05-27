@@ -12,4 +12,9 @@ public class LoginCommand implements Command {
     public String execute() {
         return path;
     }
+
+    //todo thats testing method
+    public void post() {
+
+    }
 }

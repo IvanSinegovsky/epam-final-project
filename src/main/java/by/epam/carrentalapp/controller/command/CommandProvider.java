@@ -1,5 +1,8 @@
 package by.epam.carrentalapp.controller.command;
 
+import by.epam.carrentalapp.controller.command.error.ErrorCommand;
+import by.epam.carrentalapp.controller.command.guest.CarCatalogCommand;
+import by.epam.carrentalapp.controller.command.guest.HomeCommand;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.controller.command.guest.RegisterCommand;
 import lombok.NoArgsConstructor;
@@ -14,6 +17,9 @@ public class CommandProvider {
     {
         titleToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
         titleToCommand.put(CommandTitle.REGISTER.name(), new RegisterCommand());
+        titleToCommand.put(CommandTitle.HOME.name(), new HomeCommand());
+        titleToCommand.put(CommandTitle.CAR_CATALOG.name(), new CarCatalogCommand());
+        titleToCommand.put(CommandTitle.ERROR.name(), new ErrorCommand());
     }
 
     public Command getCommand(String commandTitle) {

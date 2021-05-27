@@ -2,7 +2,6 @@ package by.epam.carrentalapp.controller;
 
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.CommandProvider;
-import by.epam.carrentalapp.dao.connection.ResultSetProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Optional;
 
 @WebServlet("/")
