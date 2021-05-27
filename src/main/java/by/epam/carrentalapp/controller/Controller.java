@@ -2,7 +2,7 @@ package by.epam.carrentalapp.controller;
 
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.CommandProvider;
-import by.epam.carrentalapp.dao.connection.DaoProvider;
+import by.epam.carrentalapp.dao.connection.ResultSetProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
@@ -34,12 +34,6 @@ public class Controller extends HttpServlet {
 
         if (commandOptional.isPresent()) {
             getServletContext().getRequestDispatcher(commandOptional.get().execute()).forward(req, resp);
-            DaoProvider daoProvider = new DaoProvider();
-            try {
-                daoProvider.executeQuery("SELECT * FROM users");
-            } catch (ClassNotFoundException | SQLException throwables) {
-                throwables.printStackTrace();
-            }
         } else {
             LOGGER.info("unknown command");
         }
