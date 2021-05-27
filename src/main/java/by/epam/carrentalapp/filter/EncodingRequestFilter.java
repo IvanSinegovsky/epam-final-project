@@ -4,10 +4,8 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import java.io.FileReader;
 import java.io.IOException;
 
-//фильтруется запрос, создается контроллер для конкретной команды
 @WebFilter("/*")
 public class EncodingRequestFilter implements Filter {
     private final Logger LOGGER = Logger.getLogger(EncodingRequestFilter.class);
