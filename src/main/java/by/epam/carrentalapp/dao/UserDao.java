@@ -1,4 +1,5 @@
 package by.epam.carrentalapp.dao;
 
-public class UserDao {
+public interface UserDao {
+    //todo all methods contracts like spring repo
 }

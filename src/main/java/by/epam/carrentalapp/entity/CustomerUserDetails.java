@@ -5,10 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class User {
+public class CustomerUserDetails {
+    private Long userDetailsId;
+    private String passportNumber;
+    private Integer rate;
     private Long userId;
-    private String email;
-    private String password;
-    private String name;
-    private String lastname;
 }

@@ -1,10 +1,10 @@
 package by.epam.carrentalapp.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@ToString
-@AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class Car {
     private Long carId;
     private String model;

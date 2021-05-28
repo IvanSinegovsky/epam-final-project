@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/")
+@WebServlet("/ ")
 public class Controller extends HttpServlet {
     private final Logger LOGGER = Logger.getLogger(Controller.class);
     private final CommandProvider commandProvider = new CommandProvider();
