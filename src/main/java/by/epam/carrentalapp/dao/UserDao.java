@@ -15,4 +15,5 @@ public interface UserDao {
 
     List<User> findAll();
     Optional<User> findByEmail(String emailToFind);
+    void save(User userToSave) throws Exception;
 }

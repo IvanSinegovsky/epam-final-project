@@ -1,7 +1,5 @@
 package by.epam.carrentalapp.dao.connection;
 
-import by.epam.carrentalapp.dao.connection.ConnectionBuilder;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -9,10 +7,11 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class PoolConnectionBuilder implements ConnectionBuilder {
+public class ConnectionPool {
     private DataSource dataSource;
+    private static ConnectionPool connectionPool;
 
-    public PoolConnectionBuilder() {
+    public ConnectionPool() {
         try {
             Context ctx = new InitialContext();
             dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/CarRentalApp");
@@ -21,8 +20,7 @@ public class PoolConnectionBuilder implements ConnectionBuilder {
         }
     }
 
-    @Override
-    public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+    public static Connection getConnection() throws SQLException {
+        return connectionPool.dataSource.getConnection();
     }
 }

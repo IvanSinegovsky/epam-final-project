@@ -1,42 +1,38 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.UserDao;
-import by.epam.carrentalapp.dao.connection.ResultSetProvider;
-import by.epam.carrentalapp.dao.impl.query.QuerySupporter;
-import by.epam.carrentalapp.dao.impl.query.UserQuery;
+import by.epam.carrentalapp.dao.connection.ConnectionPool;
+import by.epam.carrentalapp.dao.query.UserQuery;
 import by.epam.carrentalapp.entity.User;
 import org.apache.log4j.Logger;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//todo close all preparedResultSet
 public class UserDaoImpl implements UserDao {
     private final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
 
     @Override
     public List<User> findAll() {
         List<User> allUsers = new ArrayList<>();
-        Optional<ResultSet> usersOptional = ResultSetProvider.executeQuery(UserQuery.SELECT_ALL_FROM_USERS.getQuery());
 
-        if (usersOptional.isPresent()) {
-            ResultSet users = usersOptional.get();
+        try(Statement statement = ConnectionPool.getConnection().createStatement();
+            ResultSet usersResultSet = statement.executeQuery(UserQuery.SELECT_ALL_FROM_USERS.getQuery())) {
 
-            try {
-                while (users.next()){
-                    Long userId = users.getLong(USER_ID_COLUMN_NAME);
-                    String email = users.getString(EMAIL_COLUMN_NAME);
-                    String password = users.getString(PASSWORD_COLUMN_NAME);
-                    String name = users.getString(NAME_COLUMN_NAME);
-                    String lastname = users.getString(LASTNAME_COLUMN_NAME);
+            while (usersResultSet.next()){
+                Long userId = usersResultSet.getLong(USER_ID_COLUMN_NAME);
+                String email = usersResultSet.getString(EMAIL_COLUMN_NAME);
+                String password = usersResultSet.getString(PASSWORD_COLUMN_NAME);
+                String name = usersResultSet.getString(NAME_COLUMN_NAME);
+                String lastname = usersResultSet.getString(LASTNAME_COLUMN_NAME);
 
-                    allUsers.add(new User(userId, email, password, name, lastname));
-                }
-            } catch (SQLException e) {
-                LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
+                allUsers.add(new User(userId, email, password, name, lastname));
             }
+        } catch (SQLException e) {
+            LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
         }
 
         return allUsers;
@@ -45,27 +41,46 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findByEmail(String emailToFind) {
         Optional<User> userOptional = Optional.empty();
-        Optional<ResultSet> userResultSetOptional = ResultSetProvider.executeQuery(
-                UserQuery.SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS.getQuery()
-                        + QuerySupporter.wrapBySingleQuotes(emailToFind)
-        );
 
-        if (userResultSetOptional.isPresent()) {
-            ResultSet user = userResultSetOptional.get();
+        try(PreparedStatement preparedStatement = ConnectionPool.getConnection()
+                .prepareStatement(UserQuery.SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS.getQuery())) {
+            preparedStatement.setString(1, emailToFind);
 
-            try {
-                Long userId = user.getLong(USER_ID_COLUMN_NAME);
-                String email = user.getString(EMAIL_COLUMN_NAME);
-                String password = user.getString(PASSWORD_COLUMN_NAME);
-                String name = user.getString(NAME_COLUMN_NAME);
-                String lastname = user.getString(LASTNAME_COLUMN_NAME);
+            ResultSet userResultSet = preparedStatement.executeQuery();
 
-                userOptional = Optional.of(new User(userId, email, password, name, lastname));
-            } catch (SQLException e) {
-                LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
-            }
+            Long userId = userResultSet.getLong(USER_ID_COLUMN_NAME);
+            String email = userResultSet.getString(EMAIL_COLUMN_NAME);
+            String password = userResultSet.getString(PASSWORD_COLUMN_NAME);
+            String name = userResultSet.getString(NAME_COLUMN_NAME);
+            String lastname = userResultSet.getString(LASTNAME_COLUMN_NAME);
+
+            userOptional = Optional.of(new User(userId, email, password, name, lastname));
+        } catch (SQLException e) {
+            LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
         }
 
         return userOptional;
+    }
+
+    @Override
+    public void save(User userToSave) throws Exception {
+        try(PreparedStatement preparedStatement = ConnectionPool.getConnection()
+                .prepareStatement(UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, userToSave.getEmail());
+            preparedStatement.setString(2, userToSave.getPassword());
+            preparedStatement.setString(3, userToSave.getName());
+            preparedStatement.setString(4, userToSave.getLastname());
+
+            ResultSet userResultSet = preparedStatement.executeQuery();
+
+            if (userResultSet != null && userResultSet.next()) {
+                userResultSet.getLong(USER_ID_COLUMN_NAME);
+            } else {
+                //todo change to custom exception
+                throw new Exception("Cannot insert user in DB");
+            }
+        } catch (SQLException e) {
+            LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
+        }
     }
 }
