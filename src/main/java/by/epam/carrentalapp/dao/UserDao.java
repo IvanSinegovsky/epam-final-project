@@ -11,9 +11,8 @@ public interface UserDao {
     String PASSWORD_COLUMN_NAME = "password";
     String NAME_COLUMN_NAME = "name";
     String LASTNAME_COLUMN_NAME = "lastname";
-    //todo all methods contracts like spring repo
 
     List<User> findAll();
     Optional<User> findByEmail(String emailToFind);
-    void save(User userToSave) throws Exception;
+    Long save(User userToSave);
 }

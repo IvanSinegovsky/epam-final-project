@@ -63,7 +63,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void save(User userToSave) throws Exception {
+    public Long save(User userToSave) {
+        Long savedUserId = null;
+
         try(PreparedStatement preparedStatement = ConnectionPool.getConnection()
                 .prepareStatement(UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, userToSave.getEmail());
@@ -74,13 +76,12 @@ public class UserDaoImpl implements UserDao {
             ResultSet userResultSet = preparedStatement.executeQuery();
 
             if (userResultSet != null && userResultSet.next()) {
-                userResultSet.getLong(USER_ID_COLUMN_NAME);
-            } else {
-                //todo change to custom exception
-                throw new Exception("Cannot insert user in DB");
+                savedUserId = userResultSet.getLong(USER_ID_COLUMN_NAME);
             }
         } catch (SQLException e) {
             LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
         }
+
+        return savedUserId;
     }
 }

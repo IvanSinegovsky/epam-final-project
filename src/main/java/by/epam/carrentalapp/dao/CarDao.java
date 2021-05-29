@@ -10,6 +10,5 @@ public interface CarDao {
     String NUMBER_COLUMN_NAME = "number";
     String HOURLY_COST_COLUMN_NAME = "hourly_cost";
 
-    //todo all methods contracts like spring repo
     List<Car> findAll();
 }
