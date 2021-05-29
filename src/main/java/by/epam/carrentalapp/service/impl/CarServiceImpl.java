@@ -10,13 +10,13 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
     private final CarDao carDao;
 
-    {
+    public CarServiceImpl() {
         carDao = DaoFactory.getCarDao();
     }
 
     @Override
     public List<Car> getAllCars() {
         //todo add handle logic
-        return carDao.getAll();
+        return carDao.findAll();
     }
 }

@@ -6,10 +6,10 @@ import java.sql.*;
 import java.util.Optional;
 
 public class ResultSetProvider {
-    private final Logger LOGGER = Logger.getLogger(ResultSetProvider.class);
-    private final PoolConnectionBuilder poolConnectionBuilder = new PoolConnectionBuilder();
+    private static final Logger LOGGER = Logger.getLogger(ResultSetProvider.class);
+    private static final PoolConnectionBuilder poolConnectionBuilder = new PoolConnectionBuilder();
 
-    public Optional<ResultSet> executeQuery(String query) {
+    public static Optional<ResultSet> executeQuery(String query) {
         Optional<ResultSet> resultSet = Optional.empty();
 
         try {
