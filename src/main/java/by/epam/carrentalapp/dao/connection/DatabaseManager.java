@@ -15,7 +15,7 @@ public class DatabaseManager {
     }
 
     public static String getProperty(String key) {
-        LOGGER.info("key to property -> " + key);
+        LOGGER.info("Key for properties file " + key);
 
         if (resourceBundle == null) {
             init();
@@ -24,7 +24,7 @@ public class DatabaseManager {
         try {
             return resourceBundle.getString(key);
         } catch (MissingResourceException e) {
-            throw new RuntimeException("couldn't load resources, no object for the given key can be found", e);
+            throw new RuntimeException("No object for the given key found", e);
         }
     }
 
@@ -32,7 +32,7 @@ public class DatabaseManager {
         try {
             resourceBundle = ResourceBundle.getBundle(DB_CONFIG_PATH);
         } catch (MissingResourceException e) {
-            throw new RuntimeException("couldn't load resources, no resource bundle for the specified base name can be found", e);
+            throw new RuntimeException("Cannot read valid file by properties file path", e);
         }
     }
 
