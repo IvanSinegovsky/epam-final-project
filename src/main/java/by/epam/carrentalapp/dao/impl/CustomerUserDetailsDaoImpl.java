@@ -2,6 +2,7 @@ package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
+import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.CustomerUserDetailsQuery;
 import by.epam.carrentalapp.entity.CustomerUserDetails;
 import org.apache.log4j.Logger;
@@ -16,8 +17,10 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
 
     @Override
     public void save(CustomerUserDetails customerUserDetails) throws Exception {
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(CustomerUserDetailsQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS)) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    CustomerUserDetailsQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+            )) {
             preparedStatement.setString(1, customerUserDetails.getPassportNumber());
             preparedStatement.setInt(2, customerUserDetails.getRate());
             preparedStatement.setLong(3, customerUserDetails.getUserId());

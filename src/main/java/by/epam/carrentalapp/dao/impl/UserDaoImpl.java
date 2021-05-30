@@ -3,6 +3,7 @@ package by.epam.carrentalapp.dao.impl;
 import by.epam.carrentalapp.dao.UserDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
+import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.UserQuery;
 import by.epam.carrentalapp.entity.User;
 import org.apache.log4j.Logger;
@@ -67,8 +68,10 @@ public class UserDaoImpl implements UserDao {
     public Long save(User userToSave) {
         Long savedUserId = null;
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS)) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+            )) {
             preparedStatement.setString(1, userToSave.getEmail());
             preparedStatement.setString(2, userToSave.getPassword());
             preparedStatement.setString(3, userToSave.getName());

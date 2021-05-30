@@ -3,6 +3,7 @@ package by.epam.carrentalapp.dao.impl;
 import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
+import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.RoleQuery;
 import by.epam.carrentalapp.entity.Role;
 import org.apache.log4j.Logger;
@@ -19,8 +20,9 @@ public class RoleDaoImpl implements RoleDao {
     public Optional<Role> findByRoleId(Long roleIdToFind) {
         Optional<Role> roleOptional = Optional.empty();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_ID_EQUALS.getQuery())) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_ID_EQUALS.getQuery())) {
             preparedStatement.setLong(1, roleIdToFind);
 
             ResultSet roleResultSet = preparedStatement.executeQuery();

@@ -4,6 +4,7 @@ import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.UsersRolesDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
+import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.UsersRolesQuery;
 import org.apache.log4j.Logger;
 
@@ -19,10 +20,11 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
 
     @Override
     public void save(Long userId, Long roleId) {
-        try (PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection().prepareStatement(
+        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
                 UsersRolesQuery.INSERT_INTO_USERS_ROLES.getQuery(),
-                Statement.RETURN_GENERATED_KEYS)
-        ) {
+                Statement.RETURN_GENERATED_KEYS
+             )) {
             preparedStatement.setLong(1, userId);
             preparedStatement.setLong(2, roleId);
 
@@ -40,8 +42,10 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
     public List<Long> findRoleIdsByUserId(Long userIdToFind) {
         List<Long> userRoleIds = new ArrayList<>();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(UsersRolesQuery.SELECT_ALL_FROM_USERS_ROLES_WHERE_USER_ID_EQUALS.getQuery())) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        UsersRolesQuery.SELECT_ALL_FROM_USERS_ROLES_WHERE_USER_ID_EQUALS.getQuery()
+                )) {
             preparedStatement.setLong(1, userIdToFind);
 
             ResultSet userResultSet = preparedStatement.executeQuery();
