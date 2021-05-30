@@ -1,7 +1,9 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.CarDao;
+import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
+import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.CarQuery;
 import by.epam.carrentalapp.entity.Car;
 import org.apache.log4j.Logger;
@@ -16,8 +18,10 @@ public class CarDaoImpl implements CarDao {
     private final Logger LOGGER = Logger.getLogger(CarDaoImpl.class);
 
     public List<Car> findAll() {
+        LOGGER.info("CarDaoImpl started getting cars");
         List<Car> allCars = new ArrayList<>();
-        try(Statement statement = ConnectionPool.getConnection().createStatement();
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            Statement statement = connection.createStatement();
             ResultSet carsResultSet = statement.executeQuery(CarQuery.SELECT_ALL_FROM_CARS.getQuery())) {
 
             while (carsResultSet.next()){
@@ -26,9 +30,11 @@ public class CarDaoImpl implements CarDao {
                 String number = carsResultSet.getString(NUMBER_COLUMN_NAME);
                 Double hourlyCost = carsResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
 
-                allCars.add(new Car(carId, model, number, hourlyCost));
+                Car newCar = new Car(carId, model, number, hourlyCost);
+                allCars.add(newCar);
+                LOGGER.info("CarDaoImpl started getting cars ->" + newCar.toString());
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConnectionException e) {
             LOGGER.error("CarDao: cannot extract car from ResultSet.");
         }
 

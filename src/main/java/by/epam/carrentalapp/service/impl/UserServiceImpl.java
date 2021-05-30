@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.service.impl;
 
-import by.epam.carrentalapp.DaoException;
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.*;
 import by.epam.carrentalapp.dao.provider.DaoFactory;
 import by.epam.carrentalapp.dto.LoginUserDto;

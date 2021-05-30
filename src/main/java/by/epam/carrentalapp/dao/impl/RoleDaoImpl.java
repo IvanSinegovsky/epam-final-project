@@ -1,6 +1,7 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.RoleDao;
+import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.query.RoleQuery;
 import by.epam.carrentalapp.entity.Role;
@@ -18,13 +19,13 @@ public class RoleDaoImpl implements RoleDao {
     public Optional<Role> findByRoleId(Long roleIdToFind) {
         Optional<Role> roleOptional = Optional.empty();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getConnection()
+        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
                 .prepareStatement(RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_ID_EQUALS.getQuery())) {
             preparedStatement.setLong(1, roleIdToFind);
 
             ResultSet roleResultSet = preparedStatement.executeQuery();
             roleOptional = roleResultSetToRole(roleResultSet);
-        } catch (SQLException e) {
+        } catch (SQLException | ConnectionException e) {
             LOGGER.error("RoleDaoImpl findByRoleId(): cannot extract role from ResultSet.");
         }
 
@@ -35,13 +36,13 @@ public class RoleDaoImpl implements RoleDao {
     public Optional<Role> findByTitle(String titleToFind) {
         Optional<Role> roleOptional = Optional.empty();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getConnection()
+        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
                 .prepareStatement(RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_TITLE_EQUALS.getQuery())) {
             preparedStatement.setString(1, titleToFind);
 
             ResultSet roleResultSet = preparedStatement.executeQuery();
             roleOptional = roleResultSetToRole(roleResultSet);
-        } catch (SQLException e) {
+        } catch (SQLException | ConnectionException e) {
             LOGGER.error("RoleDaoImpl findByTitle(): cannot extract role from ResultSet.");
         }
 

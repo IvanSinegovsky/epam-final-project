@@ -1,7 +1,8 @@
 package by.epam.carrentalapp.dao.impl;
 
-import by.epam.carrentalapp.DaoException;
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.UsersRolesDao;
+import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.query.UsersRolesQuery;
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
 
     @Override
     public void save(Long userId, Long roleId) {
-        try (PreparedStatement preparedStatement = ConnectionPool.getConnection().prepareStatement(
+        try (PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection().prepareStatement(
                 UsersRolesQuery.INSERT_INTO_USERS_ROLES.getQuery(),
                 Statement.RETURN_GENERATED_KEYS)
         ) {
@@ -30,7 +31,7 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
             if (userResultSet == null) {
                 throw new DaoException("UsersRolesDaoImpl save(): cannot execute save in users_roles operation");
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConnectionException e) {
             LOGGER.error("UsersRolesDaoImpl save(): cannot extract roles_role_id from ResultSet");
         }
     }
@@ -39,7 +40,7 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
     public List<Long> findRoleIdsByUserId(Long userIdToFind) {
         List<Long> userRoleIds = new ArrayList<>();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getConnection()
+        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
                 .prepareStatement(UsersRolesQuery.SELECT_ALL_FROM_USERS_ROLES_WHERE_USER_ID_EQUALS.getQuery())) {
             preparedStatement.setLong(1, userIdToFind);
 
@@ -48,7 +49,7 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
                 Long roleId = userResultSet.getLong(ROLE_ID_COLUMN_NAME);
                 userRoleIds.add(roleId);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ConnectionException e) {
             LOGGER.error("UsersRolesDaoImpl findRoleIdsByUserId(): cannot extract roles_role_id from ResultSet");
         }
 

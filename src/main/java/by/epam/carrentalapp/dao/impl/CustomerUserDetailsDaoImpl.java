@@ -16,7 +16,7 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
 
     @Override
     public void save(CustomerUserDetails customerUserDetails) throws Exception {
-        try(PreparedStatement preparedStatement = ConnectionPool.getConnection()
+        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
                 .prepareStatement(CustomerUserDetailsQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, customerUserDetails.getPassportNumber());
             preparedStatement.setInt(2, customerUserDetails.getRate());

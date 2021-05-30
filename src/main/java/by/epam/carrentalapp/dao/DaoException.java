@@ -1,4 +1,4 @@
-package by.epam.carrentalapp;
+package by.epam.carrentalapp.dao;
 
 public class DaoException extends RuntimeException {
     public DaoException() {

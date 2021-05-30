@@ -11,6 +11,7 @@ import java.util.List;
 public class CarCatalogCommand implements Command {
     private final CarService carService = ServiceFactory.getCarService();
     private final Logger LOGGER = Logger.getLogger(CarCatalogCommand.class);
+    private final String CAR_CATALOG_PATH = "/view/guest/carCatalog.jsp";
 
     @Override
     public String execute() {
@@ -19,6 +20,6 @@ public class CarCatalogCommand implements Command {
         for (Car car: allCars) {
             LOGGER.info("car element in controller ->" + car.toString());
         }
-        return "empty";
+        return CAR_CATALOG_PATH;
     }
 }
