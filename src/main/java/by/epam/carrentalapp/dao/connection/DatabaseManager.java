@@ -1,16 +1,22 @@
 package by.epam.carrentalapp.dao.connection;
 
+import org.apache.log4j.Logger;
+
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class DatabaseManager {
-    private static final String DB_CONFIG_PATH = "resources/configuration/database.properties";
+    private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class);
+
+    private static final String DB_CONFIG_PATH = "database";
     private static ResourceBundle resourceBundle;
 
     private DatabaseManager() {
     }
 
     public static String getProperty(String key) {
+        LOGGER.info("key to property -> " + key);
+
         if (resourceBundle == null) {
             init();
         }

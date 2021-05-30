@@ -130,10 +130,8 @@ public class ConnectionPool {
     private int initPoolSize() {
         int value;
         try {
-            value = 5;
-            //todo remove hardcode
-            /*
-            value = Integer.parseInt(DatabaseManager.getProperty("db.poolSize"));*/
+            /*value = 5;*/
+            value = Integer.parseInt(DatabaseManager.getProperty("db.poolSize"));
         } catch (NumberFormatException e) {
             //log
             throw new RuntimeException("pool size isn't a number, check database resources.configuration file.", e);
@@ -148,10 +146,8 @@ public class ConnectionPool {
     private int initTimeout() {
         int value;
         try {
-            value = 10;
-            //todo remove hardcode
-            /*
-            value = Integer.parseInt(DatabaseManager.getProperty("db.connectionTimeout"));*/
+            /*value = 10;*/
+            value = Integer.parseInt(DatabaseManager.getProperty("db.connectionTimeout"));
         } catch (NumberFormatException e) {
             //log
             throw new RuntimeException("connection timeout isn't a number, check database resources.configuration file.", e);
