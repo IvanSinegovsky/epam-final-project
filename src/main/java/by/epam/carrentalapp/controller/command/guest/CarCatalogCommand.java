@@ -6,6 +6,8 @@ import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.ServiceFactory;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class CarCatalogCommand implements Command {
@@ -14,7 +16,7 @@ public class CarCatalogCommand implements Command {
     private final String CAR_CATALOG_PATH = "/view/guest/carCatalog.jsp";
 
     @Override
-    public String execute() {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         List<Car> allCars = carService.getAllCars();
 
         for (Car car: allCars) {

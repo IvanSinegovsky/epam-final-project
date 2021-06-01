@@ -1,33 +1,48 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Registration Form</title>
+    <title>Register x2</title>
 </head>
 <body>
-<h1>Register Form</h1>
-<form action="guru_register" method="post">
-    <table style="with: 50%">
-        <tr>
-            <td>First Name</td>
-            <td><input type="text" name="first_name" /></td>
-        </tr>
-        <tr>
-            <td>Last Name</td>
-            <td><input type="text" name="last_name" /></td>
-        </tr>
-        <tr>
-            <td>UserName</td>
-            <td><input type="text" name="username" /></td>
-        </tr>
-        <tr>
-            <td>Password</td>
-            <td><input type="password" name="password" /></td>
-        </tr>
-        <tr>
-        </tr></table>
-    <input type="submit" value="Submit" /></form>
+<div class="welcomeform">
+    <form id="registration_form" method="POST" action="home">
+        <input type="hidden" name="command" value="REGISTER"/>
+
+        <div class="field">
+            <label for="first_name">
+                Enter your name
+                <input type="text" name="name" value="" required />
+            </label>
+        </div>
+        <div class="field">
+            <label for="last_name">
+                Enter your lastname
+                <input type="text" name="lastname" value="" required />
+            </label>
+        </div>
+        <div class="field">
+            <label for="email">
+                Enter your email
+                <input type="text" name="email" value="" required />
+            </label>
+        </div>
+        <div class="field">
+            <label for="password">
+                Enter your password
+                <input type="password" name="password" value="" required />
+            </label>
+        </div>
+        <div class="field">
+            <label for="passport_number">
+                Enter your passport number
+                <input type="text" name="passport_number" value="" required />
+            </label>
+        </div>
+        <div>
+            <button type="submit">Register</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>

@@ -1,5 +1,8 @@
 package by.epam.carrentalapp.controller.command;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public interface Command {
-    String execute();
+    String execute(HttpServletRequest request, HttpServletResponse response);
 }

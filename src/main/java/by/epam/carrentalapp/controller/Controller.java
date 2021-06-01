@@ -31,12 +31,24 @@ public class Controller extends HttpServlet {
         Optional<Command> commandOptional = commandByType(commandParameter);
 
         if (commandOptional.isPresent()) {
-            getServletContext().getRequestDispatcher(commandOptional.get().execute()).forward(req, resp);
+            getServletContext().getRequestDispatcher(commandOptional.get().execute(req, resp)).forward(req, resp);
         } else {
             LOGGER.info("unknown command");
         }
+    }
 
-        //todo return error page
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String commandParameter = req.getParameter("command");
+        LOGGER.info("command -> " + commandParameter);
+
+        Optional<Command> commandOptional = commandByType(commandParameter);
+
+        if (commandOptional.isPresent()) {
+            getServletContext().getRequestDispatcher(commandOptional.get().execute(req, resp)).forward(req, resp);
+        } else {
+            LOGGER.info("unknown command");
+        }
     }
 
     private Optional<Command> commandByType(String command) {
