@@ -1,4 +1,11 @@
 package by.epam.carrentalapp.dao.connection;
+/*
+    private static String url="jdbc:mysql://localhost:3306/car_rental_app?serverTimezone=UTC";
+    private static String username="root";
+    private static String password="1234";
+*/
+
+import by.epam.carrentalapp.dao.impl.CarDaoImpl;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -24,14 +31,14 @@ public class ConnectionPool {
     private final int CONNECTION_TIMEOUT;
     private Condition isFree = poolLock.newCondition();
     private ArrayDeque<ProxyConnection> connectionPool;
-    private AtomicInteger createdConnectionsCount;
+    private AtomicInteger connectionsCreatedCount;
 
     private ConnectionPool() {
         LOGGER.info("ConnectionPool in constructor");
         POOL_SIZE = initPoolSize();
         CONNECTION_TIMEOUT = initTimeout();
         connectionPool = new ArrayDeque<>();
-        createdConnectionsCount = new AtomicInteger(0);
+        connectionsCreatedCount = new AtomicInteger(0);
     }
 
     public static ConnectionPool getInstance() {
@@ -50,28 +57,30 @@ public class ConnectionPool {
     }
 
     public ProxyConnection getConnection() throws ConnectionException {
+
         poolLock.lock();
         try {
             while (connectionPool.isEmpty()) {
-                if (createdConnectionsCount.get() != POOL_SIZE) {
+                if (connectionsCreatedCount.get() != POOL_SIZE) {
                     Connection connection = ConnectionCreator.createConnection();
-                    createdConnectionsCount.getAndIncrement();
+                    connectionsCreatedCount.getAndIncrement();
                     return new ProxyConnection(connection);
                 }
                 isFree.await(CONNECTION_TIMEOUT, TimeUnit.SECONDS);
                 if (connectionPool.isEmpty()) {
-                    throw new ConnectionException("Zero connections can be available. Check properties file value");
+                    throw new ConnectionException("connection timeout exceeded... connection isn't available now, try later.");
                 }
             }
             return connectionPool.poll();
         } catch (InterruptedException e) {
-            throw new ConnectionException("Thread was interrupted. Cannot get a connection", e);
+            throw new ConnectionException("current thread was interrupted, can't get connection.", e);
         } finally {
             poolLock.unlock();
         }
     }
 
     void releaseConnection(ProxyConnection connection) {
+
         poolLock.lock();
         try {
             connectionPool.offer(connection);
@@ -82,7 +91,8 @@ public class ConnectionPool {
     }
 
     public void closeConnections() {
-        for (int i = 0; i < createdConnectionsCount.get(); i++) {
+
+        for (int i = 0; i < connectionsCreatedCount.get(); i++) {
             poolLock.lock();
             try {
                 while (connectionPool.isEmpty()) {
@@ -90,14 +100,16 @@ public class ConnectionPool {
                 }
                 ProxyConnection proxyConnection = connectionPool.poll();
                 proxyConnection.closeConnection();
-            } catch (InterruptedException | SQLException e) {
-                LOGGER.error("IN ConnectionPool closeConnection()", e);
+            } catch (InterruptedException e) {
+                //log
+            } catch (SQLException e) {
+                //log
             } finally {
                 poolLock.unlock();
             }
         }
-        if (createdConnectionsCount.get() != 0) {
-            LOGGER.error("IN ConnectionPool closeConnection(). All connections to database were closed ");
+        if (connectionsCreatedCount.get() != 0) {
+            //log
         }
         deregisterDrivers();
     }
@@ -110,31 +122,41 @@ public class ConnectionPool {
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {
-                LOGGER.error("Exception while deregister driver", e);
+                //log
             }
         }
     }
 
     private int initPoolSize() {
-        int initPoolSize = positiveNumberPropertyByKey(DatabasePropertyKey.POOL_SIZE.getKey());
-        return initPoolSize;
-    }
-
-    private int initTimeout() {
-        int initTimeout = positiveNumberPropertyByKey(DatabasePropertyKey.CONNECTION_TIMEOUT.getKey());
-        return initTimeout;
-    }
-
-    private int positiveNumberPropertyByKey(String propertyKey) {
         int value;
         try {
-            value = Integer.parseInt(DatabaseManager.getProperty(propertyKey));
+            /*value = 5;*/
+            value = Integer.parseInt(DatabaseManager.getProperty("db.poolSize"));
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Pool size property should be a number", e);
+            //log
+            throw new RuntimeException("pool size isn't a number, check database resources.configuration file.", e);
         }
         if (value <= 0) {
-            throw new RuntimeException("Pool size property should be positive number");
+            //log
+            throw new RuntimeException("pool size can't be less or equals zero, check database resources.configuration file.");
         }
         return value;
     }
+
+    private int initTimeout() {
+        int value;
+        try {
+            /*value = 10;*/
+            value = Integer.parseInt(DatabaseManager.getProperty("db.connectionTimeout"));
+        } catch (NumberFormatException e) {
+            //log
+            throw new RuntimeException("connection timeout isn't a number, check database resources.configuration file.", e);
+        }
+        if (value <= 0) {
+            //log
+            throw new RuntimeException("timeout can't be less or equals zero, check database resources.configuration file.");
+        }
+        return value;
+    }
+
 }

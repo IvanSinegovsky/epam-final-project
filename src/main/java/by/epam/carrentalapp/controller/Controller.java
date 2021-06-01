@@ -26,33 +26,27 @@ public class Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String commandParameter = req.getParameter("command");
-        LOGGER.info("command -> " + commandParameter);
-
-        Optional<Command> commandOptional = commandByType(commandParameter);
-
-        if (commandOptional.isPresent()) {
-            getServletContext().getRequestDispatcher(commandOptional.get().execute(req, resp)).forward(req, resp);
-        } else {
-            LOGGER.info("unknown command");
-        }
+        LOGGER.info("GET command -> " + commandParameter);
+        executeCommand(commandParameter, req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String commandParameter = req.getParameter("command");
-        LOGGER.info("command -> " + commandParameter);
-
-        Optional<Command> commandOptional = commandByType(commandParameter);
-
-        if (commandOptional.isPresent()) {
-            getServletContext().getRequestDispatcher(commandOptional.get().execute(req, resp)).forward(req, resp);
-        } else {
-            LOGGER.info("unknown command");
-        }
+        LOGGER.info(" POST command -> " + commandParameter);
+        executeCommand(commandParameter, req, resp);
     }
 
-    private Optional<Command> commandByType(String command) {
-        Optional<Command> commandOptional = Optional.of(commandProvider.getCommand(command));
-        return commandOptional;
+    private void executeCommand(String command, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Command commandOptional = commandProvider.getCommand(command);
+
+        if (commandOptional != null) {
+            getServletContext().getRequestDispatcher(
+                    commandOptional.execute(request, response)).forward(request, response
+            );
+        } else {
+            LOGGER.info("Unknown command");
+        }
     }
 }

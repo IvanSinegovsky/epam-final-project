@@ -47,9 +47,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerCustomer(String name, String lastname, String email, String password, String passportNumber)
             throws Exception {
-        LOGGER.info("STARTED REGISTERING -> " + name + lastname + email + password + passportNumber);
-        String encodedPassword = BCryptPasswordEncoder.encode(password);
-        LOGGER.info("ENCODED PASSWORD -> " + encodedPassword);
+        //TODO CHANGE WITH CHANGING DB COLUMN VARCHAR SIZE
+        String encodedPassword = "pass"/*BCryptPasswordEncoder.encode(password)*/;
         Long registeredUserId = saveUser(name, lastname, email, encodedPassword);
         saveCustomerUserDetails(passportNumber, registeredUserId);
         saveCustomerUserRole(registeredUserId);

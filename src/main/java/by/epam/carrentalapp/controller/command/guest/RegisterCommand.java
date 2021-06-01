@@ -25,6 +25,7 @@ public class RegisterCommand implements Command {
         try {
             userService.registerCustomer(name, lastname, email, password, passportNumber);
         } catch (Exception e) {
+            //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
             return Router.ERROR_PATH.getPath();
         }
 

@@ -65,28 +65,27 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Long save(User userToSave) {
-        LOGGER.info("STARTED SAVING");
         Long savedUserId = null;
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS
             )) {
-            LOGGER.info("STARTED TRY BLOCK => GOT CONNECTION");
             preparedStatement.setString(1, userToSave.getEmail());
             preparedStatement.setString(2, userToSave.getPassword());
             preparedStatement.setString(3, userToSave.getName());
             preparedStatement.setString(4, userToSave.getLastname());
 
-            ResultSet userResultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
+            ResultSet userResultSet = preparedStatement.getGeneratedKeys();
 
             if (userResultSet != null && userResultSet.next()) {
-                savedUserId = userResultSet.getLong(USER_ID_COLUMN_NAME);
+                savedUserId = userResultSet.getLong(1);
             }
-
-            LOGGER.info("SAVED USER ID -> " + savedUserId);
-        } catch (SQLException | ConnectionException e) {
+        } catch (SQLException  e) {
             LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
+        } catch (ConnectionException e) {
+            LOGGER.error("connection FAILED");
         }
 
         return savedUserId;
