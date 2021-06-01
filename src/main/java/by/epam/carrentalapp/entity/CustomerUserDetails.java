@@ -12,4 +12,10 @@ public class CustomerUserDetails {
     private String passportNumber;
     private Integer rate;
     private Long userId;
+
+    public CustomerUserDetails(String passportNumber, Integer rate, Long userId) {
+        this.passportNumber = passportNumber;
+        this.rate = rate;
+        this.userId = userId;
+    }
 }

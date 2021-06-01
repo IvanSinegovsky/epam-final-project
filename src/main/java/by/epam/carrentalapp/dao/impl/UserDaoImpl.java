@@ -5,7 +5,7 @@ import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.UserQuery;
-import by.epam.carrentalapp.entity.User;
+import by.epam.carrentalapp.entity.user.User;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//todo close all preparedResultSet
 public class UserDaoImpl implements UserDao {
     private final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
 
@@ -66,12 +65,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Long save(User userToSave) {
+        LOGGER.info("STARTED SAVING");
         Long savedUserId = null;
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS
             )) {
+            LOGGER.info("STARTED TRY BLOCK => GOT CONNECTION");
             preparedStatement.setString(1, userToSave.getEmail());
             preparedStatement.setString(2, userToSave.getPassword());
             preparedStatement.setString(3, userToSave.getName());
@@ -82,6 +83,8 @@ public class UserDaoImpl implements UserDao {
             if (userResultSet != null && userResultSet.next()) {
                 savedUserId = userResultSet.getLong(USER_ID_COLUMN_NAME);
             }
+
+            LOGGER.info("SAVED USER ID -> " + savedUserId);
         } catch (SQLException | ConnectionException e) {
             LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
         }

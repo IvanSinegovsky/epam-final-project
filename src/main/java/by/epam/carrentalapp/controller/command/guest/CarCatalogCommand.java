@@ -22,6 +22,7 @@ public class CarCatalogCommand implements Command {
         for (Car car: allCars) {
             LOGGER.info("car element in controller ->" + car.toString());
         }
+
         return CAR_CATALOG_PATH;
     }
 }

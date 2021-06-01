@@ -11,14 +11,6 @@ import java.sql.SQLException;
 class ConnectionCreator {
     private static final Logger LOGGER = Logger.getLogger(ConnectionCreator.class);
 
-    static {
-        try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-        } catch (SQLException e) {
-            throw new RuntimeException("Cannot register database driver", e);
-        }
-    }
-
     static Connection createConnection() {
         String url = DatabaseManager.getProperty(DatabasePropertyKey.URL.getKey());
         String user = DatabaseManager.getProperty(DatabasePropertyKey.USER.getKey());

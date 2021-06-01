@@ -6,19 +6,25 @@ import by.epam.carrentalapp.dao.provider.DaoFactory;
 import by.epam.carrentalapp.dto.LoginUserDto;
 import by.epam.carrentalapp.entity.CustomerUserDetails;
 import by.epam.carrentalapp.entity.Role;
-import by.epam.carrentalapp.entity.User;
-import by.epam.carrentalapp.entity.customer.Customer;
+import by.epam.carrentalapp.entity.user.RoleName;
+import by.epam.carrentalapp.entity.user.User;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
+import org.apache.log4j.Logger;
 
 import javax.security.auth.login.CredentialNotFoundException;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
+    private final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
+
     private final UserDao userDao;
     private final CustomerUserDetailsDao customerUserDetailsDao;
     private final RoleDao roleDao;
     private final UsersRolesDao usersRolesDao;
+
+    private final Integer INITIAL_CUSTOMER_RATE = 1;
+    private final String INITIAL_CUSTOMER_ROLE = RoleName.CUSTOMER.getName();
 
     public UserServiceImpl() {
         userDao = DaoFactory.getUserDao();
@@ -31,8 +37,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> login(LoginUserDto userDto) throws CredentialNotFoundException {
         Optional<User> foundUser = userDao.findByEmail(userDto.getEmail());
 
-        if (foundUser.isEmpty()
-                || !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())) {
+        if (foundUser.isEmpty() || !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())) {
             throw new CredentialNotFoundException("Wrong credentials");
         }
 
@@ -40,19 +45,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerCustomer(Customer customer) throws Exception {
-        Long registeredUserId = userDao.save(customer);
+    public void registerCustomer(String name, String lastname, String email, String password, String passportNumber)
+            throws Exception {
+        LOGGER.info("STARTED REGISTERING -> " + name + lastname + email + password + passportNumber);
+        String encodedPassword = BCryptPasswordEncoder.encode(password);
+        LOGGER.info("ENCODED PASSWORD -> " + encodedPassword);
+        Long registeredUserId = saveUser(name, lastname, email, encodedPassword);
+        saveCustomerUserDetails(passportNumber, registeredUserId);
+        saveCustomerUserRole(registeredUserId);
+    }
 
-        CustomerUserDetails customerUserDetails = customer.getCustomerUserDetails();
-        customerUserDetails.setUserId(registeredUserId);
+    private Long saveUser(String name, String lastname, String email, String encodedPassword) {
+        User customerUser = new User(name, lastname, email, encodedPassword);
+        Long registeredUserId = userDao.save(customerUser);
 
+        return registeredUserId;
+    }
+
+    private void saveCustomerUserDetails(String passportNumber, Long userId) throws Exception {
+        CustomerUserDetails customerUserDetails = new CustomerUserDetails(passportNumber, INITIAL_CUSTOMER_RATE, userId);
         customerUserDetailsDao.save(customerUserDetails);
+    }
 
-        Optional<Role> role = roleDao.findByTitle("CUSTOMER");
+    private void saveCustomerUserRole(Long userId) {
+        Optional<Role> role = roleDao.findByTitle(INITIAL_CUSTOMER_ROLE);
+
         if (role.isPresent()) {
-            usersRolesDao.save(registeredUserId, role.get().getRoleId());
+            usersRolesDao.save(userId, role.get().getRoleId());
         } else {
-            throw new DaoException("Cannot find role in DAO layer");
+            throw new DaoException("Cannot find role by name " + INITIAL_CUSTOMER_ROLE + " in DAO layer");
         }
     }
 }
