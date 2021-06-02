@@ -10,6 +10,8 @@ import by.epam.carrentalapp.entity.user.RoleName;
 import by.epam.carrentalapp.entity.user.User;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
+import by.epam.carrentalapp.service.impl.validator.ValidationException;
+import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;
 
 import javax.security.auth.login.CredentialNotFoundException;
@@ -54,8 +56,13 @@ public class UserServiceImpl implements UserService {
         saveCustomerUserRole(registeredUserId);
     }
 
-    private Long saveUser(String name, String lastname, String email, String encodedPassword) {
+    private Long saveUser(String name, String lastname, String email, String encodedPassword) throws ValidationException {
         User customerUser = new User(name, lastname, email, encodedPassword);
+
+        if (!Validator.validateUser(customerUser)) {
+            throw new ValidationException("User's credentials are invalid");
+        }
+
         Long registeredUserId = userDao.save(customerUser);
 
         return registeredUserId;
@@ -63,6 +70,11 @@ public class UserServiceImpl implements UserService {
 
     private void saveCustomerUserDetails(String passportNumber, Long userId) throws Exception {
         CustomerUserDetails customerUserDetails = new CustomerUserDetails(passportNumber, INITIAL_CUSTOMER_RATE, userId);
+
+        if (!Validator.validateCustomerUserDetails(customerUserDetails)) {
+            throw new ValidationException("Customer's credentials are invalid");
+        }
+
         customerUserDetailsDao.save(customerUserDetails);
     }
 
