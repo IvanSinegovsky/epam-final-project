@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 public class RoleDaoImpl implements RoleDao {
@@ -38,12 +39,17 @@ public class RoleDaoImpl implements RoleDao {
     public Optional<Role> findByTitle(String titleToFind) {
         Optional<Role> roleOptional = Optional.empty();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_TITLE_EQUALS.getQuery())) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_TITLE_EQUALS.getQuery()
+            )) {
             preparedStatement.setString(1, titleToFind);
 
             ResultSet roleResultSet = preparedStatement.executeQuery();
-            roleOptional = roleResultSetToRole(roleResultSet);
+            while (roleResultSet.next()) {
+                LOGGER.info("RESULT SET -> " + roleResultSet.getLong(1));
+                roleOptional = roleResultSetToRole(roleResultSet);
+            }
         } catch (SQLException | ConnectionException e) {
             LOGGER.error("RoleDaoImpl findByTitle(): cannot extract role from ResultSet.");
         }

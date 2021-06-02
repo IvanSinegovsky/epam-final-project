@@ -22,17 +22,12 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
     public void save(Long userId, Long roleId) {
         try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                UsersRolesQuery.INSERT_INTO_USERS_ROLES.getQuery(),
-                Statement.RETURN_GENERATED_KEYS
+                UsersRolesQuery.INSERT_INTO_USERS_ROLES.getQuery()
              )) {
             preparedStatement.setLong(1, userId);
             preparedStatement.setLong(2, roleId);
 
-            ResultSet userResultSet = preparedStatement.executeQuery();
-
-            if (userResultSet == null) {
-                throw new DaoException("UsersRolesDaoImpl save(): cannot execute save in users_roles operation");
-            }
+            preparedStatement.executeUpdate();
         } catch (SQLException | ConnectionException e) {
             LOGGER.error("UsersRolesDaoImpl save(): cannot extract roles_role_id from ResultSet");
         }

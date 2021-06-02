@@ -19,15 +19,16 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
     public void save(CustomerUserDetails customerUserDetails) throws Exception {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    CustomerUserDetailsQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    CustomerUserDetailsQuery.INSERT_INTO_CUSTOMER_USER_DETAILS.getQuery(), Statement.RETURN_GENERATED_KEYS
             )) {
             preparedStatement.setString(1, customerUserDetails.getPassportNumber());
             preparedStatement.setInt(2, customerUserDetails.getRate());
             preparedStatement.setLong(3, customerUserDetails.getUserId());
 
-            ResultSet userResultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
+            ResultSet userDetailsResultSet = preparedStatement.getGeneratedKeys();
 
-            if (userResultSet == null) {
+            if (userDetailsResultSet == null) {
                 throw new Exception("Cannot insert customer_user_details in DB");
             }
         } catch (SQLException e) {
