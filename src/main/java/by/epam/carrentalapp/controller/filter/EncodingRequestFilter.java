@@ -1,4 +1,4 @@
-package by.epam.carrentalapp.filter;
+package by.epam.carrentalapp.controller.filter;
 
 import org.apache.log4j.Logger;
 
