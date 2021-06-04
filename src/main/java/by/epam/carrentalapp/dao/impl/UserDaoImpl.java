@@ -49,13 +49,16 @@ public class UserDaoImpl implements UserDao {
 
             ResultSet userResultSet = preparedStatement.executeQuery();
 
-            Long userId = userResultSet.getLong(USER_ID_COLUMN_NAME);
-            String email = userResultSet.getString(EMAIL_COLUMN_NAME);
-            String password = userResultSet.getString(PASSWORD_COLUMN_NAME);
-            String name = userResultSet.getString(NAME_COLUMN_NAME);
-            String lastname = userResultSet.getString(LASTNAME_COLUMN_NAME);
+            if (userResultSet.next()) {
+                Long userId = userResultSet.getLong(USER_ID_COLUMN_NAME);
+                String email = userResultSet.getString(EMAIL_COLUMN_NAME);
+                String password = userResultSet.getString(PASSWORD_COLUMN_NAME);
+                String name = userResultSet.getString(NAME_COLUMN_NAME);
+                String lastname = userResultSet.getString(LASTNAME_COLUMN_NAME);
 
-            userOptional = Optional.of(new User(userId, email, password, name, lastname));
+                userOptional = Optional.of(new User(userId, email, lastname, name, password));
+            }
+
         } catch (SQLException | ConnectionException e) {
             LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
         }

@@ -39,7 +39,11 @@ public class UserServiceImpl implements UserService {
     public Optional<User> login(LoginUserDto userDto) throws CredentialNotFoundException {
         Optional<User> foundUser = userDao.findByEmail(userDto.getEmail());
 
-        if (foundUser.isEmpty() || !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())) {
+        if (foundUser.isEmpty()
+
+            //todo remove
+            || !foundUser.get().getPassword().equals(userDto.getPassword())
+            /*|| !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())*/) {
             throw new CredentialNotFoundException("Wrong credentials");
         }
 

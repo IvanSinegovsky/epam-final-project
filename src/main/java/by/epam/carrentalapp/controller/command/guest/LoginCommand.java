@@ -19,12 +19,15 @@ public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         LoginUserDto loginUserDto = new LoginUserDto(
-                RequestParameterName.EMAIL.getName(),
-                RequestParameterName.PASSWORD.getName()
+                request.getParameter(RequestParameterName.EMAIL.getName()),
+                request.getParameter(RequestParameterName.PASSWORD.getName())
         );
 
         try {
             userService.login(loginUserDto);
+
+
+
             //todo вместо return[jsp page] do forward or redirect in all the commands
             //forward применить в других командах ServletDispatcher
             //response.sendRedirect("url");

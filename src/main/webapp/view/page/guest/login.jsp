@@ -32,8 +32,7 @@
             <c:out value="${loginSign}"/>
         </h4>
 
-        <form method="POST" action="home">
-            <input type="hidden" name="command" value="REGISTER"/>
+        <form method="POST" action="http://localhost:8080/home?command=LOGIN">
 
             <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -59,7 +58,7 @@
             <div class="form-group">
                 <button type="submit" class="btn btn-primary"><c:out value="${loginButton}"/></button>
             </div>
-            <p class="text-center"><c:out value="${notRegisteredYetSign}"/><a href="register.jsp"><c:out value="${registerReferenceSign}"/></a></p>
+            <p class="text-center"><c:out value="${notRegisteredYetSign}"/><a href="http://localhost:8080/home?command=HOME"><c:out value="${registerReferenceSign}"/></a></p>
         </form>
     </article>
 </div>
