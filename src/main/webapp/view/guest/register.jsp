@@ -1,5 +1,7 @@
-<%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
 <head>
     <title>Register</title>
@@ -10,67 +12,27 @@
           rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+    <fmt:setLocale value="${sessionScope.local}"/>
+    <fmt:setBundle basename="resources" var="loc"/>
+    <fmt:message bundle="${loc}" key="guest.register.create-account" var="createAccountSign"/>
+    <fmt:message bundle="${loc}" key="guest.register.name-input" var="nameInput"/>
+    <fmt:message bundle="${loc}" key="guest.register.lastname-input" var="lastNameInput"/>
+    <fmt:message bundle="${loc}" key="guest.register.email-input" var="emailAddressInput"/>
+    <fmt:message bundle="${loc}" key="guest.register.password-input" var="passwordInput"/>
+    <fmt:message bundle="${loc}" key="guest.register.passport-number-input" var="passportNumberInput"/>
+    <fmt:message bundle="${loc}" key="guest.register.register-button" var="registerButtonSign"/>
+    <fmt:message bundle="${loc}" key="guest.register.have-an-account" var="haveAnAccountSign"/>
+    <fmt:message bundle="${loc}" key="guest.register.log-in-reference" var="logInReferenceSign"/>
 </head>
+
 <body>
-<%--<div class="card bg-light">
-    <form id="registration_form" method="POST" action="home">
-        <input type="hidden" name="command" value="REGISTER"/>
-
-        <div class="input-group input-group-lg">
-            <span class="input-group-text">Enter your name</span>
-            <input type="text"
-                   class="form-control"
-                   aria-label="Sizing example input"
-                   aria-describedby="inputGroup-sizing-lg"
-                   name="name"
-                   required/>
-        </div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-text">Enter your lastname</span>
-            <input type="text"
-                   class="form-control"
-                   aria-label="Sizing example input"
-                   aria-describedby="inputGroup-sizing-lg"
-                   name="lastname"
-                   required/>
-        </div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-text">Enter your email</span>
-            <input type="text"
-                   class="form-control"
-                   aria-label="Sizing example input"
-                   aria-describedby="inputGroup-sizing-lg"
-                   name="email"
-                   required/>
-        </div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-text">Enter your password</span>
-            <input type="password"
-                   class="form-control"
-                   aria-label="Sizing example input"
-                   aria-describedby="inputGroup-sizing-lg"
-                   name="password"
-                   required/>
-        </div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-text">Enter your passport number</span>
-            <input type="text"
-                   class="form-control"
-                   aria-label="Sizing example input"
-                   aria-describedby="inputGroup-sizing-lg"
-                   name="passport_number"
-                   required/>
-        </div>
-        <div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </div>
-    </form>
-</div>--%>
-
-
 <div class="card bg-light">
+    
     <article class="card-body mx-auto" style="max-width: 400px;">
-        <h4 class="card-title mt-3 text-center">Create Account</h4>
+        <h4 class="card-title mt-3 text-center">
+            <c:out value="${createAccountSign}"/>
+        </h4>
 
         <form method="POST" action="home">
             <input type="hidden" name="command" value="REGISTER"/>
@@ -81,7 +43,7 @@
                 </div>
                 <input name="name"
                        class="form-control"
-                       placeholder="Name"
+                       placeholder="<c:out value="${nameInput}"/>"
                        type="text">
             </div>
 
@@ -91,7 +53,7 @@
                 </div>
                 <input name="lastname"
                        class="form-control"
-                       placeholder="Lastname"
+                       placeholder="<c:out value="${lastNameInput}"/>"
                        type="text">
             </div>
 
@@ -101,7 +63,7 @@
                 </div>
                 <input name="email"
                        class="form-control"
-                       placeholder="Email address"
+                       placeholder="<c:out value="${emailAddressInput}"/>"
                        type="email">
             </div>
 
@@ -111,7 +73,7 @@
                 </div>
                 <input name="password"
                        class="form-control"
-                       placeholder="Password"
+                       placeholder="<c:out value="${passwordInput}"/>"
                        type="password">
             </div>
 
@@ -121,22 +83,14 @@
                 </div>
                 <input name="passport_number"
                        class="form-control"
-                       placeholder="Passport number"
+                       placeholder="<c:out value="${passportNumberInput}"/>"
                        type="text">
             </div>
 
-            <%--<div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                </div>
-                <input class="form-control" placeholder="Repeat password" type="password">
-            </div>--%>
-
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary"><c:out value="${registerButtonSign}"/></button>
             </div>
-
-            <p class="text-center">Have an account? <a href="">Log In</a> </p>
+            <p class="text-center"><c:out value="${haveAnAccountSign}"/><a href=""><c:out value="${logInReferenceSign}"/></a></p>
         </form>
     </article>
 </div>

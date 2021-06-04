@@ -1,6 +1,7 @@
 package by.epam.carrentalapp.controller.command.guest;
 
 import by.epam.carrentalapp.controller.command.Command;
+import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,6 @@ public class LoginCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        return path;
+        return Router.LOGIN_PATH.getPath();
     }
 }

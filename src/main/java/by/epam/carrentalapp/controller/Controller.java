@@ -25,6 +25,7 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        setLocaleAttributeToSession(req);
         String commandParameter = req.getParameter("command");
         LOGGER.info("GET command -> " + commandParameter);
         executeCommand(commandParameter, req, resp);
@@ -32,6 +33,7 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        setLocaleAttributeToSession(req);
         String commandParameter = req.getParameter("command");
         LOGGER.info(" POST command -> " + commandParameter);
         executeCommand(commandParameter, req, resp);
@@ -48,5 +50,18 @@ public class Controller extends HttpServlet {
         } else {
             LOGGER.info("Unknown command");
         }
+    }
+
+    private void setLocaleAttributeToSession(HttpServletRequest request) {
+        String local = request.getParameter("local");
+
+        if (local != null) {
+            request.getSession(true).setAttribute("local", local);
+        } else if (request.getSession().getAttribute("local") == null) {
+            request.getSession(true).setAttribute("local", "en");
+        }
+
+        LOGGER.info("SESSION ATTRIBUTE -> "+ request.getSession().getAttribute("local"));
+        //todo maybe set locale to response
     }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 @WebFilter("/*")
 public class EncodingRequestFilter implements Filter {
     private final Logger LOGGER = Logger.getLogger(EncodingRequestFilter.class);
-    private final String ENCODING = "UTF-8";
+    private final String UTF8_ENCODING = "UTF-8";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -19,7 +19,8 @@ public class EncodingRequestFilter implements Filter {
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
-        servletRequest.setCharacterEncoding(ENCODING);
+        servletRequest.setCharacterEncoding(UTF8_ENCODING);
+        servletResponse.setCharacterEncoding(UTF8_ENCODING);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

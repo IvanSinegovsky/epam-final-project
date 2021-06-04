@@ -24,6 +24,9 @@ public class RegisterCommand implements Command {
 
         try {
             userService.registerCustomer(name, lastname, email, password, passportNumber);
+            //todo вместо return[jsp page] do forward or redirect in all the commands
+            //forward применить в других командах ServletDispatcher
+            //response.sendRedirect("url");
         } catch (Exception e) {
             //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
             return Router.ERROR_PATH.getPath();
