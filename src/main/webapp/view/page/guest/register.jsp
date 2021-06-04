@@ -4,6 +4,7 @@
 
 <html>
 <head>
+    <%@ include file="/view/fragment/navbar.jspf"%>
     <title>Register</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -13,15 +14,13 @@
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
 
-    <fmt:setLocale value="${sessionScope.local}"/>
-    <fmt:setBundle basename="resources" var="loc"/>
-    <fmt:message bundle="${loc}" key="guest.register.create-account" var="createAccountSign"/>
+    <fmt:message bundle="${loc}" key="guest.register.create-account-sign" var="createAccountSign"/>
     <fmt:message bundle="${loc}" key="guest.register.name-input" var="nameInput"/>
     <fmt:message bundle="${loc}" key="guest.register.lastname-input" var="lastNameInput"/>
     <fmt:message bundle="${loc}" key="guest.register.email-input" var="emailAddressInput"/>
     <fmt:message bundle="${loc}" key="guest.register.password-input" var="passwordInput"/>
     <fmt:message bundle="${loc}" key="guest.register.passport-number-input" var="passportNumberInput"/>
-    <fmt:message bundle="${loc}" key="guest.register.register-button" var="registerButtonSign"/>
+    <fmt:message bundle="${loc}" key="guest.register.register-button" var="registerButton"/>
     <fmt:message bundle="${loc}" key="guest.register.have-an-account" var="haveAnAccountSign"/>
     <fmt:message bundle="${loc}" key="guest.register.log-in-reference" var="logInReferenceSign"/>
 </head>
@@ -51,6 +50,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                 </div>
+
                 <input name="lastname"
                        class="form-control"
                        placeholder="<c:out value="${lastNameInput}"/>"
@@ -88,9 +88,9 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary"><c:out value="${registerButtonSign}"/></button>
+                <button type="submit" class="btn btn-primary"><c:out value="${registerButton}"/></button>
             </div>
-            <p class="text-center"><c:out value="${haveAnAccountSign}"/><a href=""><c:out value="${logInReferenceSign}"/></a></p>
+            <p class="text-center"><c:out value="${haveAnAccountSign}"/><a href="view/page/guest/login.jsp"><c:out value="${logInReferenceSign}"/></a></p>
         </form>
     </article>
 </div>

@@ -60,8 +60,5 @@ public class Controller extends HttpServlet {
         } else if (request.getSession().getAttribute("local") == null) {
             request.getSession(true).setAttribute("local", "en");
         }
-
-        LOGGER.info("SESSION ATTRIBUTE -> "+ request.getSession().getAttribute("local"));
-        //todo maybe set locale to response
     }
 }
