@@ -3,7 +3,9 @@ package by.epam.carrentalapp.controller.command.guest;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
-import by.epam.carrentalapp.service.ServiceFactory;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.controller.command.security.RoleName;
+import by.epam.carrentalapp.service.impl.ServiceFactory;
 import by.epam.carrentalapp.service.UserService;
 import org.apache.log4j.Logger;
 
@@ -24,6 +26,8 @@ public class RegisterCommand implements Command {
 
         try {
             userService.registerCustomer(name, lastname, email, password, passportNumber);
+
+            AccessManager.setRoleToSession(request, RoleName.USER);
             //todo вместо return[jsp page] do forward or redirect in all the commands
             //forward применить в других командах ServletDispatcher
             //response.sendRedirect("url");

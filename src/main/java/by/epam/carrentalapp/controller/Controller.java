@@ -2,10 +2,10 @@ package by.epam.carrentalapp.controller;
 
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.CommandProvider;
+import by.epam.carrentalapp.controller.command.CommandTitle;
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import java.util.Optional;
 @WebServlet("/home")
 public class Controller extends HttpServlet {
     private final Logger LOGGER = Logger.getLogger(Controller.class);
-    private final CommandProvider commandProvider = new CommandProvider();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -41,7 +40,7 @@ public class Controller extends HttpServlet {
 
     private void executeCommand(String command, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Command commandOptional = commandProvider.getCommand(command);
+        Command commandOptional = CommandProvider.getCommand(command);
 
         if (commandOptional != null) {
             getServletContext().getRequestDispatcher(
