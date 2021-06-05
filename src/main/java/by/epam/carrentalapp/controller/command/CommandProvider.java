@@ -13,7 +13,7 @@ import java.util.Map;
 
 @NoArgsConstructor
 public class CommandProvider {
-    private final Map<String, Command> titleToCommand = new HashMap<>();
+    private static final Map<String, Command> titleToCommand = new HashMap<>();
 
     {
         titleToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
@@ -24,7 +24,7 @@ public class CommandProvider {
         titleToCommand.put(CommandTitle.ORDER_LIST_COMMAND.name(), new OrderListCommand());
     }
 
-    public Command getCommand(String commandTitle) {
+    public static Command getCommand(String commandTitle) {
         Command command = titleToCommand.get(commandTitle.toUpperCase());
         return command;
     }
