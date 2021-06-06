@@ -52,13 +52,5 @@ public class LoginCommand implements Command {
 
         return Router.CAR_CATALOG_PATH.getPath();
     }
-
-    public void setAuthenticatedAttributeToSession(HttpServletRequest request) {
-        boolean isAuthenticated = Boolean.parseBoolean(request.getParameter("authenticated"));
-
-        if (!isAuthenticated) {
-            request.getSession(true).setAttribute("authenticated", true);
-        }
-    }
 }
 

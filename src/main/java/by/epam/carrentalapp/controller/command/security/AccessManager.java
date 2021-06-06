@@ -7,11 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class AccessManager {
-    private static final String SESSION_ROLE_ATTRIBUTE_NAME = "role";
     private static final String REQUEST_COMMAND_PARAMETER_NAME = "command";
 
-    public static boolean checkPermission(HttpServletRequest httpServletRequest) {
-        Object userRole = httpServletRequest.getSession().getAttribute(SESSION_ROLE_ATTRIBUTE_NAME);
+    public static boolean checkPermission(HttpServletRequest httpServletRequest, RoleName roleToCheck) {
+        Object userRole = httpServletRequest.getSession().getAttribute(roleToCheck.getSessionAttributeName());
         String commandTitle = httpServletRequest.getParameter(REQUEST_COMMAND_PARAMETER_NAME);
 
         String commandRoleAccess = CommandTitle.valueOf(commandTitle.toUpperCase()).getRolePermission();
@@ -31,19 +30,16 @@ public class AccessManager {
         return false;
     }
 
-    //todo role priority(maybe like enum roleName number field)
-    //or set to session list of roles if it is possible
     public static void setRoleToSessionByPriority(HttpServletRequest request, List<Role> userRoles) {
-        for (Role userRole : userRoles) {
-            if (userRole.toString().equals(RoleName.ADMIN.name())) {
-                setRoleToSession(request, RoleName.ADMIN);
-            }
-        }
+        String sessionAttributeName;
 
-        setRoleToSession(request, RoleName.USER);
+        for (Role userRole : userRoles) {
+            sessionAttributeName = RoleName.valueOf(userRole.getRoleTitle()).getSessionAttributeName();
+            setRoleToSession(request, sessionAttributeName);
+        }
     }
 
-    public static void setRoleToSession(HttpServletRequest request, RoleName roleName) {
-        request.getSession().setAttribute(SESSION_ROLE_ATTRIBUTE_NAME, roleName.name());
+    public static void setRoleToSession(HttpServletRequest request, String sessionAttributeName) {
+        request.getSession().setAttribute(sessionAttributeName, true);
     }
 }
