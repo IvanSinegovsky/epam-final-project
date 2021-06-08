@@ -1,8 +1,6 @@
 package by.epam.carrentalapp.controller.command.guest;
 
-import by.epam.carrentalapp.controller.command.Command;
-import by.epam.carrentalapp.controller.command.RequestParameterName;
-import by.epam.carrentalapp.controller.command.Router;
+import by.epam.carrentalapp.controller.command.*;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.dto.LoginUserDto;
@@ -37,14 +35,12 @@ public class LoginCommand implements Command {
 
             if (userOptional.isPresent()) {
                 userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
-                AccessManager.setRoleToSessionByPriority(request, userRoles);
+                AccessManager.setRoleListToSession(request, userRoles);
             } else {
                 //todo throw custom exception
             }
 
-            //todo вместо return[jsp page] do forward or redirect in all the commands
-            //forward применить в других командах ServletDispatcher
-            //response.sendRedirect("url");
+            redirect("/home?command=CAR_CATALOG", response);
         } catch (Exception e) {
             //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
             return Router.ERROR_PATH.getPath();

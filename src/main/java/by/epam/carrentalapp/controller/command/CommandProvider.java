@@ -15,7 +15,7 @@ import java.util.Map;
 public class CommandProvider {
     private static final Map<String, Command> titleToCommand = new HashMap<>();
 
-    {
+    static {
         titleToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
         titleToCommand.put(CommandTitle.REGISTER.name(), new RegisterCommand());
         titleToCommand.put(CommandTitle.HOME.name(), new HomeCommand());

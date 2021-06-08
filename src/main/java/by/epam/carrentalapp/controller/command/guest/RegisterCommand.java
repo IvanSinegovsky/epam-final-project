@@ -28,6 +28,7 @@ public class RegisterCommand implements Command {
             userService.registerCustomer(name, lastname, email, password, passportNumber);
 
             AccessManager.setRoleToSession(request, RoleName.USER.getSessionAttributeName());
+
             //todo вместо return[jsp page] do forward or redirect in all the commands
             //forward применить в других командах ServletDispatcher
             //response.sendRedirect("url");

@@ -30,7 +30,7 @@ public class AccessManager {
         return false;
     }
 
-    public static void setRoleToSessionByPriority(HttpServletRequest request, List<Role> userRoles) {
+    public static void setRoleListToSession(HttpServletRequest request, List<Role> userRoles) {
         String sessionAttributeName;
 
         for (Role userRole : userRoles) {
