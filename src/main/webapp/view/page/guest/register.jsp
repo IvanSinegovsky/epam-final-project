@@ -90,7 +90,7 @@
             <div class="form-group">
                 <button type="submit" class="btn btn-primary"><c:out value="${registerButton}"/></button>
             </div>
-            <p class="text-center"><c:out value="${haveAnAccountSign}"/><a href="view/page/guest/login.jsp"><c:out value="${logInReferenceSign}"/></a></p>
+            <p class="text-center"><c:out value="${haveAnAccountSign}"/><a href="home?command=LOGIN"><c:out value="${logInReferenceSign}"/></a></p>
         </form>
     </article>
 </div>

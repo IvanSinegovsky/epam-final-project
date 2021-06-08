@@ -11,6 +11,7 @@ import by.epam.carrentalapp.service.impl.ServiceFactory;
 import by.epam.carrentalapp.service.UserService;
 import org.apache.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,7 +25,8 @@ public class LoginCommand implements Command {
     private final UsersRolesService usersRolesService = ServiceFactory.getUsersRolesService();
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        forward("/view/page/guest/login.jsp", request, response);
         LoginUserDto loginUserDto = new LoginUserDto(
                 request.getParameter(RequestParameterName.EMAIL.getName()),
                 request.getParameter(RequestParameterName.PASSWORD.getName())
