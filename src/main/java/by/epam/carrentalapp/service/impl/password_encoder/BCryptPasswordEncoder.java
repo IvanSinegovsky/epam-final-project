@@ -2,7 +2,6 @@ package by.epam.carrentalapp.service.impl.password_encoder;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-//todo use it in userService register method
 public class BCryptPasswordEncoder {
     public static String encode(String password){
         String salt = BCrypt.gensalt();

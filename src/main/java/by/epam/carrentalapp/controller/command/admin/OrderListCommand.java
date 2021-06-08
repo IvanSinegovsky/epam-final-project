@@ -22,12 +22,12 @@ public class OrderListCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       /* if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
+        if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
             forward(Router.ERROR_PATH.getPath(), request, response);
-        } else {*/
+        } else {
             List<OrderRequest> orderRequests = orderRequestService.getAllOrderRequests();
             request.setAttribute("orderRequests", orderRequests);
             forward(Router.ORDER_REQUEST_LIST_PATH.getPath(), request, response);
-  //      }
+        }
     }
 }

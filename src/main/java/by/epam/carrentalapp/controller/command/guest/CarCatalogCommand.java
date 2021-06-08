@@ -20,13 +20,7 @@ public class CarCatalogCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Car> allCars = carService.getAllCars();
-
-        for (Car car: allCars) {
-            LOGGER.info("car element in controller ->" + car.toString());
-        }
-
         request.setAttribute("allCars", allCars);
-
         forward(Router.CAR_CATALOG_PATH.getPath(), request, response);
     }
 }

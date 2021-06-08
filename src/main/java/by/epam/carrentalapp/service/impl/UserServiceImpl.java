@@ -1,12 +1,12 @@
 package by.epam.carrentalapp.service.impl;
 
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.*;
 import by.epam.carrentalapp.dao.DaoFactory;
 import by.epam.carrentalapp.dto.LoginUserDto;
 import by.epam.carrentalapp.entity.CustomerUserDetails;
 import by.epam.carrentalapp.entity.Role;
-import by.epam.carrentalapp.entity.user.RoleName;
 import by.epam.carrentalapp.entity.user.User;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.validator.ValidationException;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UsersRolesDao usersRolesDao;
 
     private final Integer INITIAL_CUSTOMER_RATE = 1;
-    private final String INITIAL_CUSTOMER_ROLE = RoleName.CUSTOMER.getName();
+    private final String INITIAL_CUSTOMER_ROLE = RoleName.USER.name();
 
     public UserServiceImpl() {
         userDao = DaoFactory.getUserDao();
@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
         Optional<User> foundUser = userDao.findByEmail(userDto.getEmail());
 
         if (foundUser.isEmpty()
-
             //todo remove
             || !foundUser.get().getPassword().equals(userDto.getPassword())
             /*|| !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())*/) {

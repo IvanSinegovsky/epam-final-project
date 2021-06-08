@@ -1,17 +1,18 @@
 package by.epam.carrentalapp.controller.command;
 
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
 public enum CommandTitle {
-    LOGIN("ALL"),
-    REGISTER("ALL"),
-    HOME("ALL"),
-    CAR_CATALOG("ALL"),
-    ERROR("ALL"),
-    ORDER_LIST_COMMAND("ADMIN");
+    LOGIN(RoleName.ALL),
+    REGISTER(RoleName.ALL),
+    HOME(RoleName.ALL),
+    CAR_CATALOG(RoleName.ALL),
+    ERROR(RoleName.ALL),
+    ORDER_LIST_COMMAND(RoleName.ADMIN);
 
-    private final String rolePermission;
+    private final RoleName permission;
 }

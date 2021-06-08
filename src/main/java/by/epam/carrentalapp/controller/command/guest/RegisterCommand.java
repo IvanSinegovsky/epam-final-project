@@ -27,12 +27,9 @@ public class RegisterCommand implements Command {
 
         try {
             userService.registerCustomer(name, lastname, email, password, passportNumber);
-
             AccessManager.setRoleToSession(request, RoleName.USER.getSessionAttributeName());
-
             redirect(Router.CAR_CATALOG_PATH.getPath(), response);
         } catch (Exception e) {
-            //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
             redirect(Router.ERROR_PATH.getPath(), response);
         }
     }

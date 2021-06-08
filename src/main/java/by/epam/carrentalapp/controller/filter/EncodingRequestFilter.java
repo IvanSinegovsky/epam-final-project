@@ -12,8 +12,7 @@ public class EncodingRequestFilter implements Filter {
     private final String UTF8_ENCODING = "UTF-8";
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
+    public void init(FilterConfig filterConfig) throws ServletException { }
 
     @Override
     public void doFilter(ServletRequest servletRequest,
@@ -25,7 +24,5 @@ public class EncodingRequestFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() { }
 }
