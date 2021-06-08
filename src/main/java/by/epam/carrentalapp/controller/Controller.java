@@ -43,9 +43,7 @@ public class Controller extends HttpServlet {
         Command commandOptional = CommandProvider.getCommand(command);
 
         if (commandOptional != null) {
-            getServletContext().getRequestDispatcher(
-                    commandOptional.execute(request, response)).forward(request, response
-            );
+            commandOptional.execute(request, response);
         } else {
             LOGGER.info("Unknown command");
         }

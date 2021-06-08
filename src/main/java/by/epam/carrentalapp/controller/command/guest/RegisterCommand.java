@@ -11,13 +11,14 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class RegisterCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(RegisterCommand.class);
     private final UserService userService = ServiceFactory.getUserService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String name = request.getParameter(RequestParameterName.NAME.getName());
         String lastname = request.getParameter(RequestParameterName.LASTNAME.getName());
         String email = request.getParameter(RequestParameterName.EMAIL.getName());
@@ -34,9 +35,7 @@ public class RegisterCommand implements Command {
             //response.sendRedirect("url");
         } catch (Exception e) {
             //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
-            return Router.ERROR_PATH.getPath();
+            redirect(Router.ERROR_PATH.getPath(), response);
         }
-
-        return Router.CAR_CATALOG_PATH.getPath();
     }
 }

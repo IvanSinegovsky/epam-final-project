@@ -13,19 +13,18 @@ import java.util.Map;
 
 @NoArgsConstructor
 public class CommandProvider {
-    private static final Map<String, Command> titleToCommand = new HashMap<>();
+    private static final Map<String, Command> nameToCommand = new HashMap<>();
 
     static {
-        titleToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
-        titleToCommand.put(CommandTitle.REGISTER.name(), new RegisterCommand());
-        titleToCommand.put(CommandTitle.HOME.name(), new HomeCommand());
-        titleToCommand.put(CommandTitle.CAR_CATALOG.name(), new CarCatalogCommand());
-        titleToCommand.put(CommandTitle.ERROR.name(), new ErrorCommand());
-        titleToCommand.put(CommandTitle.ORDER_LIST_COMMAND.name(), new OrderListCommand());
+        nameToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
+        nameToCommand.put(CommandTitle.REGISTER.name(), new RegisterCommand());
+        nameToCommand.put(CommandTitle.HOME.name(), new HomeCommand());
+        nameToCommand.put(CommandTitle.CAR_CATALOG.name(), new CarCatalogCommand());
+        nameToCommand.put(CommandTitle.ERROR.name(), new ErrorCommand());
+        nameToCommand.put(CommandTitle.ORDER_LIST_COMMAND.name(), new OrderListCommand());
     }
 
     public static Command getCommand(String commandTitle) {
-        Command command = titleToCommand.get(commandTitle.toUpperCase());
-        return command;
+        return nameToCommand.get(commandTitle.toUpperCase());
     }
 }

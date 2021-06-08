@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class LoginCommand implements Command {
     private final UsersRolesService usersRolesService = ServiceFactory.getUsersRolesService();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LoginUserDto loginUserDto = new LoginUserDto(
                 request.getParameter(RequestParameterName.EMAIL.getName()),
                 request.getParameter(RequestParameterName.PASSWORD.getName())
@@ -39,14 +40,11 @@ public class LoginCommand implements Command {
             } else {
                 //todo throw custom exception
             }
-
             redirect("/home?command=CAR_CATALOG", response);
         } catch (Exception e) {
             //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
-            return Router.ERROR_PATH.getPath();
+            redirect(Router.ERROR_PATH.getPath(), response);
         }
-
-        return Router.CAR_CATALOG_PATH.getPath();
     }
 }
 

@@ -7,6 +7,7 @@ import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.impl.ServiceFactory;
 import org.apache.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class CarCatalogCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(CarCatalogCommand.class);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Car> allCars = carService.getAllCars();
 
         for (Car car: allCars) {
@@ -26,6 +27,6 @@ public class CarCatalogCommand implements Command {
 
         request.setAttribute("allCars", allCars);
 
-        return Router.CAR_CATALOG_PATH.getPath();
+        forward(Router.CAR_CATALOG_PATH.getPath(), request, response);
     }
 }

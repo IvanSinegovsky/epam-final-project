@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface Command {
-    String execute(HttpServletRequest request, HttpServletResponse response);
+    void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
     default void forward(String path,
                          HttpServletRequest request,
