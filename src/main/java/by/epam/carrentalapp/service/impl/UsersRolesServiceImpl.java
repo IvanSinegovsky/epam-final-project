@@ -2,7 +2,7 @@ package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.UsersRolesDao;
-import by.epam.carrentalapp.dao.provider.DaoFactory;
+import by.epam.carrentalapp.dao.DaoFactory;
 import by.epam.carrentalapp.entity.Role;
 import by.epam.carrentalapp.service.UsersRolesService;
 import org.apache.log4j.Logger;

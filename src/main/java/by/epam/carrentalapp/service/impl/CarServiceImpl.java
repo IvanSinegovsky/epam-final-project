@@ -1,8 +1,7 @@
 package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.dao.CarDao;
-import by.epam.carrentalapp.dao.impl.CarDaoImpl;
-import by.epam.carrentalapp.dao.provider.DaoFactory;
+import by.epam.carrentalapp.dao.DaoFactory;
 import by.epam.carrentalapp.entity.Car;
 import by.epam.carrentalapp.service.CarService;
 import org.apache.log4j.Logger;
@@ -19,7 +18,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> getAllCars() {
-        LOGGER.info("CarServiceImpl started getting cars");
         return carDao.findAll();
     }
 }

@@ -30,9 +30,7 @@ public class RegisterCommand implements Command {
 
             AccessManager.setRoleToSession(request, RoleName.USER.getSessionAttributeName());
 
-            //todo вместо return[jsp page] do forward or redirect in all the commands
-            //forward применить в других командах ServletDispatcher
-            //response.sendRedirect("url");
+            redirect(Router.CAR_CATALOG_PATH.getPath(), response);
         } catch (Exception e) {
             //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
             redirect(Router.ERROR_PATH.getPath(), response);

@@ -10,7 +10,8 @@ public enum Router {
     REGISTER_PATH("/view/page/guest/register.jsp"),
     CAR_CATALOG_PATH("/view/page/guest/carCatalog.jsp"),
     HOME_PATH("/static/home.html"),
-    ERROR_PATH("/static/error.html");
+    ERROR_PATH("/static/error.html"),
+    ORDER_REQUEST_LIST_PATH("/view/page/admin/orderRequestList.jsp");
 
     private final String path;
 }

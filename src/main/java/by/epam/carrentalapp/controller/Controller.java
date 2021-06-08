@@ -40,10 +40,10 @@ public class Controller extends HttpServlet {
 
     private void executeCommand(String command, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Command commandOptional = CommandProvider.getCommand(command);
+        Command currentCommand = CommandProvider.getCommand(command);
 
-        if (commandOptional != null) {
-            commandOptional.execute(request, response);
+        if (currentCommand != null) {
+            currentCommand.execute(request, response);
         } else {
             LOGGER.info("Unknown command");
         }

@@ -2,14 +2,13 @@ package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.*;
-import by.epam.carrentalapp.dao.provider.DaoFactory;
+import by.epam.carrentalapp.dao.DaoFactory;
 import by.epam.carrentalapp.dto.LoginUserDto;
 import by.epam.carrentalapp.entity.CustomerUserDetails;
 import by.epam.carrentalapp.entity.Role;
 import by.epam.carrentalapp.entity.user.RoleName;
 import by.epam.carrentalapp.entity.user.User;
 import by.epam.carrentalapp.service.UserService;
-import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
 import by.epam.carrentalapp.service.impl.validator.ValidationException;
 import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;

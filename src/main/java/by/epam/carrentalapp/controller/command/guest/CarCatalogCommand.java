@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class CarCatalogCommand implements Command {
-    private final CarService carService = ServiceFactory.getCarService();
     private final Logger LOGGER = Logger.getLogger(CarCatalogCommand.class);
+    private final CarService carService = ServiceFactory.getCarService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

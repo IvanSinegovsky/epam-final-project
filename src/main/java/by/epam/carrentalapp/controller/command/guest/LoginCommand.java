@@ -26,26 +26,28 @@ public class LoginCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        forward("/view/page/guest/login.jsp", request, response);
-        LoginUserDto loginUserDto = new LoginUserDto(
-                request.getParameter(RequestParameterName.EMAIL.getName()),
-                request.getParameter(RequestParameterName.PASSWORD.getName())
-        );
+        if (request.getParameter(RequestParameterName.EMAIL.getName()) == null){
+            forward("/view/page/guest/login.jsp", request, response);
+        } else {
+            LoginUserDto loginUserDto = new LoginUserDto(
+                    request.getParameter(RequestParameterName.EMAIL.getName()),
+                    request.getParameter(RequestParameterName.PASSWORD.getName())
+            );
 
-        try {
+            try {
             Optional<User> userOptional = userService.login(loginUserDto);
-            List<Role> userRoles = null;
 
             if (userOptional.isPresent()) {
-                userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
+                List<Role> userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
                 AccessManager.setRoleListToSession(request, userRoles);
             } else {
-                //todo throw custom exception
+                redirect(Router.LOGIN_PATH.getPath(), response);
             }
-            redirect("/home?command=CAR_CATALOG", response);
-        } catch (Exception e) {
-            //TODO CHANGE RO MORE INFORMATIVE EXCEPTION NAME
-            redirect(Router.ERROR_PATH.getPath(), response);
+
+                redirect("/home?command=CAR_CATALOG", response);
+            } catch (Exception e) {
+                redirect(Router.ERROR_PATH.getPath(), response);
+            }
         }
     }
 }
