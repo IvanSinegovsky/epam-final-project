@@ -21,10 +21,10 @@ public class AccessManager {
     private static boolean hasPermission(String commandRoleAccess, String userRole) {
         if (commandRoleAccess.equals(RoleName.ALL.name())) {
             return true;
-        } else if (commandRoleAccess.equals(RoleName.USER.name()) && userRole.equals(RoleName.USER.name())) {
+        } else if (commandRoleAccess.equals(RoleName.CUSTOMER.name()) && userRole.equals(RoleName.CUSTOMER.name())) {
             return true;
         } else if (commandRoleAccess.equals(RoleName.ADMIN.name())
-                && (userRole.equals(RoleName.USER.name()) || userRole.equals(RoleName.ADMIN.name()))) {
+                && (userRole.equals(RoleName.CUSTOMER.name()) || userRole.equals(RoleName.ADMIN.name()))) {
             return true;
         }
         return false;

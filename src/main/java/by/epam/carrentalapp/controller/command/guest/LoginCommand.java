@@ -40,11 +40,11 @@ public class LoginCommand implements Command {
             if (userOptional.isPresent()) {
                 List<Role> userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
                 AccessManager.setRoleListToSession(request, userRoles);
+                redirect("/home?command=CAR_CATALOG", response);
             } else {
                 redirect(Router.LOGIN_PATH.getPath(), response);
             }
 
-                redirect("/home?command=CAR_CATALOG", response);
             } catch (Exception e) {
                 redirect(Router.ERROR_PATH.getPath(), response);
             }

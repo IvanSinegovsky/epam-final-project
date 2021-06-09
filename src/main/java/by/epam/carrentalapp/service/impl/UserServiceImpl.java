@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UsersRolesDao usersRolesDao;
 
     private final Integer INITIAL_CUSTOMER_RATE = 1;
-    private final String INITIAL_CUSTOMER_ROLE = RoleName.USER.name();
+    private final String INITIAL_CUSTOMER_ROLE = RoleName.CUSTOMER.name();
 
     public UserServiceImpl() {
         userDao = DaoFactory.getUserDao();

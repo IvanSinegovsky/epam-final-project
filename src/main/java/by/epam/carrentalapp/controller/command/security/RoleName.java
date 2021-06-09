@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum RoleName {
     ALL("isAll"),
-    USER("isUser"),
+    CUSTOMER("isCustomer"),
     ADMIN("isAdmin");
 
     private final String sessionAttributeName;

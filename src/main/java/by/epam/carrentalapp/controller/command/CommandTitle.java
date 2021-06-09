@@ -13,7 +13,7 @@ public enum CommandTitle {
     CAR_CATALOG(RoleName.ALL),
     ERROR(RoleName.ALL),
     ORDER_LIST(RoleName.ADMIN),
-    CHOOSE_CAR(RoleName.USER);
+    CHOOSE_CAR(RoleName.CUSTOMER);
 
     private final RoleName permission;
 }

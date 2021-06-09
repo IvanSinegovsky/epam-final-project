@@ -27,7 +27,9 @@ public class RoleDaoImpl implements RoleDao {
             preparedStatement.setLong(1, roleIdToFind);
 
             ResultSet roleResultSet = preparedStatement.executeQuery();
-            roleOptional = roleResultSetToRole(roleResultSet);
+            while (roleResultSet.next()) {
+                roleOptional = roleResultSetToRole(roleResultSet);
+            }
         } catch (SQLException | ConnectionException e) {
             LOGGER.error("RoleDaoImpl findByRoleId(): cannot extract role from ResultSet.");
         }
