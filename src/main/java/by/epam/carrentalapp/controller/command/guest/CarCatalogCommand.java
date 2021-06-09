@@ -21,6 +21,6 @@ public class CarCatalogCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Car> allCars = carService.getAllCars();
         request.setAttribute("allCars", allCars);
-        forward(Router.CAR_CATALOG_PATH.getPath(), request, response);
+        forward(Router.CAR_CATALOG_FORWARD_PATH.getPath(), request, response);
     }
 }

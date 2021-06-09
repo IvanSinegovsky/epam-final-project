@@ -27,7 +27,7 @@ public class LoginCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getParameter(RequestParameterName.EMAIL.getName()) == null){
-            forward("/view/page/guest/login.jsp", request, response);
+            forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
         } else {
             LoginUserDto loginUserDto = new LoginUserDto(
                     request.getParameter(RequestParameterName.EMAIL.getName()),
@@ -40,13 +40,13 @@ public class LoginCommand implements Command {
             if (userOptional.isPresent()) {
                 List<Role> userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
                 AccessManager.setRoleListToSession(request, userRoles);
-                redirect("/home?command=CAR_CATALOG", response);
+                redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
             } else {
-                redirect(Router.LOGIN_PATH.getPath(), response);
+                forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
             }
 
             } catch (Exception e) {
-                redirect(Router.ERROR_PATH.getPath(), response);
+                redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
             }
         }
     }
