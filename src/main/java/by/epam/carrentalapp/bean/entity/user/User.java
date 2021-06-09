@@ -1,9 +1,8 @@
-package by.epam.carrentalapp.entity.user;
+package by.epam.carrentalapp.bean.entity.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 

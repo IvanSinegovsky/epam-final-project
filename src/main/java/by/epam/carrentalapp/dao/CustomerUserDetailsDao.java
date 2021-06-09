@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.dao;
 
-import by.epam.carrentalapp.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 
 public interface CustomerUserDetailsDao {
     String USER_DETAILS_ID_COLUMN_NAME = "user_details_id";

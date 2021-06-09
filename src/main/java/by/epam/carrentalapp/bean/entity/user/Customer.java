@@ -1,6 +1,6 @@
-package by.epam.carrentalapp.entity.user;
+package by.epam.carrentalapp.bean.entity.user;
 
-import by.epam.carrentalapp.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

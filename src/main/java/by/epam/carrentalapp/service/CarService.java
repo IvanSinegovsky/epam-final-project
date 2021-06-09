@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.service;
 
-import by.epam.carrentalapp.entity.Car;
+import by.epam.carrentalapp.bean.entity.Car;
 
 import java.util.List;
 

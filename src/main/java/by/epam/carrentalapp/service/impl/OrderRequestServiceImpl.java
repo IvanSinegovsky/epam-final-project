@@ -2,7 +2,7 @@ package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.dao.DaoFactory;
-import by.epam.carrentalapp.entity.OrderRequest;
+import by.epam.carrentalapp.bean.entity.OrderRequest;
 import by.epam.carrentalapp.service.OrderRequestService;
 import org.apache.log4j.Logger;
 

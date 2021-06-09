@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.service;
 
-import by.epam.carrentalapp.entity.Role;
+import by.epam.carrentalapp.bean.entity.Role;
 
 import java.util.List;
 

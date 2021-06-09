@@ -5,7 +5,7 @@ import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.CarQuery;
-import by.epam.carrentalapp.entity.Car;
+import by.epam.carrentalapp.bean.entity.Car;
 import org.apache.log4j.Logger;
 
 import java.sql.ResultSet;

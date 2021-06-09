@@ -1,4 +1,4 @@
-package by.epam.carrentalapp.entity;
+package by.epam.carrentalapp.bean.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,4 +16,6 @@ public class OrderRequest implements Serializable {
     private LocalDateTime expectedEndTime;
     private Long expectedCarId;
     private Long userDetailsId;
+    private Boolean isActive;
+    private Boolean isChecked;
 }

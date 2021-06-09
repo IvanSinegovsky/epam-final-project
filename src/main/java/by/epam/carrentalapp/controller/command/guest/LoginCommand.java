@@ -2,10 +2,9 @@ package by.epam.carrentalapp.controller.command.guest;
 
 import by.epam.carrentalapp.controller.command.*;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
-import by.epam.carrentalapp.controller.command.security.RoleName;
-import by.epam.carrentalapp.dto.LoginUserDto;
-import by.epam.carrentalapp.entity.Role;
-import by.epam.carrentalapp.entity.user.User;
+import by.epam.carrentalapp.bean.dto.LoginUserDto;
+import by.epam.carrentalapp.bean.entity.Role;
+import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.service.UsersRolesService;
 import by.epam.carrentalapp.service.impl.ServiceFactory;
 import by.epam.carrentalapp.service.UserService;

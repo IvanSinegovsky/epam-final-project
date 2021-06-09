@@ -2,7 +2,7 @@ package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.dao.CarDao;
 import by.epam.carrentalapp.dao.DaoFactory;
-import by.epam.carrentalapp.entity.Car;
+import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.service.CarService;
 import org.apache.log4j.Logger;
 

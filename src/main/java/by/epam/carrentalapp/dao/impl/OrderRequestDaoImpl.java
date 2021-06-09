@@ -4,10 +4,8 @@ import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.query.CarQuery;
 import by.epam.carrentalapp.dao.query.OrderRequestQuery;
-import by.epam.carrentalapp.entity.Car;
-import by.epam.carrentalapp.entity.OrderRequest;
+import by.epam.carrentalapp.bean.entity.OrderRequest;
 import org.apache.log4j.Logger;
 
 import java.sql.ResultSet;
@@ -16,7 +14,6 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class OrderRequestDaoImpl implements OrderRequestDao {
@@ -36,13 +33,17 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
                 String expectedEndTime = orderRequestsResultSet.getString(EXPECTED_END_TIME_COLUMN_NAME);
                 Long expectedCarId = orderRequestsResultSet.getLong(EXPECTED_CAR_ID_COLUMN_NAME);
                 Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
+                Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
+                Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
 
                 OrderRequest orderRequest = new OrderRequest(
                         userId,
                         LocalDateTime.parse(expectedStartTime, dateTimeFormatter),
                         LocalDateTime.parse(expectedEndTime, dateTimeFormatter),
                         expectedCarId,
-                        userDetailsId
+                        userDetailsId,
+                        isActive,
+                        isChecked
                 );
 
                 orderRequests.add(orderRequest);

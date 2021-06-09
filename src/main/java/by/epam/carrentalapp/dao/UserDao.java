@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.dao;
 
-import by.epam.carrentalapp.entity.user.User;
+import by.epam.carrentalapp.bean.entity.user.User;
 
 import java.util.List;
 import java.util.Optional;

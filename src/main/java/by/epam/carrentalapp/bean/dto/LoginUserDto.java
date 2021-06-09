@@ -1,4 +1,4 @@
-package by.epam.carrentalapp.dto;
+package by.epam.carrentalapp.bean.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -4,7 +4,7 @@ import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.CustomerUserDetailsQuery;
-import by.epam.carrentalapp.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;

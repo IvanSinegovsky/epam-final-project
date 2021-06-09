@@ -1,4 +1,4 @@
-package by.epam.carrentalapp.entity;
+package by.epam.carrentalapp.bean.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

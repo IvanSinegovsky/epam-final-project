@@ -4,11 +4,12 @@ import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.*;
 import by.epam.carrentalapp.dao.DaoFactory;
-import by.epam.carrentalapp.dto.LoginUserDto;
-import by.epam.carrentalapp.entity.CustomerUserDetails;
-import by.epam.carrentalapp.entity.Role;
-import by.epam.carrentalapp.entity.user.User;
+import by.epam.carrentalapp.bean.dto.LoginUserDto;
+import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.Role;
+import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.service.UserService;
+import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
 import by.epam.carrentalapp.service.impl.validator.ValidationException;
 import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;
@@ -39,9 +40,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> foundUser = userDao.findByEmail(userDto.getEmail());
 
         if (foundUser.isEmpty()
-            //todo remove
-            || !foundUser.get().getPassword().equals(userDto.getPassword())
-            /*|| !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())*/) {
+                || !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())) {
             throw new CredentialNotFoundException("Wrong credentials");
         }
 
@@ -51,8 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerCustomer(String name, String lastname, String email, String password, String passportNumber)
             throws Exception {
-        //TODO CHANGE WITH CHANGING DB COLUMN VARCHAR SIZE
-        String encodedPassword = "pass"/*BCryptPasswordEncoder.encode(password)*/;
+        String encodedPassword = BCryptPasswordEncoder.encode(password);
         Long registeredUserId = saveUser(name, lastname, email, encodedPassword);
         saveCustomerUserDetails(passportNumber, registeredUserId);
         saveCustomerUserRole(registeredUserId);

@@ -1,9 +1,8 @@
 package by.epam.carrentalapp.service.impl.validator;
 
-import by.epam.carrentalapp.entity.CustomerUserDetails;
-import by.epam.carrentalapp.entity.OrderRequest;
-import by.epam.carrentalapp.entity.user.Customer;
-import by.epam.carrentalapp.entity.user.User;
+import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.OrderRequest;
+import by.epam.carrentalapp.bean.entity.user.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

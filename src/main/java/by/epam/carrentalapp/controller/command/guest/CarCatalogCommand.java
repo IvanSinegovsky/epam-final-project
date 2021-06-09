@@ -2,7 +2,7 @@ package by.epam.carrentalapp.controller.command.guest;
 
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
-import by.epam.carrentalapp.entity.Car;
+import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.impl.ServiceFactory;
 import org.apache.log4j.Logger;

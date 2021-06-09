@@ -5,13 +5,12 @@ import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.query.RoleQuery;
-import by.epam.carrentalapp.entity.Role;
+import by.epam.carrentalapp.bean.entity.Role;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Optional;
 
 public class RoleDaoImpl implements RoleDao {

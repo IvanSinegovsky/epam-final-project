@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.service;
 
-import by.epam.carrentalapp.entity.OrderRequest;
+import by.epam.carrentalapp.bean.entity.OrderRequest;
 
 import java.util.List;
 
