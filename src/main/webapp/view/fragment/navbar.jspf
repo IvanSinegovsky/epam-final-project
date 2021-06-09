@@ -16,6 +16,7 @@
 <fmt:message bundle="${loc}" key="navbar.register-button" var="registerButton"/>
 <fmt:message bundle="${loc}" key="navbar.catalog-button" var="catalogButton"/>
 <fmt:message bundle="${loc}" key="navbar.choose-car-button" var="chooseCar"/>
+<fmt:message bundle="${loc}" key="navbar.language-button" var="languageButton"/>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,10 +27,10 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-                <a class="nav-link" href="#"><c:out value="${catalogButton}"/><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="home?command=CAR_CATALOG"><c:out value="${catalogButton}"/><span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="#"><c:out value="${chooseCar}"/></a><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="home?command=CHOOSE_CAR"><c:out value="${chooseCar}"/></a><span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -43,7 +44,7 @@
 
         <li class="nav-item dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Language
+                <c:out value="${languageButton}"/>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="home?command=${pageContext.request.getParameter("command")}&local=en">EN</a>

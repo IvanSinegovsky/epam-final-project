@@ -13,7 +13,7 @@ public class AccessManager {
         Object userRole = httpServletRequest.getSession().getAttribute(roleToCheck.getSessionAttributeName());
         String commandTitle = httpServletRequest.getParameter(REQUEST_COMMAND_PARAMETER_NAME);
 
-        String commandRoleAccess = CommandTitle.valueOf(commandTitle.toUpperCase()).getRolePermission();
+        String commandRoleAccess = CommandTitle.valueOf(commandTitle.toUpperCase()).getPermission().name();
 
         return hasPermission(commandRoleAccess, (String) userRole);
     }

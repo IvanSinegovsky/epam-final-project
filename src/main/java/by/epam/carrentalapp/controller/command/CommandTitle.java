@@ -12,7 +12,8 @@ public enum CommandTitle {
     HOME(RoleName.ALL),
     CAR_CATALOG(RoleName.ALL),
     ERROR(RoleName.ALL),
-    ORDER_LIST_COMMAND(RoleName.ADMIN);
+    ORDER_LIST(RoleName.ADMIN),
+    CHOOSE_CAR(RoleName.USER);
 
     private final RoleName permission;
 }

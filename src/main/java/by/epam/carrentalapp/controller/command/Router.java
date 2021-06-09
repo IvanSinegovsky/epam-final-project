@@ -11,7 +11,8 @@ public enum Router {
     CAR_CATALOG_PATH("/view/page/guest/carCatalog.jsp"),
     HOME_PATH("/static/home.html"),
     ERROR_PATH("/static/error.html"),
-    ORDER_REQUEST_LIST_PATH("/view/page/admin/orderRequestList.jsp");
+    ORDER_REQUEST_LIST_PATH("/view/page/admin/orderRequestList.jsp"),
+    CHOOSE_CAR_PATH("/view/page/customer/chooseCar.jsp");
 
     private final String path;
 }

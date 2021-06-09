@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class OrderListCommand implements Command {
-    private final Logger LOGGER = Logger.getLogger(CarCatalogCommand.class);
+    private final Logger LOGGER = Logger.getLogger(OrderListCommand.class);
     private final OrderRequestService orderRequestService = ServiceFactory.getOrderRequestService();
 
     @Override
