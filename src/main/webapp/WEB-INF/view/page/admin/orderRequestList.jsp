@@ -4,24 +4,25 @@
 
 <html>
 <head>
-    <%@ include file="/view/fragment/navbar.jspf"%>
-    <%@ include file="/view/fragment/bootstrapImport.jspf"%>
-    <title>Car catalog</title>
+    <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
+    <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
+    <title>Order request list</title>
 </head>
 <body>
-        <jsp:useBean id="allCars" scope="request" type="java.util.List"/>
+<jsp:useBean id="orderRequests" scope="request" type="java.util.List"/>
 
-        <c:forEach items="${allCars}" var="car">
-        <div class="card-group">
-            <div class="card">
-            <img class="card-img-top" src="https://westgroup.by/d/porsh-gobrid-logo-west.png" alt="Card image cap">
+<c:forEach items="${orderRequests}" var="orderRequest">
+    ${orderRequest}
+    <%--
+    <div class="card-group">
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title">${car.model}</h5>
                 <p class="card-text">${car.number}</p>
                 <p class="card-text"><small class="text-muted">${car.hourlyCost}</small></p>
             </div>
         </div>
-        </div>
-        </c:forEach>
+    </div>--%>
+</c:forEach>
 </body>
 </html>

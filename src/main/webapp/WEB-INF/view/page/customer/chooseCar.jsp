@@ -3,8 +3,8 @@
 
 <html>
 <head>
-    <%@ include file="/view/fragment/navbar.jspf"%>
-    <%@ include file="/view/fragment/bootstrapImport.jspf"%>
+    <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
+    <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
     <title>Choose car</title>
 </head>
 <body>
