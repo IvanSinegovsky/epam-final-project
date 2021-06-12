@@ -13,6 +13,8 @@ public enum Router {
     ERROR_FORWARD_PATH("/WEB-INF/static/error.html"),
     ORDER_REQUEST_LIST_FORWARD_PATH("/WEB-INF/view/page/admin/orderRequestList.jsp"),
     CHOOSE_CAR_FORWARD_PATH("/WEB-INF/view/page/customer/chooseCar.jsp"),
+    ACCEPT_ORDER_FORWARD_PATH(""), //todo change
+    REJECT_ORDER_FORWARD_PATH(""), //todo maybe change with popup
 
     LOGIN_REDIRECT_PATH("/home?command=LOGIN"),
     REGISTER_REDIRECT_PATH("/home?command=REGISTER"),
@@ -21,7 +23,9 @@ public enum Router {
     ERROR_REDIRECT_PATH("/home?command=ERROR"),
     ORDER_REQUEST_LIST_REDIRECT_PATH("/home?command=ORDER_REQUEST_LIST"),
     CHOOSE_CAR_REDIRECT_PATH("/home?command=CHOOSE_CAR"),
-    LOGOUT_REDIRECT_PATH("/home?command=LOGOUT");
+    LOGOUT_REDIRECT_PATH("/home?command=LOGOUT"),
+    ACCEPT_ORDER_REDIRECT_PATH("/home?command=ACCEPT_ORDER"),
+    REJECT_ORDER_REDIRECT_PATH("/home?command=REJECT_ORDER");
 
     private final String path;
 }

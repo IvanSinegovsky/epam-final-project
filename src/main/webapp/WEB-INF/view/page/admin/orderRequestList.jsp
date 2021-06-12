@@ -9,21 +9,48 @@
     <title>Order request list</title>
 </head>
 <body>
-<jsp:useBean id="orderRequestInfos" scope="request" type="java.util.List"/>
+<div class="container">
+    <form method="POST" action="home">
+        <input type="hidden" name="command" value="ACCEPT_ORDER"/>
 
-<c:forEach items="${orderRequestInfos}" var="orderRequestInfo">
-    <div class="card-group">
-        <div class="card">
-            <div class="card-body">
-                <p class="card-text"><small class="text-muted">Order request id: ${orderRequestInfo.orderRequestId}</small></p>
-                <h5 class="card-title">Customer rate: ${orderRequestInfo.customerRate}</h5>
-                <h5 class="card-title">${orderRequestInfo.expectedCarModel}</h5>
-                <h5 class="card-title">${orderRequestInfo.expectedStartTime}</h5>
-                <h5 class="card-title">${orderRequestInfo.expectedEndTime}</h5>
-            </div>
-            <button type="button" class="btn btn-success">Accept</button>
-            <button type="button" class="btn btn-danger">Reject</button>
-        </div>
-</c:forEach>
+        <button type="submit" name="action" value="block" class="btn btn-outline-success">
+            <fmt:message key="admin.order-request-list.accept-button" bundle="${loc}" />
+        </button>
+        <button type="submit" name="action" value="unblock" class="btn btn-outline-warning">
+            <fmt:message key="admin.order-request-list.reject-button" bundle="${loc}" />
+        </button>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th><fmt:message key="admin.order-request-list.table.column-name.request-id" bundle="${loc}" /></th>
+                <th><fmt:message key="admin.order-request-list.table.column-name.customer-rate" bundle="${loc}" /></th>
+                <th><fmt:message key="admin.order-request-list.table.column-name.car-model" bundle="${loc}" /></th>
+                <th><fmt:message key="admin.order-request-list.table.column-name.expected-start-time" bundle="${loc}" /></th>
+                <th><fmt:message key="admin.order-request-list.table.column-name.expected-end-time" bundle="${loc}" /></th>
+                <th><fmt:message key="admin.order-request-list.table.column-name.total-cost" bundle="${loc}" /></th>
+            </tr>
+            </thead>
+            <tbody>
+            <jsp:useBean id="orderRequestInfos" scope="request" type="java.util.List"/>
+            <c:forEach var="orderRequestInfo" items="${orderRequestInfos}">
+                <tr>
+                    <td><div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="selected" value="${user.id}">
+                        </label>
+                    </div></td>
+                    <td><c:out value="${orderRequestInfo.orderRequestId}"/></td>
+                    <td><c:out value="${orderRequestInfo.customerRate}"/></td>
+                    <td><c:out value="${orderRequestInfo.expectedCarModel}"/></td>
+                    <td><c:out value="${orderRequestInfo.expectedStartTime}"/></td>
+                    <td><c:out value="${orderRequestInfo.expectedEndTime}"/></td>
+                    <td><c:out value="${orderRequestInfo.totalCost}"/></td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </form>
+</div>
 </body>
 </html>

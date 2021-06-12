@@ -14,7 +14,9 @@ public enum CommandTitle {
     ERROR(RoleName.ALL),
     ORDER_REQUEST_LIST(RoleName.ADMIN),
     CHOOSE_CAR(RoleName.CUSTOMER),
-    LOGOUT(RoleName.CUSTOMER);
+    LOGOUT(RoleName.CUSTOMER),
+    ACCEPT_ORDER(RoleName.ADMIN),
+    REJECT_ORDER(RoleName.ADMIN);
 
     private final RoleName permission;
 }
