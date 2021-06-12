@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class OrderListCommand implements Command {
-    private final Logger LOGGER = Logger.getLogger(OrderListCommand.class);
+public class OrderRequestListCommand implements Command {
+    private final Logger LOGGER = Logger.getLogger(OrderRequestListCommand.class);
     private final OrderRequestService orderRequestService = ServiceFactory.getOrderRequestService();
 
     @Override

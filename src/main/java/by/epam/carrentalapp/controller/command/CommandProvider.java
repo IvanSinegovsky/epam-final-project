@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.controller.command;
 
-import by.epam.carrentalapp.controller.command.admin.OrderListCommand;
+import by.epam.carrentalapp.controller.command.admin.OrderRequestListCommand;
 import by.epam.carrentalapp.controller.command.customer.ChooseCarCommand;
 import by.epam.carrentalapp.controller.command.customer.LogoutCommand;
 import by.epam.carrentalapp.controller.command.error.ErrorCommand;
@@ -23,7 +23,7 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.HOME.name(), new HomeCommand());
         nameToCommand.put(CommandTitle.CAR_CATALOG.name(), new CarCatalogCommand());
         nameToCommand.put(CommandTitle.ERROR.name(), new ErrorCommand());
-        nameToCommand.put(CommandTitle.ORDER_REQUEST_LIST.name(), new OrderListCommand());
+        nameToCommand.put(CommandTitle.ORDER_REQUEST_LIST.name(), new OrderRequestListCommand());
         nameToCommand.put(CommandTitle.CHOOSE_CAR.name(), new ChooseCarCommand());
         nameToCommand.put(CommandTitle.LOGOUT.name(), new LogoutCommand());
     }

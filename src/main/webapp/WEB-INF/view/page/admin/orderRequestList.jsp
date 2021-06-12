@@ -13,16 +13,14 @@
 
 <c:forEach items="${orderRequests}" var="orderRequest">
     ${orderRequest}
-    <%--
-    <div class="card-group">
+<%--    <div class="card-group">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">${car.model}</h5>
                 <p class="card-text">${car.number}</p>
                 <p class="card-text"><small class="text-muted">${car.hourlyCost}</small></p>
             </div>
-        </div>
-    </div>--%>
+        </div>--%>
 </c:forEach>
 </body>
 </html>

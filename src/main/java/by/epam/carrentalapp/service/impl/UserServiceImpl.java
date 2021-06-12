@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerCustomer(String name, String lastname, String email, String password, String passportNumber)
             throws Exception {
+        checkEmailExistence(email);
         String encodedPassword = BCryptPasswordEncoder.encode(password);
         Long registeredUserId = saveUser(name, lastname, email, encodedPassword);
         saveCustomerUserDetails(passportNumber, registeredUserId);
@@ -85,6 +86,12 @@ public class UserServiceImpl implements UserService {
             usersRolesDao.save(userId, role.get().getRoleId());
         } else {
             throw new DaoException("Cannot find role by name " + INITIAL_CUSTOMER_ROLE + " in DAO layer");
+        }
+    }
+
+    private void checkEmailExistence(String email) throws Exception {
+        if (userDao.findByEmail(email).isPresent()) {
+            throw new Exception("User with such email already exists");
         }
     }
 }

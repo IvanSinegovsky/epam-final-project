@@ -11,11 +11,8 @@ public class AccessManager {
 
     public static boolean checkPermission(HttpServletRequest httpServletRequest, RoleName roleToCheck) {
         Object userRole = httpServletRequest.getSession().getAttribute(roleToCheck.getSessionAttributeName());
-        String commandTitle = httpServletRequest.getParameter(REQUEST_COMMAND_PARAMETER_NAME);
 
-        String commandRoleAccess = CommandTitle.valueOf(commandTitle.toUpperCase()).getPermission().name();
-
-        return hasPermission(commandRoleAccess, (String) userRole);
+        return (Boolean) userRole;
     }
 
     private static boolean hasPermission(String commandRoleAccess, String userRole) {
