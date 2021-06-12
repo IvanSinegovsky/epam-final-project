@@ -20,7 +20,8 @@ public class UserDaoImpl implements UserDao {
     public List<User> findAll() {
         List<User> allUsers = new ArrayList<>();
 
-        try(Statement statement = ConnectionPool.getInstance().getConnection().createStatement();
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            Statement statement = connection.createStatement();
             ResultSet usersResultSet = statement.executeQuery(UserQuery.SELECT_ALL_FROM_USERS.getQuery())) {
 
             while (usersResultSet.next()){
@@ -43,10 +44,11 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> findByEmail(String emailToFind) {
         Optional<User> userOptional = Optional.empty();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(UserQuery.SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS.getQuery())) {
-            preparedStatement.setString(1, emailToFind);
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(UserQuery
+                    .SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS.getQuery())) {
 
+            preparedStatement.setString(1, emailToFind);
             ResultSet userResultSet = preparedStatement.executeQuery();
 
             if (userResultSet.next()) {
@@ -74,6 +76,7 @@ public class UserDaoImpl implements UserDao {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS
             )) {
+
             preparedStatement.setString(1, userToSave.getEmail());
             preparedStatement.setString(2, userToSave.getPassword());
             preparedStatement.setString(3, userToSave.getName());

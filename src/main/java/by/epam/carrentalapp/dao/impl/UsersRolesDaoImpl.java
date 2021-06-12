@@ -24,6 +24,7 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
              PreparedStatement preparedStatement = connection.prepareStatement(
                 UsersRolesQuery.INSERT_INTO_USERS_ROLES.getQuery()
              )) {
+
             preparedStatement.setLong(1, userId);
             preparedStatement.setLong(2, roleId);
 
@@ -38,9 +39,8 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
         List<Long> userRoleIds = new ArrayList<>();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        UsersRolesQuery.SELECT_ALL_FROM_USERS_ROLES_WHERE_USER_ID_EQUALS.getQuery()
-                )) {
+                PreparedStatement preparedStatement = connection.prepareStatement(UsersRolesQuery
+                        .SELECT_ALL_FROM_USERS_ROLES_WHERE_USER_ID_EQUALS.getQuery())) {
             preparedStatement.setLong(1, userIdToFind);
 
             ResultSet userResultSet = preparedStatement.executeQuery();

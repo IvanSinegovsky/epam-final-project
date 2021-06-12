@@ -23,8 +23,9 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
     public void save(CustomerUserDetails customerUserDetails) throws Exception {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    CustomerUserDetailsQuery.INSERT_INTO_CUSTOMER_USER_DETAILS.getQuery(), Statement.RETURN_GENERATED_KEYS
-            )) {
+                    CustomerUserDetailsQuery.INSERT_INTO_CUSTOMER_USER_DETAILS.getQuery(),
+                    Statement.RETURN_GENERATED_KEYS)) {
+
             preparedStatement.setString(1, customerUserDetails.getPassportNumber());
             preparedStatement.setInt(2, customerUserDetails.getRate());
             preparedStatement.setLong(3, customerUserDetails.getUserId());
@@ -44,11 +45,11 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
     public Optional<CustomerUserDetails> findById(Long userDetailsIdToFind) {
         Optional<CustomerUserDetails> customerUserDetailsOptional = Optional.empty();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(CustomerUserDetailsQuery
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(CustomerUserDetailsQuery
                         .SELECT_ALL_FROM_CUSTOMER_USER_DETAILS_WHERE_USER_DETAILS_ID_EQUALS.getQuery())) {
-            preparedStatement.setLong(1, userDetailsIdToFind);
 
+            preparedStatement.setLong(1, userDetailsIdToFind);
             ResultSet customerUserDetailsResultSet = preparedStatement.executeQuery();
 
             if (customerUserDetailsResultSet.next()) {

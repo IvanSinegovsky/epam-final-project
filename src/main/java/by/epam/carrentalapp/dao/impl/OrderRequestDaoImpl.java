@@ -25,7 +25,8 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
         List<OrderRequest> orderRequests = new ArrayList<>();
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
-            ResultSet orderRequestsResultSet = statement.executeQuery(OrderRequestQuery.SELECT_ALL_FROM_ORDER_REQUESTS.getQuery())) {
+            ResultSet orderRequestsResultSet = statement.executeQuery(OrderRequestQuery
+                    .SELECT_ALL_FROM_ORDER_REQUESTS.getQuery())) {
 
             while (orderRequestsResultSet.next()){
                 Long userId = orderRequestsResultSet.getLong(USER_ID_COLUMN_NAME);

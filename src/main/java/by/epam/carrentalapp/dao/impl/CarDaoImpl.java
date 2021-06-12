@@ -49,10 +49,11 @@ public class CarDaoImpl implements CarDao {
     public Optional<Car> findById(Long carIdToFind) {
         Optional<Car> carOptional = Optional.empty();
 
-        try(PreparedStatement preparedStatement = ConnectionPool.getInstance().getConnection()
-                .prepareStatement(CarQuery.SELECT_ALL_FROM_CARS_WHERE_CAR_ID_EQUALS.getQuery())) {
-            preparedStatement.setLong(1, carIdToFind);
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(CarQuery.SELECT_ALL_FROM_CARS_WHERE_CAR_ID_EQUALS.getQuery())) {
 
+            preparedStatement.setLong(1, carIdToFind);
             ResultSet carResultSet = preparedStatement.executeQuery();
 
             if (carResultSet.next()) {

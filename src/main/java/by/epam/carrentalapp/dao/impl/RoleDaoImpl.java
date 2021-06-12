@@ -42,8 +42,7 @@ public class RoleDaoImpl implements RoleDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_TITLE_EQUALS.getQuery()
-            )) {
+                    RoleQuery.SELECT_ALL_FROM_ROLES_WHERE_ROLE_TITLE_EQUALS.getQuery())) {
             preparedStatement.setString(1, titleToFind);
 
             ResultSet roleResultSet = preparedStatement.executeQuery();
