@@ -9,18 +9,21 @@
     <title>Order request list</title>
 </head>
 <body>
-<jsp:useBean id="orderRequests" scope="request" type="java.util.List"/>
+<jsp:useBean id="orderRequestInfos" scope="request" type="java.util.List"/>
 
-<c:forEach items="${orderRequests}" var="orderRequest">
-    ${orderRequest}
-<%--    <div class="card-group">
+<c:forEach items="${orderRequestInfos}" var="orderRequestInfo">
+    <div class="card-group">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">${car.model}</h5>
-                <p class="card-text">${car.number}</p>
-                <p class="card-text"><small class="text-muted">${car.hourlyCost}</small></p>
+                <p class="card-text"><small class="text-muted">Order request id: ${orderRequestInfo.orderRequestId}</small></p>
+                <h5 class="card-title">Customer rate: ${orderRequestInfo.customerRate}</h5>
+                <h5 class="card-title">${orderRequestInfo.expectedCarModel}</h5>
+                <h5 class="card-title">${orderRequestInfo.expectedStartTime}</h5>
+                <h5 class="card-title">${orderRequestInfo.expectedEndTime}</h5>
             </div>
-        </div>--%>
+            <button type="button" class="btn btn-success">Accept</button>
+            <button type="button" class="btn btn-danger">Reject</button>
+        </div>
 </c:forEach>
 </body>
 </html>
