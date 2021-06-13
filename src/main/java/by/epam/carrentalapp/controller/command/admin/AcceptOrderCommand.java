@@ -3,6 +3,7 @@ package by.epam.carrentalapp.controller.command.admin;
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
+import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.impl.ServiceFactory;
 import org.apache.log4j.Logger;
@@ -23,12 +24,13 @@ public class AcceptOrderCommand implements Command {
         String[] acceptedOrderRequestInfoStrings = request.getParameterValues("selected");
         List<OrderRequestInformationDto> orderRequestInformationDtos
                 = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
+        Long adminApprovedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
         for (String infoString : acceptedOrderRequestInfoStrings) {
             orderRequestInformationDtos.add(OrderRequestInformationDto.valueOf(infoString));
         }
 
-        orderRequestService.acceptOrderRequests(orderRequestInformationDtos);
+        orderRequestService.acceptOrderRequests(orderRequestInformationDtos, adminApprovedId);
 
         redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
     }

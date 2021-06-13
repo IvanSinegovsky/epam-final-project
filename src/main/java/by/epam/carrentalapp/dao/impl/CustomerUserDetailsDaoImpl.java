@@ -1,13 +1,11 @@
 package by.epam.carrentalapp.dao.impl;
 
-import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.query.CustomerUserDetailsQuery;
+import by.epam.carrentalapp.dao.impl.query.CustomerUserDetailsQuery;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
-import by.epam.carrentalapp.dao.query.UserQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;

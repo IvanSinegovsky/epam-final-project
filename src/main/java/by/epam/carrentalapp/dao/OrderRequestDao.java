@@ -4,6 +4,7 @@ import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRequestDao {
     String ORDER_REQUEST_ID_COLUMN_NAME = "order_request_id";
@@ -17,4 +18,5 @@ public interface OrderRequestDao {
     List<OrderRequest> findAll();
     List<OrderRequest> findAllByIsActive();
     void setNonActiveOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos);
+    Optional<OrderRequest> findByOrderRequestId(Long orderRequestId);
 }

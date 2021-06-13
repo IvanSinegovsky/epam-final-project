@@ -1,13 +1,11 @@
 package by.epam.carrentalapp.dao.impl;
 
-import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.dao.CarDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.query.CarQuery;
+import by.epam.carrentalapp.dao.impl.query.CarQuery;
 import by.epam.carrentalapp.bean.entity.Car;
-import by.epam.carrentalapp.dao.query.UserQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -63,6 +61,34 @@ public class CarDaoImpl implements CarDao {
                 Double hourlyCost = carResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
 
                 carOptional = Optional.of(new Car(carId, model, number, hourlyCost));
+            }
+
+        } catch (SQLException | ConnectionException e) {
+            LOGGER.error("CarDaoImpl: cannot extract car from ResultSet.");
+        }
+
+        return carOptional;
+    }
+
+    @Override
+    public Optional<Car> findByModel(String carModelToFind) {
+        Optional<Car> carOptional = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(CarQuery.SELECT_ALL_FROM_CARS_WHERE_MODEL_EQUALS.getQuery())) {
+
+            preparedStatement.setString(1, carModelToFind);
+            ResultSet carResultSet = preparedStatement.executeQuery();
+
+            if (carResultSet.next()) {
+                Long carId = carResultSet.getLong(CAR_ID_COLUMN_NAME);
+                String model = carResultSet.getString(MODEL_COLUMN_NAME);
+                String number = carResultSet.getString(NUMBER_COLUMN_NAME);
+                Double hourlyCost = carResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
+
+                Car carFound = new Car(carId, model, number, hourlyCost);
+                carOptional = Optional.of(carFound);
             }
 
         } catch (SQLException | ConnectionException e) {

@@ -10,6 +10,7 @@ public class DaoFactory {
     private static RoleDao roleDao;
     private static UsersRolesDao usersRolesDao;
     private static OrderRequestDao orderRequestDao;
+    private static AcceptedOrderDao acceptedOrderDao;
 
     public static CarDao getCarDao() {
         if (carDao == null) {
@@ -51,5 +52,12 @@ public class DaoFactory {
             orderRequestDao = new OrderRequestDaoImpl();
         }
         return orderRequestDao;
+    }
+
+    public static AcceptedOrderDao getAcceptedOrderDao() {
+        if (acceptedOrderDao == null) {
+            acceptedOrderDao = new AcceptedOrderDaoImpl();
+        }
+        return acceptedOrderDao;
     }
 }

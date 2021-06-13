@@ -23,6 +23,8 @@ public class LoginCommand implements Command {
     private final UserService userService = ServiceFactory.getUserService();
     private final UsersRolesService usersRolesService = ServiceFactory.getUsersRolesService();
 
+    private static final String USER_ID_SESSION_PARAMETER_NAME = "userId";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getParameter(RequestParameterName.EMAIL.getName()) == null){
@@ -37,6 +39,7 @@ public class LoginCommand implements Command {
             Optional<User> userOptional = userService.login(loginUserDto);
 
             if (userOptional.isPresent()) {
+                request.getSession().setAttribute(USER_ID_SESSION_PARAMETER_NAME, userOptional.get().getUserId());
                 List<Role> userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
                 AccessManager.setRoleListToSession(request, userRoles);
                 redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
@@ -48,6 +51,10 @@ public class LoginCommand implements Command {
                 redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
             }
         }
+    }
+
+    public static String getUserIdSessionParameterName() {
+        return USER_ID_SESSION_PARAMETER_NAME;
     }
 }
 

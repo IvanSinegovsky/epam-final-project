@@ -1,17 +1,15 @@
 package by.epam.carrentalapp.dao.impl;
 
-import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.UsersRolesDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.query.UsersRolesQuery;
+import by.epam.carrentalapp.dao.impl.query.UsersRolesQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +39,7 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UsersRolesQuery
                         .SELECT_ALL_FROM_USERS_ROLES_WHERE_USER_ID_EQUALS.getQuery())) {
+
             preparedStatement.setLong(1, userIdToFind);
 
             ResultSet userResultSet = preparedStatement.executeQuery();

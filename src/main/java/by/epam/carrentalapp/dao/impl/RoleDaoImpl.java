@@ -4,7 +4,7 @@ import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.query.RoleQuery;
+import by.epam.carrentalapp.dao.impl.query.RoleQuery;
 import by.epam.carrentalapp.bean.entity.Role;
 import org.apache.log4j.Logger;
 

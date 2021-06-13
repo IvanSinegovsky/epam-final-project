@@ -1,15 +1,12 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
-import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.query.CarQuery;
-import by.epam.carrentalapp.dao.query.OrderRequestQuery;
+import by.epam.carrentalapp.dao.impl.query.OrderRequestQuery;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
-import by.epam.carrentalapp.dao.query.UserQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -20,9 +17,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderRequestDaoImpl implements OrderRequestDao {
     private final Logger LOGGER = Logger.getLogger(OrderRequestDaoImpl.class);
+
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
@@ -100,5 +99,42 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
         } catch (SQLException | ConnectionException e) {
             LOGGER.error("OrderRequestDaoImpl setNonActiveOrderRequests(...) cannot update value");
         }
+    }
+
+    @Override
+    public Optional<OrderRequest> findByOrderRequestId(Long orderRequestId) {
+        Optional<OrderRequest> orderRequestOptional = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    OrderRequestQuery.SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_ORDER_REQUEST_ID_EQUALS.getQuery())) {
+
+            preparedStatement.setLong(1, orderRequestId);
+            ResultSet orderRequestsResultSet = preparedStatement.executeQuery();
+
+            if (orderRequestsResultSet.next()){
+                Long userId = orderRequestsResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
+                String expectedStartTime = orderRequestsResultSet.getString(EXPECTED_START_TIME_COLUMN_NAME);
+                String expectedEndTime = orderRequestsResultSet.getString(EXPECTED_END_TIME_COLUMN_NAME);
+                Long expectedCarId = orderRequestsResultSet.getLong(EXPECTED_CAR_ID_COLUMN_NAME);
+                Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
+                Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
+                Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
+
+                orderRequestOptional = Optional.of(new OrderRequest(
+                        userId,
+                        LocalDateTime.parse(expectedStartTime, dateTimeFormatter),
+                        LocalDateTime.parse(expectedEndTime, dateTimeFormatter),
+                        expectedCarId,
+                        userDetailsId,
+                        isActive,
+                        isChecked
+                ));
+            }
+        } catch (SQLException | ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl findByOrderRequestId(...): cannot extract orderRequest from ResultSet.");
+        }
+
+        return orderRequestOptional;
     }
 }

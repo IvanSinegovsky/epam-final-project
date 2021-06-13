@@ -1,14 +1,8 @@
 package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
-import by.epam.carrentalapp.bean.entity.Car;
-import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
-import by.epam.carrentalapp.bean.entity.RejectedOrder;
-import by.epam.carrentalapp.dao.CarDao;
-import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
-import by.epam.carrentalapp.dao.OrderRequestDao;
-import by.epam.carrentalapp.dao.DaoFactory;
-import by.epam.carrentalapp.bean.entity.OrderRequest;
+import by.epam.carrentalapp.bean.entity.*;
+import by.epam.carrentalapp.dao.*;
 import by.epam.carrentalapp.service.OrderRequestService;
 import org.apache.log4j.Logger;
 
@@ -24,11 +18,13 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     private final OrderRequestDao orderRequestDao;
     private final CarDao carDao;
     private final CustomerUserDetailsDao customerUserDetailsDao;
+    private final AcceptedOrderDao acceptedOrderDao;
 
     public OrderRequestServiceImpl() {
         orderRequestDao = DaoFactory.getOrderRequestDao();
         carDao = DaoFactory.getCarDao();
         customerUserDetailsDao = DaoFactory.getCustomerUserDetailsDao();
+        acceptedOrderDao = DaoFactory.getAcceptedOrderDao();
     }
 
     @Override
@@ -70,18 +66,34 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos) {
-        //сначала с таблицей orderRequests
+    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminApprovedId) {
+        List<AcceptedOrder> acceptedOrders = new ArrayList<>();
+        Long carId;
+        Long userDetailsId;
+        Long orderRequestId;
+        Optional<OrderRequest> orderRequestOptional;
+
         orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
 
+        for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
+            orderRequestId = informationDto.getOrderRequestId();
+            carId = carDao.findByModel(informationDto.getExpectedCarModel()).get().getCarId();
+            orderRequestOptional = orderRequestDao.findByOrderRequestId(orderRequestId);
 
+            if (orderRequestOptional.isPresent()) {
+                userDetailsId = orderRequestOptional.get().getUserDetailsId();
 
-        //потом занести данные в approvedOrders
+                acceptedOrders.add(new AcceptedOrder(
+                        informationDto.getTotalCost(),
+                        orderRequestId,
+                        carId,
+                        adminApprovedId,
+                        userDetailsId
+                        ));
+            }
+        }
 
-
-
-
-
+        acceptedOrderDao.saveAll(acceptedOrders);
     }
 
     @Override

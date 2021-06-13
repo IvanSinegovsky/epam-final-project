@@ -1,4 +1,4 @@
-package by.epam.carrentalapp.dao.query;
+package by.epam.carrentalapp.dao.impl.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
