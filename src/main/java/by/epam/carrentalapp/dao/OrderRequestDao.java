@@ -1,11 +1,12 @@
 package by.epam.carrentalapp.dao;
 
+import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
 
 import java.util.List;
 
 public interface OrderRequestDao {
-    String USER_ID_COLUMN_NAME = "order_request_id";
+    String ORDER_REQUEST_ID_COLUMN_NAME = "order_request_id";
     String EXPECTED_START_TIME_COLUMN_NAME = "expected_start_time";
     String EXPECTED_END_TIME_COLUMN_NAME = "expected_end_time";
     String EXPECTED_CAR_ID_COLUMN_NAME = "expected_car_id";
@@ -14,5 +15,6 @@ public interface OrderRequestDao {
     String IS_CHECKED_COLUMN_NAME = "is_checked";
 
     List<OrderRequest> findAll();
-    void setCheckedOrderRequestByOrderRequestId(Long orderRequestId);
+    List<OrderRequest> findAllByIsActive();
+    void setNonActiveOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos);
 }

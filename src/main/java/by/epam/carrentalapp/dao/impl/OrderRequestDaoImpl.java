@@ -1,13 +1,18 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
+import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
+import by.epam.carrentalapp.dao.query.CarQuery;
 import by.epam.carrentalapp.dao.query.OrderRequestQuery;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
+import by.epam.carrentalapp.dao.query.UserQuery;
 import org.apache.log4j.Logger;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,36 +33,72 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
             ResultSet orderRequestsResultSet = statement.executeQuery(OrderRequestQuery
                     .SELECT_ALL_FROM_ORDER_REQUESTS.getQuery())) {
 
-            while (orderRequestsResultSet.next()){
-                Long userId = orderRequestsResultSet.getLong(USER_ID_COLUMN_NAME);
-                String expectedStartTime = orderRequestsResultSet.getString(EXPECTED_START_TIME_COLUMN_NAME);
-                String expectedEndTime = orderRequestsResultSet.getString(EXPECTED_END_TIME_COLUMN_NAME);
-                Long expectedCarId = orderRequestsResultSet.getLong(EXPECTED_CAR_ID_COLUMN_NAME);
-                Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
-                Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
-                Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
-
-                OrderRequest orderRequest = new OrderRequest(
-                        userId,
-                        LocalDateTime.parse(expectedStartTime, dateTimeFormatter),
-                        LocalDateTime.parse(expectedEndTime, dateTimeFormatter),
-                        expectedCarId,
-                        userDetailsId,
-                        isActive,
-                        isChecked
-                );
-
-                orderRequests.add(orderRequest);
-            }
+            orderRequests = extractOrderRequestsFromResultSet(orderRequestsResultSet);
         } catch (SQLException | ConnectionException e) {
-            LOGGER.error("OrderRequestDaoImpl: cannot extract orderRequest from ResultSet.");
+            LOGGER.error("OrderRequestDaoImpl findAll(): cannot extract orderRequest from ResultSet.");
         }
 
         return orderRequests;
     }
 
     @Override
-    public void setCheckedOrderRequestByOrderRequestId(Long orderRequestId) {
+    public List<OrderRequest> findAllByIsActive() {
+        List<OrderRequest> activeOrderRequests = new ArrayList<>();
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet orderRequestsResultSet = statement.executeQuery(OrderRequestQuery
+                    .SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_IS_ACTIVE_EQUALS_TRUE.getQuery())) {
 
+            activeOrderRequests = extractOrderRequestsFromResultSet(orderRequestsResultSet);
+        } catch (SQLException | ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl findAllByIsActive(): cannot extract orderRequest from ResultSet.");
+        }
+
+        return activeOrderRequests;
+    }
+
+    private List<OrderRequest> extractOrderRequestsFromResultSet(ResultSet orderRequestsResultSet) throws SQLException {
+        List<OrderRequest> orderRequests = new ArrayList<>();
+
+        while (orderRequestsResultSet.next()){
+            Long userId = orderRequestsResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
+            String expectedStartTime = orderRequestsResultSet.getString(EXPECTED_START_TIME_COLUMN_NAME);
+            String expectedEndTime = orderRequestsResultSet.getString(EXPECTED_END_TIME_COLUMN_NAME);
+            Long expectedCarId = orderRequestsResultSet.getLong(EXPECTED_CAR_ID_COLUMN_NAME);
+            Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
+            Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
+            Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
+
+            OrderRequest orderRequest = new OrderRequest(
+                    userId,
+                    LocalDateTime.parse(expectedStartTime, dateTimeFormatter),
+                    LocalDateTime.parse(expectedEndTime, dateTimeFormatter),
+                    expectedCarId,
+                    userDetailsId,
+                    isActive,
+                    isChecked
+            );
+
+            orderRequests.add(orderRequest);
+        }
+
+        return orderRequests;
+    }
+
+    @Override
+    public void setNonActiveOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(OrderRequestQuery
+                    .UPDATE_REQUESTS_SET_IS_ACTIVE_FALSE_IS_CHECKED_TRUE_WHERE_REQUEST_ID_EQUALS.getQuery())
+        ) {
+
+            for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
+                preparedStatement.setLong(1 ,informationDto.getOrderRequestId());
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException | ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl setNonActiveOrderRequests(...) cannot update value");
+        }
     }
 }

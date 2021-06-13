@@ -7,7 +7,7 @@ import by.epam.carrentalapp.bean.entity.RejectedOrder;
 import java.util.List;
 
 public interface OrderRequestService {
-    List<OrderRequestInformationDto> getAllOrderRequestsInformation();
-    void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestIds);
+    List<OrderRequestInformationDto> getActiveOrderRequestsInformation();
+    void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos);
     void rejectOrderRequests(List<RejectedOrder> rejectedOrders);
 }

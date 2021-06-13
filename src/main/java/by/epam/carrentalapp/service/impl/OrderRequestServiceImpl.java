@@ -32,10 +32,10 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public List<OrderRequestInformationDto> getAllOrderRequestsInformation() {
+    public List<OrderRequestInformationDto> getActiveOrderRequestsInformation() {
         List<OrderRequestInformationDto> orderRequestInformationDtoList = new ArrayList<>();
 
-        List<OrderRequest> orderRequestList = orderRequestDao.findAll();
+        List<OrderRequest> orderRequestList = orderRequestDao.findAllByIsActive();
 
         Optional<CustomerUserDetails> customerUserDetails;
         Optional<Car> expectedCarOptional;
@@ -70,8 +70,12 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestIds) {
+    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos) {
         //сначала с таблицей orderRequests
+        orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
+
+
+
         //потом занести данные в approvedOrders
 
 

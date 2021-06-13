@@ -25,7 +25,7 @@ public class OrderRequestListCommand implements Command {
         if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
             forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         } else {
-            List<OrderRequestInformationDto> orderRequests = orderRequestService.getAllOrderRequestsInformation();
+            List<OrderRequestInformationDto> orderRequests = orderRequestService.getActiveOrderRequestsInformation();
             request.setAttribute("orderRequestInfos", orderRequests);
             forward(Router.ORDER_REQUEST_LIST_FORWARD_PATH.getPath(), request, response);
         }
