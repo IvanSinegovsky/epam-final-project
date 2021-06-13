@@ -3,6 +3,7 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.RejectedOrder;
 import by.epam.carrentalapp.dao.CarDao;
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.OrderRequestDao;
@@ -66,5 +67,21 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     private long twoLocalDateTimeHourDifference(LocalDateTime dateTime, LocalDateTime laterDateTime) {
         Duration duration = Duration.between(dateTime, laterDateTime);
         return duration.getSeconds() / 3600;
+    }
+
+    @Override
+    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestIds) {
+        //сначала с таблицей orderRequests
+        //потом занести данные в approvedOrders
+
+
+
+
+
+    }
+
+    @Override
+    public void rejectOrderRequests(List<RejectedOrder> rejectedOrders) {
+
     }
 }

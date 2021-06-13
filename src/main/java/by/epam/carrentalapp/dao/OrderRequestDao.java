@@ -14,4 +14,5 @@ public interface OrderRequestDao {
     String IS_CHECKED_COLUMN_NAME = "is_checked";
 
     List<OrderRequest> findAll();
+    void setCheckedOrderRequestByOrderRequestId(Long orderRequestId);
 }

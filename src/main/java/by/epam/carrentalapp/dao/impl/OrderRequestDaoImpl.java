@@ -55,4 +55,9 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
 
         return orderRequests;
     }
+
+    @Override
+    public void setCheckedOrderRequestByOrderRequestId(Long orderRequestId) {
+
+    }
 }

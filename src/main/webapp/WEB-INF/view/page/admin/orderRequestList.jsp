@@ -11,12 +11,10 @@
 <body>
 <div class="container">
     <form method="POST" action="home">
-        <input type="hidden" name="command" value="ACCEPT_ORDER"/>
-
-        <button type="submit" name="action" value="block" class="btn btn-outline-success">
+        <button type="submit" name="command" value="ACCEPT_ORDER" class="btn btn-outline-success">
             <fmt:message key="admin.order-request-list.accept-button" bundle="${loc}" />
         </button>
-        <button type="submit" name="action" value="unblock" class="btn btn-outline-warning">
+        <button type="submit" name="command" value="REJECT_ORDER" class="btn btn-outline-warning">
             <fmt:message key="admin.order-request-list.reject-button" bundle="${loc}" />
         </button>
         <table class="table table-striped">
@@ -37,7 +35,7 @@
                 <tr>
                     <td><div class="form-check">
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="selected" value="${user.id}">
+                            <input type="checkbox" class="form-check-input" name="selected" value="${orderRequestInfo}">
                         </label>
                     </div></td>
                     <td><c:out value="${orderRequestInfo.orderRequestId}"/></td>
