@@ -4,29 +4,70 @@
 
 <html>
 <head>
+    <title>Order request list</title>
     <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
-    <title>Order request list</title>
+
+    <fmt:message bundle="${loc}" key="admin.order-request-list.accept-button" var="acceptButton"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.reject-button" var="rejectButton"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.reject-dialog.type-rejection-reason-sign" var="rejectionReasonSign"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.reject-dialog.rejection-reason-input" var="rejectionReasonInput"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.reject-dialog.reject-order-request-button" var="rejectOrderRequestButton"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.request-id" var="requestIdColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.customer-rate" var="customerRateColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.car-model" var="carModelColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.expected-start-time" var="expectedStartTimeColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.expected-end-time" var="expectedEndTimeColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.total-cost" var="totalCostColumnName"/>
 </head>
 <body>
 <div class="container">
     <form method="POST" action="home">
         <button type="submit" name="command" value="ACCEPT_ORDER" class="btn btn-outline-success">
-            <fmt:message key="admin.order-request-list.accept-button" bundle="${loc}" />
+            <c:out value="${acceptButton}"/>
         </button>
-        <button type="submit" name="command" value="REJECT_ORDER" class="btn btn-outline-warning">
-            <fmt:message key="admin.order-request-list.reject-button" bundle="${loc}" />
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rejectionReasonModal">
+            <c:out value="${rejectButton}"/>
         </button>
+
+        <div class="modal fade" id="rejectionReasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <c:out value="${rejectionReasonSign}"/>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group input-group">
+                            <input name="rejectionReason"
+                                   class="form-control"
+                                   placeholder="<c:out value="${rejectionReasonInput}"/>"
+                                   type="text">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="command" value="REJECT_ORDER" class="btn btn-primary">
+                            <c:out value="${rejectOrderRequestButton}"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
             <tr>
                 <th></th>
-                <th><fmt:message key="admin.order-request-list.table.column-name.request-id" bundle="${loc}" /></th>
-                <th><fmt:message key="admin.order-request-list.table.column-name.customer-rate" bundle="${loc}" /></th>
-                <th><fmt:message key="admin.order-request-list.table.column-name.car-model" bundle="${loc}" /></th>
-                <th><fmt:message key="admin.order-request-list.table.column-name.expected-start-time" bundle="${loc}" /></th>
-                <th><fmt:message key="admin.order-request-list.table.column-name.expected-end-time" bundle="${loc}" /></th>
-                <th><fmt:message key="admin.order-request-list.table.column-name.total-cost" bundle="${loc}" /></th>
+                <th><c:out value="${requestIdColumnName}"/></th>
+                <th><c:out value="${customerRateColumnName}"/></th>
+                <th><c:out value="${carModelColumnName}"/></th>
+                <th><c:out value="${expectedStartTimeColumnName}"/></th>
+                <th><c:out value="${expectedEndTimeColumnName}"/></th>
+                <th><c:out value="${totalCostColumnName}"/></th>
             </tr>
             </thead>
             <tbody>
@@ -35,7 +76,7 @@
                 <tr>
                     <td><div class="form-check">
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="selected" value="${orderRequestInfo}">
+                            <input type="checkbox" class="form-check-input" name="selectedOrderRequests" value="${orderRequestInfo}">
                         </label>
                     </div></td>
                     <td><c:out value="${orderRequestInfo.orderRequestId}"/></td>

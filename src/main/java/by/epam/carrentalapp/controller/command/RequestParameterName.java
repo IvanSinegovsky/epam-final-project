@@ -11,7 +11,9 @@ public enum RequestParameterName {
     LASTNAME("lastname"),
     EMAIL("email"),
     PASSWORD("password"),
-    PASSPORT_NUMBER("passport_number");
+    PASSPORT_NUMBER("passport_number"),
+    SELECTED_ORDER_REQUESTS("selectedOrderRequests"),
+    REJECTION_REASON("rejectionReason");
 
     private final String name;
 }

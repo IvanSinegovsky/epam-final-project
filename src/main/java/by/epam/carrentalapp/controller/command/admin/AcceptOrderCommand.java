@@ -2,6 +2,7 @@ package by.epam.carrentalapp.controller.command.admin;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.controller.command.Command;
+import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.service.OrderRequestService;
@@ -21,7 +22,7 @@ public class AcceptOrderCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String[] acceptedOrderRequestInfoStrings = request.getParameterValues("selected");
+        String[] acceptedOrderRequestInfoStrings = request.getParameterValues(RequestParameterName.SELECTED_ORDER_REQUESTS.getName());
         List<OrderRequestInformationDto> orderRequestInformationDtos
                 = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
         Long adminApprovedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
