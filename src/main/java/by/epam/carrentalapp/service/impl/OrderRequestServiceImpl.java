@@ -19,12 +19,14 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     private final CarDao carDao;
     private final CustomerUserDetailsDao customerUserDetailsDao;
     private final AcceptedOrderDao acceptedOrderDao;
+    private final RejectedOrderDao rejectedOrderDao;
 
     public OrderRequestServiceImpl() {
         orderRequestDao = DaoFactory.getOrderRequestDao();
         carDao = DaoFactory.getCarDao();
         customerUserDetailsDao = DaoFactory.getCustomerUserDetailsDao();
         acceptedOrderDao = DaoFactory.getAcceptedOrderDao();
+        rejectedOrderDao = DaoFactory.getRejectedOrderDao();
     }
 
     @Override
@@ -67,29 +69,35 @@ public class OrderRequestServiceImpl implements OrderRequestService {
 
     @Override
     public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminApprovedId) {
-        List<AcceptedOrder> acceptedOrders = new ArrayList<>();
+        List<AcceptedOrder> acceptedOrders = new ArrayList<>(orderRequestInformationDtos.size());
         Long carId;
         Long userDetailsId;
         Long orderRequestId;
         Optional<OrderRequest> orderRequestOptional;
+        Optional<Car> carOptional;
 
         orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
 
         for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
-            orderRequestId = informationDto.getOrderRequestId();
-            carId = carDao.findByModel(informationDto.getExpectedCarModel()).get().getCarId();
-            orderRequestOptional = orderRequestDao.findByOrderRequestId(orderRequestId);
+            carOptional = carDao.findByModel(informationDto.getExpectedCarModel());
 
-            if (orderRequestOptional.isPresent()) {
-                userDetailsId = orderRequestOptional.get().getUserDetailsId();
+            if (carOptional.isPresent()) {
+                carId = carOptional.get().getCarId();
 
-                acceptedOrders.add(new AcceptedOrder(
-                        informationDto.getTotalCost(),
-                        orderRequestId,
-                        carId,
-                        adminApprovedId,
-                        userDetailsId
-                        ));
+                orderRequestId = informationDto.getOrderRequestId();
+                orderRequestOptional = orderRequestDao.findByOrderRequestId(orderRequestId);
+
+                if (orderRequestOptional.isPresent()) {
+                    userDetailsId = orderRequestOptional.get().getUserDetailsId();
+
+                    acceptedOrders.add(new AcceptedOrder(
+                            informationDto.getTotalCost(),
+                            orderRequestId,
+                            carId,
+                            adminApprovedId,
+                            userDetailsId
+                    ));
+                }
             }
         }
 
@@ -97,7 +105,25 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void rejectOrderRequests(List<RejectedOrder> rejectedOrders) {
+    public void rejectOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos,
+                                    Long adminRejectedId,
+                                    String rejectionReason) {
+        List<RejectedOrder> rejectedOrders = new ArrayList<>(orderRequestInformationDtos.size());
 
+        orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
+
+        if (rejectionReason.length() > 100) {
+            rejectionReason = rejectionReason.substring(0, 99);
+        }
+
+        for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
+            rejectedOrders.add(new RejectedOrder(
+                    rejectionReason,
+                    informationDto.getOrderRequestId(),
+                    adminRejectedId
+            ));
+        }
+
+        rejectedOrderDao.saveAll(rejectedOrders);
     }
 }

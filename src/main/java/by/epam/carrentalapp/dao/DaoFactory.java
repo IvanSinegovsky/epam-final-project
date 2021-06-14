@@ -1,6 +1,5 @@
 package by.epam.carrentalapp.dao;
 
-import by.epam.carrentalapp.dao.*;
 import by.epam.carrentalapp.dao.impl.*;
 
 public class DaoFactory {
@@ -11,6 +10,7 @@ public class DaoFactory {
     private static UsersRolesDao usersRolesDao;
     private static OrderRequestDao orderRequestDao;
     private static AcceptedOrderDao acceptedOrderDao;
+    private static RejectedOrderDao rejectedOrderDao;
 
     public static CarDao getCarDao() {
         if (carDao == null) {
@@ -59,5 +59,12 @@ public class DaoFactory {
             acceptedOrderDao = new AcceptedOrderDaoImpl();
         }
         return acceptedOrderDao;
+    }
+
+    public static RejectedOrderDao getRejectedOrderDao() {
+        if (rejectedOrderDao == null) {
+            rejectedOrderDao = new RejectedOrderDaoImpl();
+        }
+        return rejectedOrderDao;
     }
 }

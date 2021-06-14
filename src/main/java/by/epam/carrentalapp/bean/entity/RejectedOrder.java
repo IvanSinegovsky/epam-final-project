@@ -14,4 +14,10 @@ public class RejectedOrder implements Serializable {
     private String rejectionReason;
     private Long orderRequestId;
     private Long adminUserRejectedId;
+
+    public RejectedOrder(String rejectionReason, Long orderRequestId, Long adminUserRejectedId) {
+        this.rejectionReason = rejectionReason;
+        this.orderRequestId = orderRequestId;
+        this.adminUserRejectedId = adminUserRejectedId;
+    }
 }
