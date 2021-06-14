@@ -1,5 +1,6 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.UserDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
@@ -33,8 +34,12 @@ public class UserDaoImpl implements UserDao {
 
                 allUsers.add(new User(userId, email, password, name, lastname));
             }
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("UserDaoImpl findAll(...): cannot extract user from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("UserDaoImpl findAll(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return allUsers;
@@ -61,8 +66,12 @@ public class UserDaoImpl implements UserDao {
                 userOptional = Optional.of(new User(userId, email, lastname, name, password));
             }
 
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("UserDaoImpl findByEmail(...): cannot extract user from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("UserDaoImpl findByEmail(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return userOptional;
@@ -88,10 +97,12 @@ public class UserDaoImpl implements UserDao {
             if (userResultSet != null && userResultSet.next()) {
                 savedUserId = userResultSet.getLong(1);
             }
-        } catch (SQLException  e) {
-            LOGGER.error("UserDaoImpl: cannot extract user from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("UserDaoImpl save(...): cannot insert user record");
+            throw new DaoException(e);
         } catch (ConnectionException e) {
-            LOGGER.error("connection FAILED");
+            LOGGER.error("UserDaoImpl save(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return savedUserId;

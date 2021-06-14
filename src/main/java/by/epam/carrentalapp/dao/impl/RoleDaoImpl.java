@@ -1,5 +1,6 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
@@ -29,8 +30,12 @@ public class RoleDaoImpl implements RoleDao {
             while (roleResultSet.next()) {
                 roleOptional = roleResultSetToRole(roleResultSet);
             }
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("RoleDaoImpl findByRoleId(): cannot extract role from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("RoleDaoImpl findByRoleId(...): cannot extract role from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("RoleDaoImpl findByRoleId(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return roleOptional;
@@ -50,8 +55,12 @@ public class RoleDaoImpl implements RoleDao {
                 LOGGER.info("RESULT SET -> " + roleResultSet.getLong(1));
                 roleOptional = roleResultSetToRole(roleResultSet);
             }
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("RoleDaoImpl findByTitle(): cannot extract role from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("RoleDaoImpl findByRoleId(...): cannot extract role from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("RoleDaoImpl findByRoleId(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return roleOptional;

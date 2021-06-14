@@ -4,6 +4,7 @@ import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.bean.entity.*;
 import by.epam.carrentalapp.dao.*;
 import by.epam.carrentalapp.service.OrderRequestService;
+import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
 
 import java.time.Duration;
@@ -33,30 +34,34 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     public List<OrderRequestInformationDto> getActiveOrderRequestsInformation() {
         List<OrderRequestInformationDto> orderRequestInformationDtoList = new ArrayList<>();
 
-        List<OrderRequest> orderRequestList = orderRequestDao.findAllByIsActive();
+        try {
+            List<OrderRequest> orderRequestList = orderRequestDao.findAllByIsActive();
+            Optional<CustomerUserDetails> customerUserDetails;
+            Optional<Car> expectedCarOptional;
+            double totalCost;
 
-        Optional<CustomerUserDetails> customerUserDetails;
-        Optional<Car> expectedCarOptional;
-        double totalCost;
+            for (OrderRequest orderRequest : orderRequestList) {
+                customerUserDetails = customerUserDetailsDao.findById(orderRequest.getUserDetailsId());
+                expectedCarOptional = carDao.findById(orderRequest.getExpectedCarId());
 
-        for (OrderRequest orderRequest : orderRequestList) {
-            customerUserDetails = customerUserDetailsDao.findById(orderRequest.getUserDetailsId());
-            expectedCarOptional = carDao.findById(orderRequest.getExpectedCarId());
+                if (expectedCarOptional.isPresent() && customerUserDetails.isPresent()) {
+                    totalCost = expectedCarOptional.get().getHourlyCost()
+                            * twoLocalDateTimeHourDifference(
+                                    orderRequest.getExpectedStartTime(),
+                                    orderRequest.getExpectedEndTime()
+                    );
 
-            if (expectedCarOptional.isPresent() && customerUserDetails.isPresent()) {
-                totalCost = expectedCarOptional.get().getHourlyCost()
-                        * twoLocalDateTimeHourDifference(
-                                orderRequest.getExpectedStartTime(),
-                                orderRequest.getExpectedEndTime()
-                );
-
-                orderRequestInformationDtoList.add(new OrderRequestInformationDto(
-                        orderRequest,
-                        customerUserDetails.get(),
-                        expectedCarOptional.get().getModel(),
-                        totalCost
-                ));
+                    orderRequestInformationDtoList.add(new OrderRequestInformationDto(
+                            orderRequest,
+                            customerUserDetails.get(),
+                            expectedCarOptional.get().getModel(),
+                            totalCost
+                    ));
+                }
             }
+        } catch (DaoException e) {
+            LOGGER.error("OrderRequestServiceImpl getActiveOrderRequestsInformation(): DAO cannot return values");
+            throw new ServiceException(e);
         }
 
         return orderRequestInformationDtoList;
@@ -76,32 +81,37 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         Optional<OrderRequest> orderRequestOptional;
         Optional<Car> carOptional;
 
-        orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
+        try {
+            orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
 
-        for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
-            carOptional = carDao.findByModel(informationDto.getExpectedCarModel());
+            for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
+                carOptional = carDao.findByModel(informationDto.getExpectedCarModel());
 
-            if (carOptional.isPresent()) {
-                carId = carOptional.get().getCarId();
+                if (carOptional.isPresent()) {
+                    carId = carOptional.get().getCarId();
 
-                orderRequestId = informationDto.getOrderRequestId();
-                orderRequestOptional = orderRequestDao.findByOrderRequestId(orderRequestId);
+                    orderRequestId = informationDto.getOrderRequestId();
+                    orderRequestOptional = orderRequestDao.findByOrderRequestId(orderRequestId);
 
-                if (orderRequestOptional.isPresent()) {
-                    userDetailsId = orderRequestOptional.get().getUserDetailsId();
+                    if (orderRequestOptional.isPresent()) {
+                        userDetailsId = orderRequestOptional.get().getUserDetailsId();
 
-                    acceptedOrders.add(new AcceptedOrder(
-                            informationDto.getTotalCost(),
-                            orderRequestId,
-                            carId,
-                            adminApprovedId,
-                            userDetailsId
-                    ));
+                        acceptedOrders.add(new AcceptedOrder(
+                                informationDto.getTotalCost(),
+                                orderRequestId,
+                                carId,
+                                adminApprovedId,
+                                userDetailsId
+                        ));
+                    }
                 }
             }
-        }
 
-        acceptedOrderDao.saveAll(acceptedOrders);
+            acceptedOrderDao.saveAll(acceptedOrders);
+        } catch (DaoException e) {
+            LOGGER.error("OrderRequestServiceImpl acceptOrderRequests(...): DAO cannot execute operations");
+            throw new ServiceException(e);
+        }
     }
 
     @Override
@@ -110,20 +120,25 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                                     String rejectionReason) {
         List<RejectedOrder> rejectedOrders = new ArrayList<>(orderRequestInformationDtos.size());
 
-        orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
+        try {
+            orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
 
-        if (rejectionReason.length() > 100) {
-            rejectionReason = rejectionReason.substring(0, 99);
+            if (rejectionReason.length() > 100) {
+                rejectionReason = rejectionReason.substring(0, 99);
+            }
+
+            for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
+                rejectedOrders.add(new RejectedOrder(
+                        rejectionReason,
+                        informationDto.getOrderRequestId(),
+                        adminRejectedId
+                ));
+            }
+
+            rejectedOrderDao.saveAll(rejectedOrders);
+        } catch (DaoException e) {
+            LOGGER.error("OrderRequestServiceImpl rejectOrderRequests(...): DAO cannot execute operations");
+            throw new ServiceException(e);
         }
-
-        for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
-            rejectedOrders.add(new RejectedOrder(
-                    rejectionReason,
-                    informationDto.getOrderRequestId(),
-                    adminRejectedId
-            ));
-        }
-
-        rejectedOrderDao.saveAll(rejectedOrders);
     }
 }

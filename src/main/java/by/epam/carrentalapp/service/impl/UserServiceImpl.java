@@ -8,6 +8,7 @@ import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.bean.entity.user.User;
+import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
 import by.epam.carrentalapp.service.impl.validator.ValidationException;
@@ -36,44 +37,61 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> login(LoginUserDto userDto) throws CredentialNotFoundException {
-        Optional<User> foundUser = userDao.findByEmail(userDto.getEmail());
+    public Optional<User> login(LoginUserDto userDto) {
+        Optional<User> foundUser;
 
-        if (foundUser.isEmpty()
-                || !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())) {
-            throw new CredentialNotFoundException("Wrong credentials");
+        try {
+            foundUser = userDao.findByEmail(userDto.getEmail());
+
+            if (foundUser.isEmpty() || !BCryptPasswordEncoder.compare(userDto.getPassword(), foundUser.get().getPassword())) {
+                throw new ServiceException("Cannot login. Wrong user credentials");
+            }
+        } catch (DaoException e) {
+            LOGGER.error("UserServiceImpl login(...): DAO cannot execute operations");
+            throw new ServiceException(e);
         }
 
         return foundUser;
     }
 
     @Override
-    public void registerCustomer(String name, String lastname, String email, String password, String passportNumber)
-            throws Exception {
-        checkEmailExistence(email);
-        String encodedPassword = BCryptPasswordEncoder.encode(password);
-        Long registeredUserId = saveUser(name, lastname, email, encodedPassword);
-        saveCustomerUserDetails(passportNumber, registeredUserId);
-        saveCustomerUserRole(registeredUserId);
+    public void registerCustomer(String name, String lastname, String email, String password, String passportNumber) {
+        try {
+            checkEmailExistence(email);
+            String encodedPassword = BCryptPasswordEncoder.encode(password);
+            Long registeredUserId = saveUser(name, lastname, email, encodedPassword);
+            saveCustomerUserDetails(passportNumber, registeredUserId);
+            saveCustomerUserRole(registeredUserId);
+        } catch (DaoException e) {
+            LOGGER.error("UserServiceImpl registerCustomer(...): DAO cannot execute operations");
+            throw new ServiceException(e);
+        }
     }
 
-    private Long saveUser(String name, String lastname, String email, String encodedPassword) throws ValidationException {
-        User customerUser = new User(name, lastname, email, encodedPassword);
+    private Long saveUser(String name, String lastname, String email, String encodedPassword){
+        Long registeredUserId = null;
 
-        if (!Validator.validateUser(customerUser)) {
-            throw new ValidationException("User's credentials are invalid");
+        try {
+            User customerUser = new User(name, lastname, email, encodedPassword);
+
+            if (!Validator.validateUser(customerUser)) {
+                throw new ServiceException("User's credentials are invalid");
+            }
+
+            registeredUserId = userDao.save(customerUser);
+        } catch (DaoException e) {
+            LOGGER.error("UserServiceImpl saveUser(...): DAO cannot execute operations");
+            throw new ServiceException(e);
         }
-
-        Long registeredUserId = userDao.save(customerUser);
 
         return registeredUserId;
     }
 
-    private void saveCustomerUserDetails(String passportNumber, Long userId) throws Exception {
+    private void saveCustomerUserDetails(String passportNumber, Long userId) {
         CustomerUserDetails customerUserDetails = new CustomerUserDetails(passportNumber, INITIAL_CUSTOMER_RATE, userId);
 
         if (!Validator.validateCustomerUserDetails(customerUserDetails)) {
-            throw new ValidationException("Customer's credentials are invalid");
+            throw new ServiceException("Cannot save customerUserDetails. Customer's credentials are invalid");
         }
 
         customerUserDetailsDao.save(customerUserDetails);
@@ -85,13 +103,13 @@ public class UserServiceImpl implements UserService {
         if (role.isPresent()) {
             usersRolesDao.save(userId, role.get().getRoleId());
         } else {
-            throw new DaoException("Cannot find role by name " + INITIAL_CUSTOMER_ROLE + " in DAO layer");
+            throw new ServiceException("Cannot find role by name " + INITIAL_CUSTOMER_ROLE + " in DAO layer");
         }
     }
 
-    private void checkEmailExistence(String email) throws Exception {
+    private void checkEmailExistence(String email) {
         if (userDao.findByEmail(email).isPresent()) {
-            throw new Exception("User with such email already exists");
+            throw new ServiceException("User with such email already exists");
         }
     }
 }

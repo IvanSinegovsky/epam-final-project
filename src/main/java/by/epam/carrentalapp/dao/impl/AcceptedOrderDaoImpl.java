@@ -2,11 +2,11 @@ package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.dao.AcceptedOrderDao;
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.impl.query.AcceptedOrderQuery;
-import by.epam.carrentalapp.dao.impl.query.UserQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -35,9 +35,11 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
                 acceptedOrderId = Optional.of(acceptedOrderResultSet.getLong(1));
             }
         } catch (SQLException e) {
-            LOGGER.error("AcceptedOrderDaoImpl: cannot extract AcceptedOrder from ResultSet.");
+            LOGGER.error("AcceptedOrderDaoImpl save(...): cannot extract AcceptedOrder from ResultSet");
+            throw new DaoException(e);
         } catch (ConnectionException e) {
-            LOGGER.error("connection FAILED");
+            LOGGER.error("AcceptedOrderDaoImpl save(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return acceptedOrderId;
@@ -60,9 +62,11 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.error("AcceptedOrderDaoImpl: cannot extract AcceptedOrders from ResultSet.");
+            LOGGER.error("AcceptedOrderDaoImpl saveAll(...): cannot extract AcceptedOrders from ResultSet");
+            throw new DaoException(e);
         } catch (ConnectionException e) {
-            LOGGER.error("connection FAILED");
+            LOGGER.error("AcceptedOrderDaoImpl saveAll(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return acceptedOrderIds;

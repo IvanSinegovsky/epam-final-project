@@ -1,6 +1,7 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
@@ -18,7 +19,7 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
     private final Logger LOGGER = Logger.getLogger(CustomerUserDetailsDaoImpl.class);
 
     @Override
-    public void save(CustomerUserDetails customerUserDetails) throws Exception {
+    public void save(CustomerUserDetails customerUserDetails) {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     CustomerUserDetailsQuery.INSERT_INTO_CUSTOMER_USER_DETAILS.getQuery(),
@@ -32,10 +33,14 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
             ResultSet userDetailsResultSet = preparedStatement.getGeneratedKeys();
 
             if (userDetailsResultSet == null) {
-                throw new Exception("Cannot insert customer_user_details in DB");
+                throw new DaoException("Cannot insert customerUserDetails record");
             }
         } catch (SQLException e) {
-            LOGGER.error("CustomerUserDetailsDaoImpl: cannot insert customer_user_details.");
+            LOGGER.error("CustomerUserDetailsDaoImpl save(...): cannot extract generated key from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CustomerUserDetailsDaoImpl save(...): connection pool crashed");
+            throw new DaoException(e);
         }
     }
 
@@ -60,9 +65,12 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
                         userDetailsId, passportNumber, rate, userId
                 ));
             }
-
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("CustomerUserDetailsDaoImpl: cannot extract CustomerUserDetails from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("CustomerUserDetailsDaoImpl findById(...): cannot extract customerUserDetails from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CustomerUserDetailsDaoImpl findById(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return customerUserDetailsOptional;

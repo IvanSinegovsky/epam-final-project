@@ -5,6 +5,7 @@ import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
+import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceFactory;
 import by.epam.carrentalapp.service.UserService;
 import org.apache.log4j.Logger;
@@ -15,7 +16,11 @@ import java.io.IOException;
 
 public class RegisterCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(RegisterCommand.class);
-    private final UserService userService = ServiceFactory.getUserService();
+    private final UserService userService;
+
+    public RegisterCommand() {
+        userService = ServiceFactory.getUserService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -27,10 +32,14 @@ public class RegisterCommand implements Command {
 
         try {
             userService.registerCustomer(name, lastname, email, password, passportNumber);
-            AccessManager.setRoleToSession(request, RoleName.CUSTOMER.getSessionAttributeName());
-            redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
-        } catch (Exception e) {
+        } catch (ServiceException e) {
+            LOGGER.error("RegisterCommand execute(...): service crashed");
+            request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
+                    "Cannot register. Credentials are invalid");
             redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
         }
+
+        AccessManager.setRoleToSession(request, RoleName.CUSTOMER.getSessionAttributeName());
+        redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
     }
 }

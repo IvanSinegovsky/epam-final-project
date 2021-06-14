@@ -5,6 +5,7 @@ import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.bean.entity.user.User;
+import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UsersRolesService;
 import by.epam.carrentalapp.service.impl.ServiceFactory;
 import by.epam.carrentalapp.service.UserService;
@@ -20,23 +21,35 @@ import java.util.Optional;
 public class LoginCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(LoginCommand.class);
 
-    private final UserService userService = ServiceFactory.getUserService();
-    private final UsersRolesService usersRolesService = ServiceFactory.getUsersRolesService();
-
     private static final String USER_ID_SESSION_PARAMETER_NAME = "userId";
+
+    private final UserService userService;
+    private final UsersRolesService usersRolesService;
+
+    public LoginCommand() {
+        userService = ServiceFactory.getUserService();
+        usersRolesService = ServiceFactory.getUsersRolesService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getParameter(RequestParameterName.EMAIL.getName()) == null){
             forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
         } else {
+            Optional<User> userOptional = Optional.empty();
             LoginUserDto loginUserDto = new LoginUserDto(
                     request.getParameter(RequestParameterName.EMAIL.getName()),
                     request.getParameter(RequestParameterName.PASSWORD.getName())
             );
 
             try {
-            Optional<User> userOptional = userService.login(loginUserDto);
+                userOptional = userService.login(loginUserDto);
+            } catch (ServiceException e) {
+                LOGGER.error("LoginCommand execute(...): service crashed");
+                request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
+                        "Wrong credentials");
+                redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
+            }
 
             if (userOptional.isPresent()) {
                 request.getSession().setAttribute(USER_ID_SESSION_PARAMETER_NAME, userOptional.get().getUserId());
@@ -45,10 +58,6 @@ public class LoginCommand implements Command {
                 redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
             } else {
                 forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
-            }
-
-            } catch (Exception e) {
-                redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
             }
         }
     }

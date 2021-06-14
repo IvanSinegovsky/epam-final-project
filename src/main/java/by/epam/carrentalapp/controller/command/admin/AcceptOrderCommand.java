@@ -6,6 +6,7 @@ import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.service.OrderRequestService;
+import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceFactory;
 import org.apache.log4j.Logger;
 
@@ -18,20 +19,33 @@ import java.util.List;
 
 public class AcceptOrderCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(AcceptOrderCommand.class);
-    private final OrderRequestService orderRequestService = ServiceFactory.getOrderRequestService();
+    private final OrderRequestService orderRequestService;
+
+    public AcceptOrderCommand() {
+         orderRequestService = ServiceFactory.getOrderRequestService();
+    }
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String[] acceptedOrderRequestInfoStrings = request.getParameterValues(RequestParameterName.SELECTED_ORDER_REQUESTS.getName());
-        List<OrderRequestInformationDto> orderRequestInformationDtos
-                = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
-        Long adminApprovedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+            String[] acceptedOrderRequestInfoStrings
+                    = request.getParameterValues(RequestParameterName.SELECTED_ORDER_REQUESTS.getName());
+            List<OrderRequestInformationDto> orderRequestInformationDtos
+                    = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
+            Long adminApprovedId
+                    = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
-        for (String infoString : acceptedOrderRequestInfoStrings) {
-            orderRequestInformationDtos.add(OrderRequestInformationDto.valueOf(infoString));
+            for (String infoString : acceptedOrderRequestInfoStrings) {
+                orderRequestInformationDtos.add(OrderRequestInformationDto.valueOf(infoString));
+            }
+
+        try {
+            orderRequestService.acceptOrderRequests(orderRequestInformationDtos, adminApprovedId);
+        } catch (ServiceException e) {
+            LOGGER.error("AcceptOrderCommand execute(...): service crashed");
+            request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
+                    "Cannot accept order, please try again later");
+            redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
         }
-
-        orderRequestService.acceptOrderRequests(orderRequestInformationDtos, adminApprovedId);
 
         redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
     }

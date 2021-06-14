@@ -11,6 +11,6 @@ import java.io.IOException;
 public class ErrorCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        forward(Router.CAR_CATALOG_FORWARD_PATH.getPath(), request, response);
+        forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
     }
 }

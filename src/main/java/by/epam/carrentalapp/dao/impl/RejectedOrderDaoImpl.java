@@ -1,6 +1,7 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.bean.entity.RejectedOrder;
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.RejectedOrderDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
@@ -35,9 +36,11 @@ public class RejectedOrderDaoImpl implements RejectedOrderDao {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.error("RejectedOrderDaoImpl: cannot extract RejectedOrders from ResultSet.");
+            LOGGER.error("RejectedOrderDaoImpl saveAll(...): cannot insert rejectedOrder record");
+            throw new DaoException(e);
         } catch (ConnectionException e) {
-            LOGGER.error("connection FAILED");
+            LOGGER.error("RejectedOrderDaoImpl saveAll(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return rejectedOrderIds;

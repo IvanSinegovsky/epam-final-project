@@ -9,9 +9,9 @@
     <title>Car catalog</title>
 </head>
 <body>
-        <jsp:useBean id="allCars" scope="request" type="java.util.List"/>
+        <jsp:useBean id="all_cars" scope="request" type="java.util.List"/>
 
-        <c:forEach items="${allCars}" var="car">
+        <c:forEach items="${all_cars}" var="car">
         <div class="card-group">
             <div class="card">
             <img class="card-img-top" src="https://westgroup.by/d/porsh-gobrid-logo-west.png" alt="Card image cap">

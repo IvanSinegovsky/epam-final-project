@@ -13,7 +13,10 @@ public enum RequestParameterName {
     PASSWORD("password"),
     PASSPORT_NUMBER("passport_number"),
     SELECTED_ORDER_REQUESTS("selectedOrderRequests"),
-    REJECTION_REASON("rejectionReason");
+    REJECTION_REASON("rejectionReason"),
+    ALL_CARS("all_cars"),
+    EXCEPTION_MESSAGE("exception_message"),
+    ORDER_REQUEST_INFOS("order_request_infos");
 
     private final String name;
 }

@@ -1,5 +1,6 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.UsersRolesDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
@@ -27,8 +28,12 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
             preparedStatement.setLong(2, roleId);
 
             preparedStatement.executeUpdate();
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("UsersRolesDaoImpl save(): cannot extract roles_role_id from ResultSet");
+        } catch (SQLException e) {
+            LOGGER.error("UsersRolesDaoImpl save(...): cannot insert userId, roleId record");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("UsersRolesDaoImpl save(...): connection pool crashed");
+            throw new DaoException(e);
         }
     }
 
@@ -47,8 +52,12 @@ public class UsersRolesDaoImpl implements UsersRolesDao {
                 Long roleId = userResultSet.getLong(ROLE_ID_COLUMN_NAME);
                 userRoleIds.add(roleId);
             }
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("UsersRolesDaoImpl findRoleIdsByUserId(): cannot extract roles_role_id from ResultSet");
+        } catch (SQLException e) {
+            LOGGER.error("UsersRolesDaoImpl findRoleIdsByUserId(...): cannot extract roleId from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("UsersRolesDaoImpl findRoleIdsByUserId(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return userRoleIds;

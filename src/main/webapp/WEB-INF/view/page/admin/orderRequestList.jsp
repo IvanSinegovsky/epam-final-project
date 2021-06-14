@@ -71,8 +71,8 @@
             </tr>
             </thead>
             <tbody>
-            <jsp:useBean id="orderRequestInfos" scope="request" type="java.util.List"/>
-            <c:forEach var="orderRequestInfo" items="${orderRequestInfos}">
+            <jsp:useBean id="order_request_infos" scope="request" type="java.util.List"/>
+            <c:forEach var="orderRequestInfo" items="${order_request_infos}">
                 <tr>
                     <td><div class="form-check">
                         <label class="form-check-label">

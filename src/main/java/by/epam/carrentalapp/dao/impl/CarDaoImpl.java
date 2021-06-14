@@ -1,6 +1,7 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.CarDao;
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
@@ -20,8 +21,8 @@ public class CarDaoImpl implements CarDao {
     private final Logger LOGGER = Logger.getLogger(CarDaoImpl.class);
 
     public List<Car> findAll() {
-        LOGGER.info("CarDaoImpl started getting cars");
         List<Car> allCars = new ArrayList<>();
+
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet carsResultSet = statement.executeQuery(CarQuery.SELECT_ALL_FROM_CARS.getQuery())) {
@@ -32,12 +33,14 @@ public class CarDaoImpl implements CarDao {
                 String number = carsResultSet.getString(NUMBER_COLUMN_NAME);
                 Double hourlyCost = carsResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
 
-                Car newCar = new Car(carId, model, number, hourlyCost);
-                allCars.add(newCar);
-                LOGGER.info("CarDaoImpl started getting cars ->" + newCar.toString());
+                allCars.add(new Car(carId, model, number, hourlyCost));
             }
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("CarDao: cannot extract car from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("CarDao findAll(...): cannot extract car from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CarDao findAll(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return allCars;
@@ -63,8 +66,12 @@ public class CarDaoImpl implements CarDao {
                 carOptional = Optional.of(new Car(carId, model, number, hourlyCost));
             }
 
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("CarDaoImpl: cannot extract car from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("CarDao findById(...): cannot extract car from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CarDao findById(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return carOptional;
@@ -90,9 +97,12 @@ public class CarDaoImpl implements CarDao {
                 Car carFound = new Car(carId, model, number, hourlyCost);
                 carOptional = Optional.of(carFound);
             }
-
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("CarDaoImpl: cannot extract car from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("CarDao findByModel(...): cannot extract car from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CarDao findByModel(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return carOptional;

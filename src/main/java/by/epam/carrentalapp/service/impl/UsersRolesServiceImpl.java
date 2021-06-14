@@ -1,9 +1,11 @@
 package by.epam.carrentalapp.service.impl;
 
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.UsersRolesDao;
 import by.epam.carrentalapp.dao.DaoFactory;
 import by.epam.carrentalapp.bean.entity.Role;
+import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UsersRolesService;
 import org.apache.log4j.Logger;
 
@@ -24,14 +26,20 @@ public class UsersRolesServiceImpl implements UsersRolesService {
 
     @Override
     public List<Role> getAllUserRoles(Long userId) {
-        List<Long> userRolesIds = usersRolesDao.findRoleIdsByUserId(userId);
-        Optional<Role> foundRoleOptional;
         List<Role> userRoles = new ArrayList<>();
 
-        for (Long userRoleId : userRolesIds) {
-            foundRoleOptional = roleDao.findByRoleId(userRoleId);
+        try {
+            List<Long> userRolesIds = usersRolesDao.findRoleIdsByUserId(userId);
+            Optional<Role> foundRoleOptional;
 
-            foundRoleOptional.ifPresent(userRoles::add);
+            for (Long userRoleId : userRolesIds) {
+                foundRoleOptional = roleDao.findByRoleId(userRoleId);
+
+                foundRoleOptional.ifPresent(userRoles::add);
+            }
+        } catch (DaoException e) {
+            LOGGER.error("UserServiceImpl login(...): DAO cannot execute operations");
+            throw new ServiceException(e);
         }
 
         return userRoles;

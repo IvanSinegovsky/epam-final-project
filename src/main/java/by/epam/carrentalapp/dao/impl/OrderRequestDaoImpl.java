@@ -1,6 +1,7 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
+import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
@@ -26,15 +27,20 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
 
     @Override
     public List<OrderRequest> findAll() {
-        List<OrderRequest> orderRequests = new ArrayList<>();
+        List<OrderRequest> orderRequests;
+
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet orderRequestsResultSet = statement.executeQuery(OrderRequestQuery
                     .SELECT_ALL_FROM_ORDER_REQUESTS.getQuery())) {
 
             orderRequests = extractOrderRequestsFromResultSet(orderRequestsResultSet);
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("OrderRequestDaoImpl findAll(): cannot extract orderRequest from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("OrderRequestDaoImpl findAll(...): cannot extract orderRequest from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl findAll(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return orderRequests;
@@ -49,8 +55,12 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
                     .SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_IS_ACTIVE_EQUALS_TRUE.getQuery())) {
 
             activeOrderRequests = extractOrderRequestsFromResultSet(orderRequestsResultSet);
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("OrderRequestDaoImpl findAllByIsActive(): cannot extract orderRequest from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("OrderRequestDaoImpl findAllByIsActive(...): cannot extract orderRequest from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl findAllByIsActive(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return activeOrderRequests;
@@ -96,8 +106,12 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
 
                 preparedStatement.executeUpdate();
             }
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("OrderRequestDaoImpl setNonActiveOrderRequests(...) cannot update value");
+        } catch (SQLException e) {
+            LOGGER.error("OrderRequestDaoImpl setNonActiveOrderRequests(...): cannot execute update");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl setNonActiveOrderRequests(...): connection pool crashed");
+            throw new DaoException(e);
         }
     }
 
@@ -131,8 +145,12 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
                         isChecked
                 ));
             }
-        } catch (SQLException | ConnectionException e) {
-            LOGGER.error("OrderRequestDaoImpl findByOrderRequestId(...): cannot extract orderRequest from ResultSet.");
+        } catch (SQLException e) {
+            LOGGER.error("OrderRequestDaoImpl findByOrderRequestId(...): cannot extract orderRequest from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl findByOrderRequestId(...): connection pool crashed");
+            throw new DaoException(e);
         }
 
         return orderRequestOptional;

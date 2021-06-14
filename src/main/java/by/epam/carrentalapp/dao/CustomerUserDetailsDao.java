@@ -10,6 +10,6 @@ public interface CustomerUserDetailsDao {
     String RATE_COLUMN_NAME = "rate";
     String USER_ID_COLUMN_NAME = "user_id";
 
-    void save(CustomerUserDetails customerUserDetails) throws Exception;
+    void save(CustomerUserDetails customerUserDetails);
     Optional<CustomerUserDetails> findById(Long userDetailsIdToFind);
 }
