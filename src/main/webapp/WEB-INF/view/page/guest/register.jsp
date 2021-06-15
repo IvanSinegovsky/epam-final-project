@@ -4,15 +4,9 @@
 
 <html>
 <head>
-    <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
     <title>Register</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
+    <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
 
     <fmt:message bundle="${loc}" key="guest.register.create-account-sign" var="createAccountSign"/>
     <fmt:message bundle="${loc}" key="guest.register.name-input" var="nameInput"/>
