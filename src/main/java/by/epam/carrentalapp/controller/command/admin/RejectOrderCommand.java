@@ -40,13 +40,13 @@ public class RejectOrderCommand implements Command {
 
         try {
             orderRequestService.rejectOrderRequests(orderRequestInformationDtos, adminRejectedId, rejectionReason);
+
+            redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
         } catch (ServiceException e) {
             LOGGER.error("RejectOrderCommand execute(...): service crashed");
             request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
                     "Cannot reject order, please try again later");
             redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
         }
-
-        redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
     }
 }

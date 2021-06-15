@@ -27,26 +27,26 @@ public class AcceptOrderCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-            String[] acceptedOrderRequestInfoStrings
-                    = request.getParameterValues(RequestParameterName.SELECTED_ORDER_REQUESTS.getName());
-            List<OrderRequestInformationDto> orderRequestInformationDtos
-                    = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
-            Long adminApprovedId
-                    = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
+        String[] acceptedOrderRequestInfoStrings
+                = request.getParameterValues(RequestParameterName.SELECTED_ORDER_REQUESTS.getName());
+        List<OrderRequestInformationDto> orderRequestInformationDtos
+                = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
+        Long adminApprovedId
+                = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
-            for (String infoString : acceptedOrderRequestInfoStrings) {
-                orderRequestInformationDtos.add(OrderRequestInformationDto.valueOf(infoString));
-            }
+        for (String infoString : acceptedOrderRequestInfoStrings) {
+            orderRequestInformationDtos.add(OrderRequestInformationDto.valueOf(infoString));
+        }
 
         try {
             orderRequestService.acceptOrderRequests(orderRequestInformationDtos, adminApprovedId);
+
+            redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
         } catch (ServiceException e) {
             LOGGER.error("AcceptOrderCommand execute(...): service crashed");
             request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
                     "Cannot accept order, please try again later");
             redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
         }
-
-        redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
     }
 }

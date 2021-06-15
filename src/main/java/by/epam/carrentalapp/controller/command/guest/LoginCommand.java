@@ -44,20 +44,20 @@ public class LoginCommand implements Command {
 
             try {
                 userOptional = userService.login(loginUserDto);
+
+                if (userOptional.isPresent()) {
+                    request.getSession().setAttribute(USER_ID_SESSION_PARAMETER_NAME, userOptional.get().getUserId());
+                    List<Role> userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
+                    AccessManager.setRoleListToSession(request, userRoles);
+                    redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
+                } else {
+                    forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
+                }
             } catch (ServiceException e) {
                 LOGGER.error("LoginCommand execute(...): service crashed");
                 request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
                         "Wrong credentials");
-                redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
-            }
-
-            if (userOptional.isPresent()) {
-                request.getSession().setAttribute(USER_ID_SESSION_PARAMETER_NAME, userOptional.get().getUserId());
-                List<Role> userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
-                AccessManager.setRoleListToSession(request, userRoles);
-                redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
-            } else {
-                forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
+                forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
             }
         }
     }

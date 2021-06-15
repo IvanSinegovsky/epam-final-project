@@ -35,15 +35,15 @@ public class OrderRequestListCommand implements Command {
 
             try {
                 orderRequests = orderRequestService.getActiveOrderRequestsInformation();
+
+                request.setAttribute(RequestParameterName.ORDER_REQUEST_INFOS.getName(), orderRequests);
+                forward(Router.ORDER_REQUEST_LIST_FORWARD_PATH.getPath(), request, response);
             } catch (ServiceException e) {
                 LOGGER.error("OrderRequestListCommand execute(...): service crashed");
                 request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
                         "Cannot get order request list, please try again later");
                 redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
             }
-
-            request.setAttribute(RequestParameterName.ORDER_REQUEST_INFOS.getName(), orderRequests);
-            forward(Router.ORDER_REQUEST_LIST_FORWARD_PATH.getPath(), request, response);
         }
     }
 }

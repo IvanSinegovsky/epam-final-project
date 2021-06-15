@@ -25,18 +25,16 @@ public class CarCatalogCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Car> allCars = null;
-
         try {
-            allCars = carService.getAllCars();
+            List<Car> allCars = carService.getAllCars();
+            request.setAttribute(RequestParameterName.ALL_CARS.getName(), allCars);
+
+            forward(Router.CAR_CATALOG_FORWARD_PATH.getPath(), request, response);
         } catch (ServiceException e) {
             LOGGER.error("CarCatalogCommand execute(...): service crashed");
             request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
                     "Cannot show car catalog, please try again later");
             redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
         }
-
-        request.setAttribute(RequestParameterName.ALL_CARS.getName(), allCars);
-        forward(Router.CAR_CATALOG_FORWARD_PATH.getPath(), request, response);
     }
 }

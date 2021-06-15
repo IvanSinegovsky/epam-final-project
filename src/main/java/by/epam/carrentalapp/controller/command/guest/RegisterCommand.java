@@ -32,14 +32,14 @@ public class RegisterCommand implements Command {
 
         try {
             userService.registerCustomer(name, lastname, email, password, passportNumber);
+            AccessManager.setRoleToSession(request, RoleName.CUSTOMER.getSessionAttributeName());
+
+            redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
         } catch (ServiceException e) {
             LOGGER.error("RegisterCommand execute(...): service crashed");
             request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
                     "Cannot register. Credentials are invalid");
             redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
         }
-
-        AccessManager.setRoleToSession(request, RoleName.CUSTOMER.getSessionAttributeName());
-        redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
     }
 }
