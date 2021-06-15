@@ -73,7 +73,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminApprovedId) {
+    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminAcceptedId) {
         List<AcceptedOrder> acceptedOrders = new ArrayList<>(orderRequestInformationDtos.size());
         Long carId;
         Long userDetailsId;
@@ -100,7 +100,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                                 informationDto.getTotalCost(),
                                 orderRequestId,
                                 carId,
-                                adminApprovedId,
+                                adminAcceptedId,
                                 userDetailsId
                         ));
                     }

@@ -14,4 +14,5 @@ public class Car implements Serializable {
     private String model;
     private String number;
     private Double hourlyCost;
+    private String assetURL;
 }

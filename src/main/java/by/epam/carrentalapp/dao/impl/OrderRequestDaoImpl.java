@@ -77,6 +77,7 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
             Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
             Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
             Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
+            Long promoCodeId = orderRequestsResultSet.getLong(PROMO_CODES_PROMO_CODE_ID);
 
             OrderRequest orderRequest = new OrderRequest(
                     userId,
@@ -85,7 +86,8 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
                     expectedCarId,
                     userDetailsId,
                     isActive,
-                    isChecked
+                    isChecked,
+                    promoCodeId
             );
 
             orderRequests.add(orderRequest);
@@ -134,6 +136,7 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
                 Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
                 Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
                 Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
+                Long promoCodeId = orderRequestsResultSet.getLong(PROMO_CODES_PROMO_CODE_ID);
 
                 orderRequestOptional = Optional.of(new OrderRequest(
                         userId,
@@ -142,7 +145,8 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
                         expectedCarId,
                         userDetailsId,
                         isActive,
-                        isChecked
+                        isChecked,
+                        promoCodeId
                 ));
             }
         } catch (SQLException e) {

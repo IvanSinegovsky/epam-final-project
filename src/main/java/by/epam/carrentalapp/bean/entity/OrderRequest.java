@@ -18,4 +18,5 @@ public class OrderRequest implements Serializable {
     private Long userDetailsId;
     private Boolean isActive;
     private Boolean isChecked;
+    private Long promoCodeId;
 }

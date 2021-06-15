@@ -32,8 +32,9 @@ public class CarDaoImpl implements CarDao {
                 String model = carsResultSet.getString(MODEL_COLUMN_NAME);
                 String number = carsResultSet.getString(NUMBER_COLUMN_NAME);
                 Double hourlyCost = carsResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
+                String assetURL = carsResultSet.getString(ASSET_URL_COLUMN_NAME);
 
-                allCars.add(new Car(carId, model, number, hourlyCost));
+                allCars.add(new Car(carId, model, number, hourlyCost, assetURL));
             }
         } catch (SQLException e) {
             LOGGER.error("CarDao findAll(...): cannot extract car from ResultSet");
@@ -62,8 +63,9 @@ public class CarDaoImpl implements CarDao {
                 String model = carResultSet.getString(MODEL_COLUMN_NAME);
                 String number = carResultSet.getString(NUMBER_COLUMN_NAME);
                 Double hourlyCost = carResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
+                String assetURL = carResultSet.getString(ASSET_URL_COLUMN_NAME);
 
-                carOptional = Optional.of(new Car(carId, model, number, hourlyCost));
+                carOptional = Optional.of(new Car(carId, model, number, hourlyCost, assetURL));
             }
 
         } catch (SQLException e) {
@@ -93,9 +95,9 @@ public class CarDaoImpl implements CarDao {
                 String model = carResultSet.getString(MODEL_COLUMN_NAME);
                 String number = carResultSet.getString(NUMBER_COLUMN_NAME);
                 Double hourlyCost = carResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
+                String assetURL = carResultSet.getString(ASSET_URL_COLUMN_NAME);
 
-                Car carFound = new Car(carId, model, number, hourlyCost);
-                carOptional = Optional.of(carFound);
+                carOptional = Optional.of(new Car(carId, model, number, hourlyCost, assetURL));
             }
         } catch (SQLException e) {
             LOGGER.error("CarDao findByModel(...): cannot extract car from ResultSet");

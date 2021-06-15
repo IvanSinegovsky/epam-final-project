@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderRequestService {
     List<OrderRequestInformationDto> getActiveOrderRequestsInformation();
-    void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminApprovedId);
+    void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminAcceptedId);
     void rejectOrderRequests(List<OrderRequestInformationDto> rejectedOrders,
                              Long adminRejectedId,
                              String rejectionReason);

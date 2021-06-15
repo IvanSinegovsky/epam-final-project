@@ -9,8 +9,9 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RepairBill implements Serializable {
-    private Long acceptedOrderId;
-    private Double bill;
-    private String comment;
+public class PromoCode implements Serializable {
+    private Long promoCodeId;
+    private String promoCode;
+    private Integer discount;
+    private Boolean isActive;
 }

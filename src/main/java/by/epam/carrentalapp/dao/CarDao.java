@@ -10,6 +10,7 @@ public interface CarDao {
     String MODEL_COLUMN_NAME = "model";
     String NUMBER_COLUMN_NAME = "number";
     String HOURLY_COST_COLUMN_NAME = "hourly_cost";
+    String ASSET_URL_COLUMN_NAME = "asset_url";
 
     List<Car> findAll();
     Optional<Car> findById(Long carIdRoFind);

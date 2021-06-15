@@ -14,6 +14,7 @@ public interface OrderRequestDao {
     String USERS_DETAILS_ID_COLUMN_NAME = "user_details_id";
     String IS_ACTIVE_COLUMN_NAME = "is_active";
     String IS_CHECKED_COLUMN_NAME = "is_checked";
+    String PROMO_CODES_PROMO_CODE_ID = "promo_codes_promo_code_id";
 
     List<OrderRequest> findAll();
     List<OrderRequest> findAllByIsActive();

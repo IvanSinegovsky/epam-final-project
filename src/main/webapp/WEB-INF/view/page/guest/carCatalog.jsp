@@ -14,7 +14,7 @@
         <c:forEach items="${all_cars}" var="car">
         <div class="card-group">
             <div class="card">
-            <img class="card-img-top" src="https://westgroup.by/d/porsh-gobrid-logo-west.png" alt="Card image cap">
+            <img class="card-img-top" src="${car.assetURL}" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">${car.model}</h5>
                 <p class="card-text">${car.number}</p>

@@ -26,7 +26,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    AcceptedOrderQuery.INSERT_INTO_APPROVED_ORDERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    AcceptedOrderQuery.INSERT_INTO_ACCEPTED_ORDERS.getQuery(), Statement.RETURN_GENERATED_KEYS
             )) {
 
             ResultSet acceptedOrderResultSet = insertAndGetGeneratedKey(preparedStatement, acceptedOrder);
@@ -51,7 +51,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    AcceptedOrderQuery.INSERT_INTO_APPROVED_ORDERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    AcceptedOrderQuery.INSERT_INTO_ACCEPTED_ORDERS.getQuery(), Statement.RETURN_GENERATED_KEYS
             )) {
 
             for (AcceptedOrder acceptedOrder : acceptedOrders) {
@@ -78,7 +78,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
         preparedStatement.setLong(2, acceptedOrder.getOrderRequestId());
         preparedStatement.setLong(3, acceptedOrder.getCarId());
         preparedStatement.setBoolean(4, false);
-        preparedStatement.setLong(5, acceptedOrder.getAdminUserApprovedId());
+        preparedStatement.setLong(5, acceptedOrder.getAdminUserAcceptedId());
         preparedStatement.setLong(6, acceptedOrder.getUserDetailsId());
 
         preparedStatement.executeUpdate();

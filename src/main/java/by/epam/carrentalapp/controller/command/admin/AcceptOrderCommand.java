@@ -31,7 +31,7 @@ public class AcceptOrderCommand implements Command {
                 = request.getParameterValues(RequestParameterName.SELECTED_ORDER_REQUESTS.getName());
         List<OrderRequestInformationDto> orderRequestInformationDtos
                 = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
-        Long adminApprovedId
+        Long adminAcceptedId
                 = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
         for (String infoString : acceptedOrderRequestInfoStrings) {
@@ -39,7 +39,7 @@ public class AcceptOrderCommand implements Command {
         }
 
         try {
-            orderRequestService.acceptOrderRequests(orderRequestInformationDtos, adminApprovedId);
+            orderRequestService.acceptOrderRequests(orderRequestInformationDtos, adminAcceptedId);
 
             redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
         } catch (ServiceException e) {
