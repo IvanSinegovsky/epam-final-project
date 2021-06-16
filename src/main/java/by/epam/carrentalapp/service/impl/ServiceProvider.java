@@ -1,17 +1,13 @@
 package by.epam.carrentalapp.service.impl;
 
-import by.epam.carrentalapp.service.CarService;
-import by.epam.carrentalapp.service.OrderRequestService;
-import by.epam.carrentalapp.service.UserService;
-import by.epam.carrentalapp.service.UsersRolesService;
-import by.epam.carrentalapp.service.impl.CarServiceImpl;
-import by.epam.carrentalapp.service.impl.UserServiceImpl;
+import by.epam.carrentalapp.service.*;
 
-public class ServiceFactory {
+public class ServiceProvider {
     private static CarService carService;
     private static UserService userService;
     private static UsersRolesService usersRolesService;
     private static OrderRequestService orderRequestService;
+    private static AcceptedOrderService acceptedOrderService;
 
     public static CarService getCarService() {
         if (carService == null) {
@@ -39,5 +35,12 @@ public class ServiceFactory {
             orderRequestService = new OrderRequestServiceImpl();
         }
         return orderRequestService;
+    }
+
+    public static AcceptedOrderService getAcceptedOrderService() {
+        if (acceptedOrderService == null) {
+            acceptedOrderService = new AcceptedOrderServiceImpl();
+        }
+        return acceptedOrderService;
     }
 }

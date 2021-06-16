@@ -6,7 +6,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceFactory;
+import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -20,7 +20,7 @@ public class CarCatalogCommand implements Command {
     private final CarService carService;
 
     public CarCatalogCommand() {
-        carService = ServiceFactory.getCarService();
+        carService = ServiceProvider.getCarService();
     }
 
     @Override

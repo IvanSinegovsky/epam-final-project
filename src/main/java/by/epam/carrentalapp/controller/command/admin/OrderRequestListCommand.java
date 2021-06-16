@@ -6,10 +6,9 @@ import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
-import by.epam.carrentalapp.bean.entity.OrderRequest;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceFactory;
+import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -23,7 +22,7 @@ public class OrderRequestListCommand implements Command {
     private final OrderRequestService orderRequestService;
 
     public OrderRequestListCommand() {
-        orderRequestService = ServiceFactory.getOrderRequestService();
+        orderRequestService = ServiceProvider.getOrderRequestService();
     }
 
     @Override

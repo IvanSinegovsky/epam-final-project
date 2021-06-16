@@ -23,11 +23,11 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     private final RejectedOrderDao rejectedOrderDao;
 
     public OrderRequestServiceImpl() {
-        orderRequestDao = DaoFactory.getOrderRequestDao();
-        carDao = DaoFactory.getCarDao();
-        customerUserDetailsDao = DaoFactory.getCustomerUserDetailsDao();
-        acceptedOrderDao = DaoFactory.getAcceptedOrderDao();
-        rejectedOrderDao = DaoFactory.getRejectedOrderDao();
+        orderRequestDao = DaoProvider.getOrderRequestDao();
+        carDao = DaoProvider.getCarDao();
+        customerUserDetailsDao = DaoProvider.getCustomerUserDetailsDao();
+        acceptedOrderDao = DaoProvider.getAcceptedOrderDao();
+        rejectedOrderDao = DaoProvider.getRejectedOrderDao();
     }
 
     @Override

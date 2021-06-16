@@ -7,10 +7,9 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceFactory;
+import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class AcceptOrderCommand implements Command {
     private final OrderRequestService orderRequestService;
 
     public AcceptOrderCommand() {
-         orderRequestService = ServiceFactory.getOrderRequestService();
+         orderRequestService = ServiceProvider.getOrderRequestService();
     }
 
     @Override

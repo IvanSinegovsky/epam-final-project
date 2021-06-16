@@ -7,7 +7,7 @@ import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UsersRolesService;
-import by.epam.carrentalapp.service.impl.ServiceFactory;
+import by.epam.carrentalapp.service.impl.ServiceProvider;
 import by.epam.carrentalapp.service.UserService;
 import org.apache.log4j.Logger;
 
@@ -27,8 +27,8 @@ public class LoginCommand implements Command {
     private final UsersRolesService usersRolesService;
 
     public LoginCommand() {
-        userService = ServiceFactory.getUserService();
-        usersRolesService = ServiceFactory.getUsersRolesService();
+        userService = ServiceProvider.getUserService();
+        usersRolesService = ServiceProvider.getUsersRolesService();
     }
 
     @Override

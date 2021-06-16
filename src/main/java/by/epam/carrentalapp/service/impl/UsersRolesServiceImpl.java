@@ -3,7 +3,7 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.UsersRolesDao;
-import by.epam.carrentalapp.dao.DaoFactory;
+import by.epam.carrentalapp.dao.DaoProvider;
 import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UsersRolesService;
@@ -20,8 +20,8 @@ public class UsersRolesServiceImpl implements UsersRolesService {
     private final UsersRolesDao usersRolesDao;
 
     public UsersRolesServiceImpl() {
-        roleDao = DaoFactory.getRoleDao();
-        usersRolesDao = DaoFactory.getUsersRolesDao();
+        roleDao = DaoProvider.getRoleDao();
+        usersRolesDao = DaoProvider.getUsersRolesDao();
     }
 
     @Override

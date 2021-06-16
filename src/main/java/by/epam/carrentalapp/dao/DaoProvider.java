@@ -2,7 +2,7 @@ package by.epam.carrentalapp.dao;
 
 import by.epam.carrentalapp.dao.impl.*;
 
-public class DaoFactory {
+public class DaoProvider {
     private static CarDao carDao;
     private static UserDao userDao;
     private static CustomerUserDetailsDao customerUserDetailsDao;

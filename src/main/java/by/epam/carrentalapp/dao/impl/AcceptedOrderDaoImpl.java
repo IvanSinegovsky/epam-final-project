@@ -85,4 +85,40 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         return preparedStatement.getGeneratedKeys();
     }
+
+    @Override
+    public List<AcceptedOrder> findByCarId(Long carIdToFind) {
+        List<AcceptedOrder> acceptedOrdersByCarId = new ArrayList<>();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_CAR_ID_EQUALS.getQuery())) {
+
+            preparedStatement.setLong(1, carIdToFind);
+            ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
+
+            while (acceptedOrdersResultSet.next()) {
+                Long orderId = acceptedOrdersResultSet.getLong(ORDER_ID_COLUMN_NAME);
+                Double bill = acceptedOrdersResultSet.getDouble(BILL_COLUMN_NAME);
+                Long orderRequestId = acceptedOrdersResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
+                Long carId = acceptedOrdersResultSet.getLong(CAR_ID_COLUMN_NAME);
+                Boolean isPaid = acceptedOrdersResultSet.getBoolean(IS_PAID_COLUMN_NAME);
+                Long adminUserAcceptedId = acceptedOrdersResultSet.getLong(ADMIN_USER_ACCEPTED_ID_COLUMN_NAME);
+                Long userDetailsId = acceptedOrdersResultSet.getLong(USER_DETAILS_ID_COLUMN_NAME);
+
+                acceptedOrdersByCarId.add(new AcceptedOrder(
+                        orderId, bill, orderRequestId, carId, isPaid, adminUserAcceptedId, userDetailsId
+                ));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findByCarId(...): cannot extract acceptedOrder from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findByCarId(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return acceptedOrdersByCarId;
+    }
 }

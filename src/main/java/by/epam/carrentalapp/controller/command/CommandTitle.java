@@ -16,7 +16,8 @@ public enum CommandTitle {
     CHOOSE_CAR(RoleName.CUSTOMER),
     LOGOUT(RoleName.CUSTOMER),
     ACCEPT_ORDER(RoleName.ADMIN),
-    REJECT_ORDER(RoleName.ADMIN);
+    REJECT_ORDER(RoleName.ADMIN),
+    CAR_OCCUPATION(RoleName.ALL);
 
     private final RoleName permission;
 }

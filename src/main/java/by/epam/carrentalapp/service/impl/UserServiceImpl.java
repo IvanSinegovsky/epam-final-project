@@ -3,7 +3,7 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.*;
-import by.epam.carrentalapp.dao.DaoFactory;
+import by.epam.carrentalapp.dao.DaoProvider;
 import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import by.epam.carrentalapp.bean.entity.Role;
@@ -11,11 +11,9 @@ import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
-import by.epam.carrentalapp.service.impl.validator.ValidationException;
 import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;
 
-import javax.security.auth.login.CredentialNotFoundException;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
@@ -30,10 +28,10 @@ public class UserServiceImpl implements UserService {
     private final String INITIAL_CUSTOMER_ROLE = RoleName.CUSTOMER.name();
 
     public UserServiceImpl() {
-        userDao = DaoFactory.getUserDao();
-        customerUserDetailsDao = DaoFactory.getCustomerUserDetailsDao();
-        roleDao = DaoFactory.getRoleDao();
-        usersRolesDao = DaoFactory.getUsersRolesDao();
+        userDao = DaoProvider.getUserDao();
+        customerUserDetailsDao = DaoProvider.getCustomerUserDetailsDao();
+        roleDao = DaoProvider.getRoleDao();
+        usersRolesDao = DaoProvider.getUsersRolesDao();
     }
 
     @Override

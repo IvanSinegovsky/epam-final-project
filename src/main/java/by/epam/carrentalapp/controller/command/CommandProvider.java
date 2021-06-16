@@ -3,6 +3,7 @@ package by.epam.carrentalapp.controller.command;
 import by.epam.carrentalapp.controller.command.admin.AcceptOrderCommand;
 import by.epam.carrentalapp.controller.command.admin.OrderRequestListCommand;
 import by.epam.carrentalapp.controller.command.admin.RejectOrderCommand;
+import by.epam.carrentalapp.controller.command.customer.CarOccupationCommand;
 import by.epam.carrentalapp.controller.command.customer.ChooseCarCommand;
 import by.epam.carrentalapp.controller.command.customer.LogoutCommand;
 import by.epam.carrentalapp.controller.command.error.ErrorCommand;
@@ -30,6 +31,7 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.LOGOUT.name(), new LogoutCommand());
         nameToCommand.put(CommandTitle.ACCEPT_ORDER.name(), new AcceptOrderCommand());
         nameToCommand.put(CommandTitle.REJECT_ORDER.name(), new RejectOrderCommand());
+        nameToCommand.put(CommandTitle.CAR_OCCUPATION.name(), new CarOccupationCommand());
     }
 
     public static Command getCommand(String commandTitle) {

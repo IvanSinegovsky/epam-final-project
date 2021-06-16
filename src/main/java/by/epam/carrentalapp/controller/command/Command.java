@@ -11,7 +11,11 @@ public interface Command {
     default void forward(String path,
                          HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher(path).forward(request, response);
+        if (request.getRequestDispatcher(path) != null) {
+            request.getRequestDispatcher(path).forward(request, response);
+        } else {
+            request.getRequestDispatcher(Router.ERROR_FORWARD_PATH.getPath()).forward(request, response);
+        }
     }
 
     default void redirect(String path, HttpServletResponse response) throws IOException {

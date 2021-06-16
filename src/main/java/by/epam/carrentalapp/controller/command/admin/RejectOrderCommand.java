@@ -1,14 +1,13 @@
 package by.epam.carrentalapp.controller.command.admin;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
-import by.epam.carrentalapp.bean.entity.RejectedOrder;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceFactory;
+import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -23,7 +22,7 @@ public class RejectOrderCommand implements Command {
     private final OrderRequestService orderRequestService;
 
     public RejectOrderCommand() {
-        orderRequestService = ServiceFactory.getOrderRequestService();
+        orderRequestService = ServiceProvider.getOrderRequestService();
     }
 
     @Override

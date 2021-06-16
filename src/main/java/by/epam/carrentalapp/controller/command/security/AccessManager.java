@@ -1,6 +1,5 @@
 package by.epam.carrentalapp.controller.command.security;
 
-import by.epam.carrentalapp.controller.command.CommandTitle;
 import by.epam.carrentalapp.bean.entity.Role;
 
 import javax.servlet.http.HttpServletRequest;
