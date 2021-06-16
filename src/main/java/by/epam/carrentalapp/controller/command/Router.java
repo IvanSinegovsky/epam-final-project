@@ -13,8 +13,6 @@ public enum Router {
     ERROR_FORWARD_PATH("/WEB-INF/view/page/error.jsp"),
     ORDER_REQUEST_LIST_FORWARD_PATH("/WEB-INF/view/page/admin/orderRequestList.jsp"),
     CHOOSE_CAR_FORWARD_PATH("/WEB-INF/view/page/customer/chooseCar.jsp"),
-    ACCEPT_ORDER_FORWARD_PATH(""), //todo change
-    REJECT_ORDER_FORWARD_PATH(""), //todo maybe change with popup
     MAKE_ORDER_FORM_FORWARD_PATH("/WEB-INF/view/page/customer/makeOrderForm.jsp"),
 
     LOGIN_REDIRECT_PATH("/home?command=LOGIN"),

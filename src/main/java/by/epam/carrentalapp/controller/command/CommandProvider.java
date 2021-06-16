@@ -7,10 +7,7 @@ import by.epam.carrentalapp.controller.command.customer.CarOccupationCommand;
 import by.epam.carrentalapp.controller.command.customer.ChooseCarCommand;
 import by.epam.carrentalapp.controller.command.customer.LogoutCommand;
 import by.epam.carrentalapp.controller.command.error.ErrorCommand;
-import by.epam.carrentalapp.controller.command.guest.CarCatalogCommand;
-import by.epam.carrentalapp.controller.command.guest.HomeCommand;
-import by.epam.carrentalapp.controller.command.guest.LoginCommand;
-import by.epam.carrentalapp.controller.command.guest.RegisterCommand;
+import by.epam.carrentalapp.controller.command.guest.*;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
@@ -32,6 +29,7 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.ACCEPT_ORDER.name(), new AcceptOrderCommand());
         nameToCommand.put(CommandTitle.REJECT_ORDER.name(), new RejectOrderCommand());
         nameToCommand.put(CommandTitle.CAR_OCCUPATION.name(), new CarOccupationCommand());
+        nameToCommand.put(CommandTitle.LOGIN_AND_MAKE_ORDER.name(), new LoginAndMakeOrderCommand());
     }
 
     public static Command getCommand(String commandTitle) {
