@@ -2,7 +2,6 @@ package by.epam.carrentalapp.controller.command.admin;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.controller.command.Command;
-import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
@@ -21,6 +20,9 @@ public class OrderRequestListCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(OrderRequestListCommand.class);
     private final OrderRequestService orderRequestService;
 
+    private final String ORDER_REQUEST_INFOS_REQUEST_PARAMETER_NAME = "order_request_infos";
+    private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
+
     public OrderRequestListCommand() {
         orderRequestService = ServiceProvider.getOrderRequestService();
     }
@@ -35,12 +37,11 @@ public class OrderRequestListCommand implements Command {
             try {
                 orderRequests = orderRequestService.getActiveOrderRequestsInformation();
 
-                request.setAttribute(RequestParameterName.ORDER_REQUEST_INFOS.getName(), orderRequests);
+                request.setAttribute(ORDER_REQUEST_INFOS_REQUEST_PARAMETER_NAME, orderRequests);
                 forward(Router.ORDER_REQUEST_LIST_FORWARD_PATH.getPath(), request, response);
             } catch (ServiceException e) {
                 LOGGER.error("OrderRequestListCommand execute(...): service crashed");
-                request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
-                        "Cannot get order request list, please try again later");
+                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot get order request list, please try again later");
                 redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
             }
         }

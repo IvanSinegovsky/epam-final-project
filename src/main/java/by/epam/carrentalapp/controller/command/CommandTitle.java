@@ -18,7 +18,8 @@ public enum CommandTitle {
     ACCEPT_ORDER(RoleName.ADMIN),
     REJECT_ORDER(RoleName.ADMIN),
     CAR_OCCUPATION(RoleName.ALL),
-    LOGIN_AND_MAKE_ORDER(RoleName.ALL);
+    LOGIN_AND_MAKE_ORDER(RoleName.ALL),
+    MAKE_ORDER_REQUEST(RoleName.CUSTOMER);
 
     private final RoleName permission;
 }

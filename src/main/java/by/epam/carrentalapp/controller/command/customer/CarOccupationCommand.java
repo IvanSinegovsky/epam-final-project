@@ -2,7 +2,6 @@ package by.epam.carrentalapp.controller.command.customer;
 
 import by.epam.carrentalapp.bean.dto.CarOccupationDto;
 import by.epam.carrentalapp.controller.command.Command;
-import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
@@ -16,7 +15,12 @@ import java.util.List;
 
 public class CarOccupationCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(CarOccupationCommand.class);
+
     private final AcceptedOrderService acceptedOrderService;
+
+    private final String CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME = "car_id_to_check";
+    private final String CAR_OCCUPATION_REQUEST_PARAMETER_NAME = "car_occupation";
+    private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
 
     public CarOccupationCommand() {
         this.acceptedOrderService = ServiceProvider.getAcceptedOrderService();
@@ -24,15 +28,17 @@ public class CarOccupationCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Long carId = Long.valueOf(request.getParameter(RequestParameterName.CAR_ID_TO_CHECK.getName()));
+        Long carId = Long.valueOf(request.getParameter(CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME));
 
         try {
             List<CarOccupationDto> carOccupationById = acceptedOrderService.getCarOccupationById(carId);
-            request.setAttribute(RequestParameterName.CAR_OCCUPATION.getName(), carOccupationById);
+            request.setAttribute(CAR_OCCUPATION_REQUEST_PARAMETER_NAME, carOccupationById);
 
             forward(Router.MAKE_ORDER_FORM_FORWARD_PATH.getPath(), request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("CarOccupationCommand execute(...): service crashed");
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot make order request. Please, try again later");
+            forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         }
     }
 }

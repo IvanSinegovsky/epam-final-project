@@ -4,7 +4,6 @@ import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.controller.command.Command;
-import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.service.ServiceException;
@@ -28,6 +27,11 @@ public class LoginAndMakeOrderCommand implements Command {
     private final UserService userService;
     private final UsersRolesService usersRolesService;
 
+    private final String EMAIL_REQUEST_PARAMETER_NAME = "email";
+    private final String PASSWORD_REQUEST_PARAMETER_NAME = "password";
+    private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
+    private final String CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME = "car_id_to_check";
+
     public LoginAndMakeOrderCommand() {
         userService = ServiceProvider.getUserService();
         usersRolesService = ServiceProvider.getUsersRolesService();
@@ -35,13 +39,13 @@ public class LoginAndMakeOrderCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (request.getParameter(RequestParameterName.EMAIL.getName()) == null){
+        if (request.getParameter(EMAIL_REQUEST_PARAMETER_NAME) == null){
             forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
         } else {
             Optional<User> userOptional = Optional.empty();
             LoginUserDto loginUserDto = new LoginUserDto(
-                    request.getParameter(RequestParameterName.EMAIL.getName()),
-                    request.getParameter(RequestParameterName.PASSWORD.getName())
+                    request.getParameter(EMAIL_REQUEST_PARAMETER_NAME),
+                    request.getParameter(PASSWORD_REQUEST_PARAMETER_NAME)
             );
 
             try {
@@ -51,8 +55,8 @@ public class LoginAndMakeOrderCommand implements Command {
                     request.getSession().setAttribute(USER_ID_SESSION_PARAMETER_NAME, userOptional.get().getUserId());
                     List<Role> userRoles = usersRolesService.getAllUserRoles(userOptional.get().getUserId());
                     AccessManager.setRoleListToSession(request, userRoles);
-                    if (!"".equals(request.getParameter(RequestParameterName.CAR_ID_TO_CHECK.getName()))) {
-                        forward(Router.MAKE_ORDER_FORM_FORWARD_PATH.getPath(), request, response);
+                    if (!"".equals(request.getParameter(CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME))) {
+                        forward(Router.CAR_OCCUPATION_REDIRECT_COMMAND.getPath(), request, response);
                     } else {
                         redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
                     }
@@ -61,8 +65,7 @@ public class LoginAndMakeOrderCommand implements Command {
                 }
             } catch (ServiceException e) {
                 LOGGER.error("LoginCommand execute(...): service crashed");
-                request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
-                        "Wrong credentials");
+                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Wrong credentials");
                 forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
             }
         }

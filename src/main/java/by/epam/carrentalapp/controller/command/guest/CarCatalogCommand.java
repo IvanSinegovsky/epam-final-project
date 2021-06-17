@@ -1,7 +1,6 @@
 package by.epam.carrentalapp.controller.command.guest;
 
 import by.epam.carrentalapp.controller.command.Command;
-import by.epam.carrentalapp.controller.command.RequestParameterName;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.service.CarService;
@@ -19,6 +18,9 @@ public class CarCatalogCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(CarCatalogCommand.class);
     private final CarService carService;
 
+    private final String ALL_CARS_REQUEST_PARAMETER_NAME = "all_cars";
+    private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
+
     public CarCatalogCommand() {
         carService = ServiceProvider.getCarService();
     }
@@ -27,13 +29,12 @@ public class CarCatalogCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<Car> allCars = carService.getAllCars();
-            request.setAttribute(RequestParameterName.ALL_CARS.getName(), allCars);
+            request.setAttribute(ALL_CARS_REQUEST_PARAMETER_NAME, allCars);
 
             forward(Router.CAR_CATALOG_FORWARD_PATH.getPath(), request, response);
         } catch (ServiceException e) {
             LOGGER.error("CarCatalogCommand execute(...): service crashed");
-            request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
-                    "Cannot show car catalog, please try again later");
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot show car catalog, please try again later");
             redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
         }
     }

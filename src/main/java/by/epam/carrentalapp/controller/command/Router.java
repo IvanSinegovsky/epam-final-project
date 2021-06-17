@@ -24,7 +24,8 @@ public enum Router {
     CHOOSE_CAR_REDIRECT_PATH("/home?command=CHOOSE_CAR"),
     LOGOUT_REDIRECT_PATH("/home?command=LOGOUT"),
     ACCEPT_ORDER_REDIRECT_PATH("/home?command=ACCEPT_ORDER"),
-    REJECT_ORDER_REDIRECT_PATH("/home?command=REJECT_ORDER");
+    REJECT_ORDER_REDIRECT_PATH("/home?command=REJECT_ORDER"),
+    CAR_OCCUPATION_REDIRECT_COMMAND("/home?command=CAR_OCCUPATION");
 
     private final String path;
 }

@@ -23,6 +23,10 @@ public class LoginCommand implements Command {
 
     private static final String USER_ID_SESSION_PARAMETER_NAME = "userId";
 
+    private final String EMAIL_REQUEST_PARAMETER_NAME = "email";
+    private final String PASSWORD_REQUEST_PARAMETER_NAME = "password";
+    private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
+
     private final UserService userService;
     private final UsersRolesService usersRolesService;
 
@@ -33,13 +37,13 @@ public class LoginCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (request.getParameter(RequestParameterName.EMAIL.getName()) == null){
+        if (request.getParameter(EMAIL_REQUEST_PARAMETER_NAME) == null){
             forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
         } else {
             Optional<User> userOptional = Optional.empty();
             LoginUserDto loginUserDto = new LoginUserDto(
-                    request.getParameter(RequestParameterName.EMAIL.getName()),
-                    request.getParameter(RequestParameterName.PASSWORD.getName())
+                    request.getParameter(EMAIL_REQUEST_PARAMETER_NAME),
+                    request.getParameter(PASSWORD_REQUEST_PARAMETER_NAME)
             );
 
             try {
@@ -55,8 +59,7 @@ public class LoginCommand implements Command {
                 }
             } catch (ServiceException e) {
                 LOGGER.error("LoginCommand execute(...): service crashed");
-                request.setAttribute(RequestParameterName.EXCEPTION_MESSAGE.getName(),
-                        "Wrong credentials");
+                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Wrong credentials");
                 forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
             }
         }
