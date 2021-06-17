@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarOccupationDto {
+    private Long carId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 }

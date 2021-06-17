@@ -16,6 +16,7 @@ public interface OrderRequestDao {
     String IS_CHECKED_COLUMN_NAME = "is_checked";
     String PROMO_CODES_PROMO_CODE_ID = "promo_codes_promo_code_id";
 
+    Optional<Long> save(OrderRequest orderRequest);
     List<OrderRequest> findAll();
     List<OrderRequest> findAllByIsActive();
     void setNonActiveOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos);

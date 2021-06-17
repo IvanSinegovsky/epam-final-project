@@ -8,6 +8,7 @@ import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
 import by.epam.carrentalapp.dao.impl.query.OrderRequestQuery;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
+import by.epam.carrentalapp.dao.impl.query.UserQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -24,6 +25,40 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
     private final Logger LOGGER = Logger.getLogger(OrderRequestDaoImpl.class);
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @Override
+    public Optional<Long> save(OrderRequest orderRequest) {
+        Optional<Long> savedOrderRequestId = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    OrderRequestQuery.INSERT_INTO_ORDER_REQUESTS.getQuery(), Statement.RETURN_GENERATED_KEYS
+            )) {
+
+            preparedStatement.setString(1, orderRequest.getExpectedStartTime().format(dateTimeFormatter));
+            preparedStatement.setString(2, orderRequest.getExpectedEndTime().format(dateTimeFormatter));
+            preparedStatement.setLong(3, orderRequest.getExpectedCarId());
+            preparedStatement.setLong(4, orderRequest.getUserDetailsId());
+            preparedStatement.setBoolean(5, orderRequest.getIsActive());
+            preparedStatement.setBoolean(6, orderRequest.getIsChecked());
+            preparedStatement.setLong(7, orderRequest.getPromoCodeId());
+
+            preparedStatement.executeUpdate();
+            ResultSet orderRequestResultSet = preparedStatement.getGeneratedKeys();
+
+            if (orderRequestResultSet != null && orderRequestResultSet.next()) {
+                savedOrderRequestId = Optional.of(orderRequestResultSet.getLong(1));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("OrderRequestDaoImpl save(...): cannot orderRequest user record");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl save(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return savedOrderRequestId;
+    }
 
     @Override
     public List<OrderRequest> findAll() {

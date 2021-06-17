@@ -11,6 +11,7 @@ public class DaoProvider {
     private static OrderRequestDao orderRequestDao;
     private static AcceptedOrderDao acceptedOrderDao;
     private static RejectedOrderDao rejectedOrderDao;
+    private static PromoCodeDao promoCodeDao;
 
     public static CarDao getCarDao() {
         if (carDao == null) {
@@ -66,5 +67,12 @@ public class DaoProvider {
             rejectedOrderDao = new RejectedOrderDaoImpl();
         }
         return rejectedOrderDao;
+    }
+
+    public static PromoCodeDao getPromoCodeDao() {
+        if (promoCodeDao == null) {
+            promoCodeDao = new PromoCodeDaoImpl();
+        }
+        return promoCodeDao;
     }
 }

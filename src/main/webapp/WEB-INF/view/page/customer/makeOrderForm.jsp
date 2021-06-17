@@ -25,12 +25,15 @@
         <br/>
         <c:out value="${occupation.endTime}"/>
     </div>
+        <c:set var="car_id" value="${occupation.carId}" scope="request"/>
     </c:forEach>
 </div>
 
 <br/>
+<h4><c:out value="${occupation.startTime}"/></h4>
 <h4><c:out value="${selectTimeIntervalSign}"/></h4>
     <form method="POST" action="http://localhost:8080/home?command=MAKE_ORDER_REQUEST">
+        <input type="hidden" name="car_id" value="${car_id}"/>
         <div class="form-group row">
            <label for="start_date_and_time" class="col-2 col-form-label"><c:out value="${chooseRideStartTimeInput}"/></label>
            <div class="col-10">
@@ -41,6 +44,12 @@
             <label for="end_date_and_time" class="col-2 col-form-label"><c:out value="${chooseRideEndTimeInput}"/></label>
             <div class="col-10">
                 <input class="form-control" type="datetime-local" id="end_date_and_time" name="end_date_and_time">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="promo_code" class="col-2 col-form-label">TOCHANGE PROMOCODE</label>
+            <div class="col-10">
+                <input class="form-control" type="text" id="promo_code" name="promo_code">
             </div>
         </div>
         <div class="form-group">

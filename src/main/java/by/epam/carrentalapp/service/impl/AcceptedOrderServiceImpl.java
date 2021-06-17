@@ -40,6 +40,7 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
 
                 if (orderRequestOptional.isPresent()) {
                     carOccupationDtoList.add(new CarOccupationDto(
+                            carId,
                             orderRequestOptional.get().getExpectedStartTime(),
                             orderRequestOptional.get().getExpectedEndTime()
                     ));

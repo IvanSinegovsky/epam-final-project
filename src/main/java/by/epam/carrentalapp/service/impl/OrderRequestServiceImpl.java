@@ -16,11 +16,14 @@ import java.util.Optional;
 public class OrderRequestServiceImpl implements OrderRequestService {
     private final Logger LOGGER = Logger.getLogger(OrderRequestServiceImpl.class);
 
+    private final String ZERO_DISCOUNT_PROMOCODE = "ZERODISCOUNT";
+
     private final OrderRequestDao orderRequestDao;
     private final CarDao carDao;
     private final CustomerUserDetailsDao customerUserDetailsDao;
     private final AcceptedOrderDao acceptedOrderDao;
     private final RejectedOrderDao rejectedOrderDao;
+    private final PromoCodeDao promoCodeDao;
 
     public OrderRequestServiceImpl() {
         orderRequestDao = DaoProvider.getOrderRequestDao();
@@ -28,6 +31,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         customerUserDetailsDao = DaoProvider.getCustomerUserDetailsDao();
         acceptedOrderDao = DaoProvider.getAcceptedOrderDao();
         rejectedOrderDao = DaoProvider.getRejectedOrderDao();
+        promoCodeDao = DaoProvider.getPromoCodeDao();
     }
 
     @Override
@@ -140,5 +144,51 @@ public class OrderRequestServiceImpl implements OrderRequestService {
             LOGGER.error("OrderRequestServiceImpl rejectOrderRequests(...): DAO cannot execute operations");
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public void saveOrderRequest(Long carId, Long userId,
+                                 LocalDateTime expectedStartTime, LocalDateTime expectedEndTime,
+                                 String promoCode) {
+        try {
+            Long customerUserDetailsId = null;
+            Long promoCodeId = null;
+            Optional<PromoCode> promoCodeOptional = Optional.empty();
+
+            if (promoCode == null) {
+                promoCodeId = getZeroDiscountPromoCodeId();
+            } else {
+                promoCodeOptional = promoCodeDao.findByPromoCode(promoCode);
+
+                if (promoCodeOptional.isEmpty()) {
+                    promoCodeId = getZeroDiscountPromoCodeId();
+                }
+            }
+
+            Optional<CustomerUserDetails> customerUserDetailsOptional = customerUserDetailsDao.findByUserId(userId);
+
+            if (customerUserDetailsOptional.isPresent()) {
+                customerUserDetailsId = customerUserDetailsOptional.get().getUserDetailsId();
+            }
+
+            orderRequestDao.save(new OrderRequest(
+                    expectedStartTime,
+                    expectedEndTime,
+                    carId,
+                    customerUserDetailsId,
+                    true,
+                    false,
+                    promoCodeId
+            ));
+        } catch (DaoException e) {
+            LOGGER.error("OrderRequestServiceImpl saveOrderRequest(...): DAO cannot execute operations");
+            throw new ServiceException(e);
+        }
+    }
+
+    private Long getZeroDiscountPromoCodeId() {
+        return promoCodeDao.findByPromoCode(ZERO_DISCOUNT_PROMOCODE).orElseThrow(
+                () -> new ServiceException("Wrong customers and default promoCode")
+        ).getPromoCodeId();
     }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum OrderRequestQuery {
+    INSERT_INTO_ORDER_REQUESTS("INSERT INTO order_requests(expected_start_time, expected_end_time, expected_car_id, user_details_id, is_active, is_checked, promo_codes_promo_code_id) VALUES (?,?,?,?,?,?,?);"),
     SELECT_ALL_FROM_ORDER_REQUESTS("SELECT * FROM order_requests"),
     SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_IS_ACTIVE_EQUALS_TRUE("SELECT * FROM order_requests WHERE is_active=1"),
     SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_ORDER_REQUEST_ID_EQUALS("SELECT * FROM order_requests WHERE order_request_id=?"),
