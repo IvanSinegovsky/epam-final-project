@@ -15,4 +15,5 @@ public interface UserDao {
     List<User> findAll();
     Optional<User> findByEmail(String emailToFind);
     Long save(User userToSave);
+    Optional<User> findByUserId(Long userId);
 }
