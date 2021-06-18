@@ -9,108 +9,62 @@ import org.apache.log4j.Logger;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class EmailNotification {
     private static final Logger LOGGER = Logger.getLogger(CarServiceImpl.class);
 
-/*    private static final String EMAIL_CONFIG_PATH = "email";
+    private static final String EMAIL_CONFIG_PATH = "email";
     private static ResourceBundle resourceBundle;
     private static Properties properties;
 
-    private static String fromUsername;
-    private static String fromPassword;
+    private static Session session;
+
+    private static String corporateEmail;
+    private static String corporatePassword;
 
     public static void sendMessage(Email email, User user) {
-        if (resourceBundle == null) {
-            setEmailProperties();
-        }
+        String customerEmail = user.getEmail();
 
-        Session session = Session.getInstance(properties, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(fromUsername, fromPassword);
-            }
-        });
-        session.setDebug(true);
+        if (corporateEmail == null) {
+            propertiesInit();
+        }
 
         try {
             MimeMessage message = new MimeMessage(session);
 
-            message.setFrom(new InternetAddress(fromUsername));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+            message.setFrom(new InternetAddress(corporateEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(customerEmail));
             message.setSubject(email.getMessageSubject());
             message.setText(email.getMessageText(user.getName()));
 
             Transport.send(message);
         } catch (MessagingException e) {
-            LOGGER.error("Cannot send email to customer");
+            LOGGER.error("Cannot send email");
             throw new ServiceException(e);
         }
     }
 
-    private static void setEmailProperties() {
-        try {
-            resourceBundle = ResourceBundle.getBundle(EMAIL_CONFIG_PATH);
-            properties = System.getProperties();
+    private static void propertiesInit() {
+        properties = System.getProperties();
 
-            properties.put("mail.smtp.host", resourceBundle.getString("mail.smtp.host"));
-            properties.put("mail.smtp.port", resourceBundle.getString("mail.smtp.port"));
-            properties.put("mail.smtp.ssl.enable", resourceBundle.getString("mail.smtp.ssl.enable"));
-            properties.put("mail.smtp.auth", resourceBundle.getString("mail.smtp.auth"));
-            properties.put("mail.smtp.user", resourceBundle.getString("mail.smtp.user"));
-            properties.put("mail.smtp.password", resourceBundle.getString("mail.smtp.password"));
+        resourceBundle = ResourceBundle.getBundle(EMAIL_CONFIG_PATH);
 
-            fromUsername = resourceBundle.getString("mail.smtp.user");
-            fromPassword = resourceBundle.getString("mail.smtp.password");
-        } catch (MissingResourceException e) {
-            LOGGER.error("Email notification emailPropertiesInit(). Cannot read valid file by properties file path");
-            throw new ServiceException(e);
-        }
-    }*/
+        corporateEmail = resourceBundle.getString("mail.smtp.user");
+        corporatePassword = resourceBundle.getString("mail.smtp.password");
 
-    public static void sendMessage(Email email, User user) {
-        String to = user.getEmail();
-        String from = "isinegovsky@gmail.com";
-        String host = "smtp.gmail.com";
+        properties.put("mail.smtp.host", resourceBundle.getString("mail.smtp.host"));
+        properties.put("mail.smtp.port", resourceBundle.getString("mail.smtp.port"));
+        properties.put("mail.smtp.ssl.enable", resourceBundle.getString("mail.smtp.ssl.enable"));
+        properties.put("mail.smtp.auth", resourceBundle.getString("mail.smtp.auth"));
 
-        // Get system properties
-        Properties properties = System.getProperties();
-
-        // Setup mail server
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-        properties.put("mail.smtp.auth", "true");
-
-        // Get the Session object.// and pass username and password
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-
+        session = Session.getInstance(properties, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-
-                return new PasswordAuthentication("isinegovsky@gmail.com", "");
-
+                return new PasswordAuthentication(corporateEmail, corporatePassword);
             }
-
         });
 
-        // Used to debug SMTP issues
         session.setDebug(true);
-
-        try {
-            MimeMessage message = new MimeMessage(session);
-
-            message.setFrom(new InternetAddress(from));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(email.getMessageSubject());
-            message.setText(email.getMessageText(user.getName()));
-
-            Transport.send(message);
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
-
     }
-
 }
