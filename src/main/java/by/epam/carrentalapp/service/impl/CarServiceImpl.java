@@ -2,13 +2,14 @@ package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.dao.CarDao;
 import by.epam.carrentalapp.dao.DaoException;
-import by.epam.carrentalapp.dao.DaoProvider;
+import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CarServiceImpl implements CarService {
     private final Logger LOGGER = Logger.getLogger(CarServiceImpl.class);
@@ -30,5 +31,19 @@ public class CarServiceImpl implements CarService {
         }
 
         return cars;
+    }
+
+    @Override
+    public Optional<Car> getCarById(Long carId) {
+        Optional<Car> carOptional = Optional.empty();
+
+        try {
+            carOptional = carDao.findById(carId);
+        } catch (DaoException e) {
+            LOGGER.error("CarServiceImpl getCarById(...): DAO cannot return car");
+            throw new ServiceException(e);
+        }
+
+        return carOptional;
     }
 }

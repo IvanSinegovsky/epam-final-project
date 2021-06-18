@@ -3,7 +3,7 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.*;
-import by.epam.carrentalapp.dao.DaoProvider;
+import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import by.epam.carrentalapp.bean.entity.Role;

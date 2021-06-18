@@ -6,12 +6,13 @@ import by.epam.carrentalapp.bean.entity.RejectedOrder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRequestService {
     List<OrderRequestInformationDto> getActiveOrderRequestsInformation();
-    void saveOrderRequest(Long carId, Long userId,
-                          LocalDateTime expectedStartTime, LocalDateTime expectedEndTime,
-                          String promocode);
+    Optional<OrderRequest> saveOrderRequest(Long carId, Long userId,
+                                            LocalDateTime expectedStartTime, LocalDateTime expectedEndTime,
+                                            String promocode);
     void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminAcceptedId);
     void rejectOrderRequests(List<OrderRequestInformationDto> rejectedOrders,
                              Long adminRejectedId,

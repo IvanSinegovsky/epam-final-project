@@ -5,7 +5,7 @@ import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
 import by.epam.carrentalapp.dao.AcceptedOrderDao;
 import by.epam.carrentalapp.dao.DaoException;
-import by.epam.carrentalapp.dao.DaoProvider;
+import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import by.epam.carrentalapp.service.ServiceException;

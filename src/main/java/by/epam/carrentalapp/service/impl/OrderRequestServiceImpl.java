@@ -3,6 +3,7 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import by.epam.carrentalapp.bean.entity.*;
 import by.epam.carrentalapp.dao.*;
+import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -147,9 +148,11 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void saveOrderRequest(Long carId, Long userId,
+    public Optional<OrderRequest> saveOrderRequest(Long carId, Long userId,
                                  LocalDateTime expectedStartTime, LocalDateTime expectedEndTime,
                                  String promoCode) {
+        Optional<OrderRequest> orderRequestOptional = Optional.empty();
+
         try {
             Long customerUserDetailsId = null;
             Long promoCodeId = null;
@@ -171,7 +174,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                 customerUserDetailsId = customerUserDetailsOptional.get().getUserDetailsId();
             }
 
-            orderRequestDao.save(new OrderRequest(
+            Optional<Long> savedOrderRequestId = orderRequestDao.save(new OrderRequest(
                     expectedStartTime,
                     expectedEndTime,
                     carId,
@@ -180,10 +183,15 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                     false,
                     promoCodeId
             ));
+            orderRequestOptional = orderRequestDao.findByOrderRequestId(savedOrderRequestId.orElseThrow(
+                    () -> new ServiceException("Something with saving went wrong")
+            ));
         } catch (DaoException e) {
             LOGGER.error("OrderRequestServiceImpl saveOrderRequest(...): DAO cannot execute operations");
             throw new ServiceException(e);
         }
+
+        return orderRequestOptional;
     }
 
     private Long getZeroDiscountPromoCodeId() {
