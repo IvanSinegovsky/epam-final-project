@@ -15,4 +15,5 @@ public interface CarDao {
     List<Car> findAll();
     Optional<Car> findById(Long carIdRoFind);
     Optional<Car> findByModel(String carModelToFind);
+    Optional<Long> save(Car car);
 }

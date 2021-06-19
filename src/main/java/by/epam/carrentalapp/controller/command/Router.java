@@ -15,6 +15,7 @@ public enum Router {
     CHOOSE_CAR_FORWARD_PATH("/WEB-INF/view/page/customer/chooseCar.jsp"),
     MAKE_ORDER_FORM_FORWARD_PATH("/WEB-INF/view/page/customer/makeOrderForm.jsp"),
     SAVED_ORDER_REQUEST_INFO_FORWARD_PATH("/WEB-INF/view/page/customer/savedOrderRequestInfo.jsp"),
+    ADD_CAR_FORWARD_PATH("/WEB-INF/view/page/admin/addCar.jsp"),
 
     LOGIN_REDIRECT_PATH("/home?command=LOGIN"),
     REGISTER_REDIRECT_PATH("/home?command=REGISTER"),

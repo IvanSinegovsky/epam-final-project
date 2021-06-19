@@ -109,4 +109,35 @@ public class CarDaoImpl implements CarDao {
 
         return carOptional;
     }
+
+    @Override
+    public Optional<Long> save(Car carToSave) {
+        Optional<Long> savedCarId = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    CarQuery.INSERT_INTO_CARS.getQuery(), Statement.RETURN_GENERATED_KEYS
+            )) {
+
+            preparedStatement.setString(1, carToSave.getModel());
+            preparedStatement.setString(2, carToSave.getNumber());
+            preparedStatement.setDouble(3, carToSave.getHourlyCost());
+            preparedStatement.setString(4, carToSave.getAssetURL());
+
+            preparedStatement.executeUpdate();
+            ResultSet carResultSet = preparedStatement.getGeneratedKeys();
+
+            if (carResultSet != null && carResultSet.next()) {
+                savedCarId = Optional.of(carResultSet.getLong(1));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("CarDaoImpl save(...): cannot insert car record");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CarDaoImpl save(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return savedCarId;
+    }
 }

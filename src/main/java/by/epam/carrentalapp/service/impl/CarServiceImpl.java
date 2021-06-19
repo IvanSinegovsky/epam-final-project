@@ -46,4 +46,18 @@ public class CarServiceImpl implements CarService {
 
         return carOptional;
     }
+
+    @Override
+    public void addCar(Car car) {
+        try {
+            Optional<Long> savedCarIdOptional = carDao.save(car);
+
+            if (savedCarIdOptional.isEmpty()) {
+                throw new ServiceException("CarServiceImpl addCar(...): DAO cannot return generated key");
+            }
+        } catch (DaoException e) {
+            LOGGER.error("CarServiceImpl addCar(...): DAO cannot save car");
+            throw new ServiceException(e);
+        }
+    }
 }

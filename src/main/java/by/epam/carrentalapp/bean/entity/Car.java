@@ -15,4 +15,11 @@ public class Car implements Serializable {
     private String number;
     private Double hourlyCost;
     private String assetURL;
+
+    public Car(String model, String number, Double hourlyCost, String assetURL) {
+        this.model = model;
+        this.number = number;
+        this.hourlyCost = hourlyCost;
+        this.assetURL = assetURL;
+    }
 }

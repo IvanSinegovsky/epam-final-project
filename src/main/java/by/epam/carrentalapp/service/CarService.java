@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface CarService {
     List<Car> getAllCars();
     Optional<Car> getCarById(Long carId);
+    void addCar(Car car);
 }
