@@ -18,18 +18,32 @@
 <body>
 <h3><c:out value="${carOccupationSign}"/></h3>
 <jsp:useBean id="car_occupation" scope="request" type="java.util.List"/>
-<div class="card-group">
-    <c:forEach items="${car_occupation}" var="occupation" varStatus="counter">
-    <div>
-        <c:out value="${occupation.startTime}"/>
-        <br/>
-        <c:out value="${occupation.endTime}"/>
-    </div>
-        <c:set var="car_id" value="${occupation.carId}" scope="request"/>
-    </c:forEach>
-</div>
 
-<br/>
+<c:if test="${empty car_occupation}">
+    <h3>TOCHANGE current car is not occupied</h3>
+</c:if>
+<c:if test="${!empty car_occupation}">
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">tochange start time</th>
+        <th scope="col">tochange end time</th>
+    </tr>
+    </thead>
+    <tbody>
+        <c:forEach items="${car_occupation}" var="occupation" varStatus="counter">
+        <tr>
+            <div>
+                <td><c:out value="${occupation.startTime}"/></td>
+                <td><c:out value="${occupation.endTime}"/></td>
+            </div>
+        </tr>
+        <c:set var="car_id" value="${occupation.carId}" scope="request"/>
+        </c:forEach>
+    </tbody>
+</table>
+</c:if>
+
 <h4><c:out value="${occupation.startTime}"/></h4>
 <h4><c:out value="${selectTimeIntervalSign}"/></h4>
     <form method="POST" action="http://localhost:8080/home?command=MAKE_ORDER_REQUEST">

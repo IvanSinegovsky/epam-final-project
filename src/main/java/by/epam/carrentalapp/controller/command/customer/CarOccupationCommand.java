@@ -28,6 +28,7 @@ public class CarOccupationCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.removeAttribute(CAR_OCCUPATION_REQUEST_PARAMETER_NAME);
         Long carId = Long.valueOf(request.getParameter(CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME));
 
         try {

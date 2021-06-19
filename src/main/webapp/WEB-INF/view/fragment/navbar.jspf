@@ -45,12 +45,12 @@
             </c:if>
         </ul>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><c:out value="${loginButton}"/></button>
-            </li>
-            <li>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><c:out value="${registerButton}"/></button>
-            </li>
+
+            <c:if test="${sessionScope.isCustomer != true}">
+                <a class="btn btn-primary" href="home?command=LOGIN" role="button"><c:out value="${loginButton}"/></a>
+                <a class="btn btn-primary" href="home?command=GO_TO_REGISTER" role="button"><c:out value="${registerButton}"/></a>
+            </c:if>
+
             <li class="nav-item dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <c:out value="${languageButton}"/>

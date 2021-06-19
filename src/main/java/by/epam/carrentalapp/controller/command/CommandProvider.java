@@ -32,6 +32,7 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.CAR_OCCUPATION.name(), new CarOccupationCommand());
         nameToCommand.put(CommandTitle.LOGIN_AND_MAKE_ORDER.name(), new LoginAndMakeOrderCommand());
         nameToCommand.put(CommandTitle.MAKE_ORDER_REQUEST.name(), new MakeOrderRequestCommand());
+        nameToCommand.put(CommandTitle.GO_TO_REGISTER.name(), new GoToRegisterCommand());
     }
 
     public static Command getCommand(String commandTitle) {
