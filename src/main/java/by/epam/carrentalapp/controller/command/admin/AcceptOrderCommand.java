@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.controller.command.admin;
 
-import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
+import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
@@ -30,15 +30,15 @@ public class AcceptOrderCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String[] acceptedOrderRequestInfoStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
-        List<OrderRequestInformationDto> orderRequestInformationDtos = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
+        List<OrderRequestInfoDto> orderRequestInfoDtos = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
         Long adminAcceptedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
         for (String infoString : acceptedOrderRequestInfoStrings) {
-            orderRequestInformationDtos.add(OrderRequestInformationDto.valueOf(infoString));
+            orderRequestInfoDtos.add(OrderRequestInfoDto.valueOf(infoString));
         }
 
         try {
-            orderRequestService.acceptOrderRequests(orderRequestInformationDtos, adminAcceptedId);
+            orderRequestService.acceptOrderRequests(orderRequestInfoDtos, adminAcceptedId);
 
             redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
         } catch (ServiceException e) {

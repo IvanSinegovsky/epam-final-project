@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.service.impl;
 
-import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
+import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.bean.entity.*;
 import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.dao.*;
@@ -42,40 +42,19 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public List<OrderRequestInformationDto> getActiveOrderRequestsInformation() {
-        List<OrderRequestInformationDto> orderRequestInformationDtoList = new ArrayList<>();
+    public List<OrderRequestInfoDto> getActiveOrderRequestsInformation() {
+        List<OrderRequestInfoDto> orderRequestInfoDtoList;
 
         try {
             List<OrderRequest> orderRequestList = orderRequestDao.findAllByIsActive();
-            Optional<CustomerUserDetails> customerUserDetails;
-            Optional<Car> expectedCarOptional;
-            double totalCost;
 
-            for (OrderRequest orderRequest : orderRequestList) {
-                customerUserDetails = customerUserDetailsDao.findById(orderRequest.getUserDetailsId());
-                expectedCarOptional = carDao.findById(orderRequest.getExpectedCarId());
-
-                if (expectedCarOptional.isPresent() && customerUserDetails.isPresent()) {
-                    totalCost = expectedCarOptional.get().getHourlyCost()
-                            * twoLocalDateTimeHourDifference(
-                                    orderRequest.getExpectedStartTime(),
-                                    orderRequest.getExpectedEndTime()
-                    );
-
-                    orderRequestInformationDtoList.add(new OrderRequestInformationDto(
-                            orderRequest,
-                            customerUserDetails.get(),
-                            expectedCarOptional.get().getModel(),
-                            totalCost
-                    ));
-                }
-            }
+            orderRequestInfoDtoList = orderRequestToDto(orderRequestList);
         } catch (DaoException e) {
             LOGGER.error("OrderRequestServiceImpl getActiveOrderRequestsInformation(): DAO cannot return values");
             throw new ServiceException(e);
         }
 
-        return orderRequestInformationDtoList;
+        return orderRequestInfoDtoList;
     }
 
     private long twoLocalDateTimeHourDifference(LocalDateTime dateTime, LocalDateTime laterDateTime) {
@@ -84,8 +63,8 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void acceptOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos, Long adminAcceptedId) {
-        List<AcceptedOrder> acceptedOrders = new ArrayList<>(orderRequestInformationDtos.size());
+    public void acceptOrderRequests(List<OrderRequestInfoDto> orderRequestInfoDtos, Long adminAcceptedId) {
+        List<AcceptedOrder> acceptedOrders = new ArrayList<>(orderRequestInfoDtos.size());
         Long carId;
         Long userDetailsId;
         Long orderRequestId;
@@ -93,9 +72,9 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         Optional<Car> carOptional;
 
         try {
-            orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
+            orderRequestDao.setNonActiveOrderRequests(orderRequestInfoDtos);
 
-            for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
+            for (OrderRequestInfoDto informationDto : orderRequestInfoDtos) {
                 carOptional = carDao.findByModel(informationDto.getExpectedCarModel());
 
                 if (carOptional.isPresent()) {
@@ -126,20 +105,20 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     }
 
     @Override
-    public void rejectOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos,
+    public void rejectOrderRequests(List<OrderRequestInfoDto> orderRequestInfoDtos,
                                     Long adminRejectedId,
                                     String rejectionReason) {
-        List<RejectedOrder> rejectedOrders = new ArrayList<>(orderRequestInformationDtos.size());
+        List<RejectedOrder> rejectedOrders = new ArrayList<>(orderRequestInfoDtos.size());
         Long userDetailsId;
 
         try {
-            orderRequestDao.setNonActiveOrderRequests(orderRequestInformationDtos);
+            orderRequestDao.setNonActiveOrderRequests(orderRequestInfoDtos);
 
             if (rejectionReason.length() > 100) {
                 rejectionReason = rejectionReason.substring(0, 99);
             }
 
-            for (OrderRequestInformationDto informationDto : orderRequestInformationDtos) {
+            for (OrderRequestInfoDto informationDto : orderRequestInfoDtos) {
                 rejectedOrders.add(new RejectedOrder(
                         rejectionReason,
                         informationDto.getOrderRequestId(),
@@ -226,5 +205,54 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         return promoCodeDao.findByPromoCode(ZERO_DISCOUNT_PROMOCODE).orElseThrow(
                 () -> new ServiceException("Wrong customers and default promoCode")
         ).getPromoCodeId();
+    }
+
+    @Override
+    public List<OrderRequestInfoDto> getCustomerActiveOrderRequestsInformation(Long userId) {
+        List<OrderRequestInfoDto> customerOrderRequestInfoDtoList;
+        Long userDetailsId;
+
+        try {
+            userDetailsId = customerUserDetailsDao.findByUserId(userId).orElseThrow(
+                    () -> new ServiceException("Current user is not a customer")
+            ).getUserDetailsId();
+            List<OrderRequest> orderRequestList = orderRequestDao.findAllByIsActiveAndUserDetailsId(userDetailsId);
+
+            customerOrderRequestInfoDtoList = orderRequestToDto(orderRequestList);
+        } catch (DaoException e) {
+            LOGGER.error("OrderRequestServiceImpl getCustomerActiveOrderRequestsInformation(): DAO cannot return values");
+            throw new ServiceException(e);
+        }
+
+        return customerOrderRequestInfoDtoList;
+    }
+
+    private List<OrderRequestInfoDto> orderRequestToDto(List<OrderRequest> orderRequestList) {
+        List<OrderRequestInfoDto> orderRequestInfoDtoList = new ArrayList<>();
+        Optional<CustomerUserDetails> customerUserDetails;
+        Optional<Car> expectedCarOptional;
+        double totalCost;
+
+        for (OrderRequest orderRequest : orderRequestList) {
+            customerUserDetails = customerUserDetailsDao.findById(orderRequest.getUserDetailsId());
+            expectedCarOptional = carDao.findById(orderRequest.getExpectedCarId());
+
+            if (expectedCarOptional.isPresent() && customerUserDetails.isPresent()) {
+                totalCost = expectedCarOptional.get().getHourlyCost()
+                        * twoLocalDateTimeHourDifference(
+                        orderRequest.getExpectedStartTime(),
+                        orderRequest.getExpectedEndTime()
+                );
+
+                orderRequestInfoDtoList.add(new OrderRequestInfoDto(
+                        orderRequest,
+                        customerUserDetails.get(),
+                        expectedCarOptional.get().getModel(),
+                        totalCost
+                ));
+            }
+        }
+
+        return orderRequestInfoDtoList;
     }
 }

@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.controller.command.admin;
 
-import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
+import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
@@ -32,7 +32,7 @@ public class OrderRequestListCommand implements Command {
         if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
             forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         } else {
-            List<OrderRequestInformationDto> orderRequests = null;
+            List<OrderRequestInfoDto> orderRequests = null;
 
             try {
                 orderRequests = orderRequestService.getActiveOrderRequestsInformation();

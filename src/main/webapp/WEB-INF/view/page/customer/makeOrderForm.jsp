@@ -38,7 +38,6 @@
                 <td><c:out value="${occupation.endTime}"/></td>
             </div>
         </tr>
-        <c:set var="car_id" value="${occupation.carId}" scope="request"/>
         </c:forEach>
     </tbody>
 </table>
@@ -47,7 +46,8 @@
 <h4><c:out value="${occupation.startTime}"/></h4>
 <h4><c:out value="${selectTimeIntervalSign}"/></h4>
     <form method="POST" action="http://localhost:8080/home?command=MAKE_ORDER_REQUEST">
-        <input type="hidden" name="car_id" value="${car_id}"/>
+        <jsp:useBean id="car_id_to_check" scope="request" type="java.lang.Long"/>
+        <input type="hidden" name="car_id" value="${car_id_to_check}"/>
         <div class="form-group row">
            <label for="start_date_and_time" class="col-2 col-form-label"><c:out value="${chooseRideStartTimeInput}"/></label>
            <div class="col-10">

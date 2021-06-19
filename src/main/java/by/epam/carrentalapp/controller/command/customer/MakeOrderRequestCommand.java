@@ -8,6 +8,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.OrderRequestService;
+import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
@@ -61,7 +62,7 @@ public class MakeOrderRequestCommand implements Command {
             request.setAttribute(EXPECTED_CAR_REQUEST_PARAMETER_NAME, expectedCar);
 
             forward(Router.SAVED_ORDER_REQUEST_INFO_FORWARD_PATH.getPath(), request, response);
-        } catch (NumberFormatException e) {
+        } catch (ServiceException e) {
             LOGGER.error("MakeOrderRequestCommand execute(...): service crashed");
             request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Wrong input data format");
             forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);

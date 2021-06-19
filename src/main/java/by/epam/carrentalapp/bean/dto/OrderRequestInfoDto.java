@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderRequestInformationDto {
+public class OrderRequestInfoDto {
     private Long orderRequestId;
     private Integer customerRate;
     private String expectedCarModel;
@@ -19,10 +19,10 @@ public class OrderRequestInformationDto {
     private LocalDateTime expectedEndTime;
     private Double totalCost;
 
-    public OrderRequestInformationDto(OrderRequest orderRequest,
-                                      CustomerUserDetails customerUserDetails,
-                                      String expectedCarModel,
-                                      Double totalCost) {
+    public OrderRequestInfoDto(OrderRequest orderRequest,
+                               CustomerUserDetails customerUserDetails,
+                               String expectedCarModel,
+                               Double totalCost) {
         this.orderRequestId = orderRequest.getOrderRequestId();
         this.customerRate = customerUserDetails.getRate();
         this.expectedCarModel = expectedCarModel;
@@ -31,7 +31,7 @@ public class OrderRequestInformationDto {
         this.totalCost = totalCost;
     }
 
-    public static OrderRequestInformationDto valueOf(String orderRequestInformationString) {
+    public static OrderRequestInfoDto valueOf(String orderRequestInformationString) {
         String[] fields = orderRequestInformationString.split(",");
 
         Long orderRequestId = Long.valueOf(fields[0].substring(indexNumberAfterEqualsChar(fields[0])));
@@ -43,7 +43,7 @@ public class OrderRequestInformationDto {
                 indexNumberAfterEqualsChar(fields[5]), fields[5].length() - 1
         ));
 
-        return new OrderRequestInformationDto(
+        return new OrderRequestInfoDto(
                 orderRequestId, customerRate, expectedCarModel, expectedStartTime, expectedEndTime, totalCost
         );
     }

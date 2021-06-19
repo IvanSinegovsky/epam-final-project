@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.controller.command.admin;
 
-import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
+import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
@@ -32,15 +32,15 @@ public class RejectOrderCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String[] rejectedOrderRequestInfoStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
         String rejectionReason = request.getParameter(REJECTION_REASON_REQUEST_PARAMETER_NAME);
-        List<OrderRequestInformationDto> orderRequestInformationDtos = new ArrayList<>(rejectedOrderRequestInfoStrings.length);
+        List<OrderRequestInfoDto> orderRequestInfoDtos = new ArrayList<>(rejectedOrderRequestInfoStrings.length);
         Long adminRejectedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
         for (String infoString : rejectedOrderRequestInfoStrings) {
-            orderRequestInformationDtos.add(OrderRequestInformationDto.valueOf(infoString));
+            orderRequestInfoDtos.add(OrderRequestInfoDto.valueOf(infoString));
         }
 
         try {
-            orderRequestService.rejectOrderRequests(orderRequestInformationDtos, adminRejectedId, rejectionReason);
+            orderRequestService.rejectOrderRequests(orderRequestInfoDtos, adminRejectedId, rejectionReason);
 
             redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
         } catch (ServiceException e) {

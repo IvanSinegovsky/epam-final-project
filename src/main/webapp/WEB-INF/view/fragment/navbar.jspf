@@ -69,6 +69,7 @@
             
             <c:if test="${sessionScope.isCustomer == true}">
                 <a class="btn btn-primary" href="home?command=LOGOUT" role="button"><c:out value="${logoutButton}"/></a>
+                <a class="btn btn-primary" href="home?command=ACTIVE_ORDER_REQUEST_LIST" role="button">TOCHANGE profile</a>
             </c:if>
         </ul>
     </div>

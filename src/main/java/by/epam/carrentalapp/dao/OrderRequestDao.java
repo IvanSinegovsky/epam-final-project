@@ -1,6 +1,6 @@
 package by.epam.carrentalapp.dao;
 
-import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
+import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
 
 import java.util.List;
@@ -19,6 +19,7 @@ public interface OrderRequestDao {
     Optional<Long> save(OrderRequest orderRequest);
     List<OrderRequest> findAll();
     List<OrderRequest> findAllByIsActive();
-    void setNonActiveOrderRequests(List<OrderRequestInformationDto> orderRequestInformationDtos);
+    List<OrderRequest> findAllByIsActiveAndUserDetailsId(Long userDetailsId);
+    void setNonActiveOrderRequests(List<OrderRequestInfoDto> orderRequestInfoDtos);
     Optional<OrderRequest> findByOrderRequestId(Long orderRequestId);
 }

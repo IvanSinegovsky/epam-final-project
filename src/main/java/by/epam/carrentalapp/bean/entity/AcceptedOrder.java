@@ -1,6 +1,5 @@
 package by.epam.carrentalapp.bean.entity;
 
-import by.epam.carrentalapp.bean.dto.OrderRequestInformationDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

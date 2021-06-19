@@ -34,6 +34,7 @@ public class CarOccupationCommand implements Command {
         try {
             List<CarOccupationDto> carOccupationById = acceptedOrderService.getCarOccupationById(carId);
             request.setAttribute(CAR_OCCUPATION_REQUEST_PARAMETER_NAME, carOccupationById);
+            request.setAttribute(CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME, carId);
 
             forward(Router.MAKE_ORDER_FORM_FORWARD_PATH.getPath(), request, response);
         } catch (Exception e) {
