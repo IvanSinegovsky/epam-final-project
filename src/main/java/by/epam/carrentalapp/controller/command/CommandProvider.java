@@ -1,12 +1,7 @@
 package by.epam.carrentalapp.controller.command;
 
-import by.epam.carrentalapp.controller.command.admin.AcceptOrderCommand;
-import by.epam.carrentalapp.controller.command.admin.OrderRequestListCommand;
-import by.epam.carrentalapp.controller.command.admin.RejectOrderCommand;
-import by.epam.carrentalapp.controller.command.customer.CarOccupationCommand;
-import by.epam.carrentalapp.controller.command.customer.ChooseCarCommand;
-import by.epam.carrentalapp.controller.command.customer.LogoutCommand;
-import by.epam.carrentalapp.controller.command.customer.MakeOrderRequestCommand;
+import by.epam.carrentalapp.controller.command.admin.*;
+import by.epam.carrentalapp.controller.command.customer.*;
 import by.epam.carrentalapp.controller.command.error.ErrorCommand;
 import by.epam.carrentalapp.controller.command.guest.*;
 import lombok.NoArgsConstructor;
@@ -33,6 +28,10 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.LOGIN_AND_MAKE_ORDER.name(), new LoginAndMakeOrderCommand());
         nameToCommand.put(CommandTitle.MAKE_ORDER_REQUEST.name(), new MakeOrderRequestCommand());
         nameToCommand.put(CommandTitle.GO_TO_REGISTER.name(), new GoToRegisterCommand());
+        nameToCommand.put(CommandTitle.ADD_CAR.name(), new AddCarCommand());
+        nameToCommand.put(CommandTitle.PROMO_CODE_LIST.name(), new PromoCodeListCommand());
+        nameToCommand.put(CommandTitle.UNDO_ORDER_REQUEST.name(), new UndoOrderRequestCommand());
+        nameToCommand.put(CommandTitle.CHECK_CUSTOMER_STATISTICS.name(), new CheckCustomerStatisticsCommand());
     }
 
     public static Command getCommand(String commandTitle) {
