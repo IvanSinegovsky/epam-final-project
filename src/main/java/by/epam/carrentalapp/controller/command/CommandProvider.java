@@ -32,6 +32,7 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.PROMO_CODE_LIST.name(), new PromoCodeListCommand());
         nameToCommand.put(CommandTitle.UNDO_ORDER_REQUEST.name(), new UndoOrderRequestCommand());
         nameToCommand.put(CommandTitle.CHECK_CUSTOMER_STATISTICS.name(), new CheckCustomerStatisticsCommand());
+        nameToCommand.put(CommandTitle.DISABLE_PROMO_CODE.name(), new DisablePromoCodeCommand());
     }
 
     public static Command getCommand(String commandTitle) {

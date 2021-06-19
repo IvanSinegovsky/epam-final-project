@@ -2,6 +2,7 @@ package by.epam.carrentalapp.dao;
 
 import by.epam.carrentalapp.bean.entity.PromoCode;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PromoCodeDao {
@@ -11,4 +12,7 @@ public interface PromoCodeDao {
     String IS_ACTIVE_COLUMN_NAME = "is_active";
 
     Optional<PromoCode> findByPromoCode(String promoCode);
+    Optional<Long> save(PromoCode promoCodeToSave);
+    void setValuesNonActiveByPromoCodes(List<String> promoCodes);
+    List<PromoCode> findAll();
 }

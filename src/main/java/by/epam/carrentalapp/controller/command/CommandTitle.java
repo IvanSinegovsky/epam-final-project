@@ -27,6 +27,7 @@ public enum CommandTitle {
     ACCEPT_ORDER(RoleName.ADMIN),
     REJECT_ORDER(RoleName.ADMIN),
     PROMO_CODE_LIST(RoleName.ADMIN),
+    DISABLE_PROMO_CODE(RoleName.ADMIN),
     ORDER_REQUEST_LIST(RoleName.ADMIN),
     CHECK_CUSTOMER_STATISTICS(RoleName.ADMIN);
 

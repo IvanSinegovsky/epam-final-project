@@ -12,6 +12,9 @@ import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class PromoCodeDaoImpl implements PromoCodeDao {
@@ -45,5 +48,83 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
         }
 
         return promoCodeOptional;
+    }
+
+    @Override
+    public Optional<Long> save(PromoCode promoCodeToSave) {
+        Optional<Long> savedPromoCodeId = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    PromoCodeQuery.INSERT_INTO_PROMO_CODES.getQuery(), Statement.RETURN_GENERATED_KEYS
+            )) {
+
+            preparedStatement.setString(1, promoCodeToSave.getPromoCode());
+            preparedStatement.setInt(2, promoCodeToSave.getDiscount());
+            preparedStatement.setBoolean(3, promoCodeToSave.getIsActive());
+
+            preparedStatement.executeUpdate();
+            ResultSet promoCodeResultSet = preparedStatement.getGeneratedKeys();
+
+            if (promoCodeResultSet != null && promoCodeResultSet.next()) {
+                savedPromoCodeId = Optional.of(promoCodeResultSet.getLong(1));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("PromoCodeDaoImpl save(...): cannot insert PromoCode to db");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("PromoCodeDaoImpl save(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return savedPromoCodeId;
+    }
+
+    @Override
+    public void setValuesNonActiveByPromoCodes(List<String> promoCodes)  {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    PromoCodeQuery.UPDATE_PROMO_CODES_SET_IS_ACTIVE_FALSE_WHERE_PROMO_CODE.getQuery()
+            )) {
+
+            for (String promoCode : promoCodes) {
+                preparedStatement.setString(1 , promoCode);
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            LOGGER.error("PromoCodeDaoImpl setValuesNonActiveByPromoCodes(...): cannot execute update");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("PromoCodeDaoImpl setValuesNonActiveByPromoCodes(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public List<PromoCode> findAll() {
+        List<PromoCode> allPromoCodes = new ArrayList<>();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet promoCodesResultSet = statement.executeQuery(PromoCodeQuery.SELECT_ALL_FROM_PROMO_CODES.getQuery())) {
+
+            while (promoCodesResultSet.next()){
+                Long promoCodeId = promoCodesResultSet.getLong(PROMO_CODE_ID_COLUMN_NAME);
+                String promoCode = promoCodesResultSet.getString(PROMO_CODE_COLUMN_NAME);
+                Integer discount = promoCodesResultSet.getInt(DISCOUNT_COLUMN_NAME);
+                Boolean isActive = promoCodesResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
+
+                allPromoCodes.add(new PromoCode(promoCodeId, promoCode, discount, isActive));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("PromoCodeDaoImpl findAll(...): cannot extract PromoCode from resultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("PromoCodeDaoImpl findAll(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return allPromoCodes;
     }
 }

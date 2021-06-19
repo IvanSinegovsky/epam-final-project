@@ -8,6 +8,7 @@ public class ServiceProvider {
     private static UsersRolesService usersRolesService;
     private static OrderRequestService orderRequestService;
     private static AcceptedOrderService acceptedOrderService;
+    private static PromoCodeService promoCodeService;
 
     public static CarService getCarService() {
         if (carService == null) {
@@ -42,5 +43,12 @@ public class ServiceProvider {
             acceptedOrderService = new AcceptedOrderServiceImpl();
         }
         return acceptedOrderService;
+    }
+
+    public static PromoCodeService getPromoCodeService() {
+        if (promoCodeService == null) {
+            promoCodeService = new PromoCodeServiceImpl();
+        }
+        return promoCodeService;
     }
 }
