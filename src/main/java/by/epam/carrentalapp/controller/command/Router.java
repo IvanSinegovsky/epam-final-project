@@ -28,7 +28,8 @@ public enum Router {
     LOGOUT_REDIRECT_PATH("/home?command=LOGOUT"),
     ACCEPT_ORDER_REDIRECT_PATH("/home?command=ACCEPT_ORDER"),
     REJECT_ORDER_REDIRECT_PATH("/home?command=REJECT_ORDER"),
-    CAR_OCCUPATION_REDIRECT_COMMAND("/home?command=CAR_OCCUPATION");
+    CAR_OCCUPATION_REDIRECT_COMMAND("/home?command=CAR_OCCUPATION"),
+    PROMO_CODE_LIST_REDIRECT_PATH("/home?command=PROMO_CODE_LIST");
 
     private final String path;
 }

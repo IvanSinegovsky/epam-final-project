@@ -31,7 +31,7 @@
                 <tr>
                     <td><div class="form-check">
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="selected_promo_codes" value="${promo_code}">
+                            <input type="checkbox" class="form-check-input" name="selected_promo_codes" value="${promo_code.promoCode}">
                         </label>
                     </div></td>
                     <td><c:out value="${promo_code.promoCodeId}"/></td>
