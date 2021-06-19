@@ -14,4 +14,10 @@ public class PromoCode implements Serializable {
     private String promoCode;
     private Integer discount;
     private Boolean isActive;
+
+    public PromoCode(String promoCode, Integer discount, Boolean isActive) {
+        this.promoCode = promoCode;
+        this.discount = discount;
+        this.isActive = isActive;
+    }
 }

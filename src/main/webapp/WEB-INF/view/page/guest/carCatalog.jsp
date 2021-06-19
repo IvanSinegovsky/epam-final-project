@@ -6,6 +6,7 @@
 <head>
     <title>Car catalog</title>
     <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
+    <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
 
     <fmt:setLocale value="${sessionScope.local}"/>
@@ -21,7 +22,6 @@
 
         <div class="card-group">
         <c:forEach items="${all_cars}" var="car" varStatus="counter">
-            <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
             <div class="card">
             <img class="card-img-top" src="${car.assetURL}" alt="Card image cap">
             <div class="card-body">

@@ -6,11 +6,15 @@
 <head>
     <title>Promo code list</title>
     <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
+    <%@ include file="/WEB-INF/view/fragment/newPromoCodePopup.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
 </head>
 <body>
 <div class="container">
     <form method="POST" action="home">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPromoCodeModalModal">
+            TOCHANGE add promocode
+        </button>
         <button type="submit" name="command" value="DISABLE_PROMO_CODE" class="btn btn-outline-success">
             TOCHANGE disable
         </button>
