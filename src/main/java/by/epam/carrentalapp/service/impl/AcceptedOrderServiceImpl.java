@@ -55,4 +55,10 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
 
         return carOccupationDtoList;
     }
+
+    @Override
+    public void sendRepairBill(AcceptedOrder acceptedOrder) {
+        //send email
+        //save repair bill to db
+    }
 }

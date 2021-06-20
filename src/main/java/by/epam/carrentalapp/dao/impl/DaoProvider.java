@@ -13,6 +13,7 @@ public class DaoProvider {
     private static AcceptedOrderDao acceptedOrderDao;
     private static RejectedOrderDao rejectedOrderDao;
     private static PromoCodeDao promoCodeDao;
+    private static RepairBillDao repairBillDao;
 
     public static CarDao getCarDao() {
         if (carDao == null) {
@@ -75,5 +76,12 @@ public class DaoProvider {
             promoCodeDao = new PromoCodeDaoImpl();
         }
         return promoCodeDao;
+    }
+
+    public static RepairBillDao getRepairBillDao() {
+        if (repairBillDao == null) {
+            repairBillDao = new RepairBillDaoImpl();
+        }
+        return repairBillDao;
     }
 }

@@ -18,6 +18,7 @@ public enum Router {
     ADD_CAR_FORWARD_PATH("/WEB-INF/view/page/admin/addCar.jsp"),
     PROMO_CODE_LIST_FORWARD_PATH("/WEB-INF/view/page/admin/promoCodeList.jsp"),
     ACTIVE_ORDER_REQUEST_LIST_FORWARD_PATH("/WEB-INF/view/page/customer/customerActiveOrderList.jsp"),
+    CUSTOMER_STATISTICS_FORWARD_PATH("/WEB-INF/view/page/admin/customerStatistics.jsp"),
 
     LOGIN_REDIRECT_PATH("/home?command=LOGIN"),
     REGISTER_REDIRECT_PATH("/home?command=REGISTER"),

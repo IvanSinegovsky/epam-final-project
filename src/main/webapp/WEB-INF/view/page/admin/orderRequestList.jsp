@@ -68,6 +68,7 @@
                 <th><c:out value="${expectedStartTimeColumnName}"/></th>
                 <th><c:out value="${expectedEndTimeColumnName}"/></th>
                 <th><c:out value="${totalCostColumnName}"/></th>
+                <th>TOCHANGE Customer statistics</th>
             </tr>
             </thead>
             <tbody>
@@ -85,10 +86,18 @@
                     <td><c:out value="${orderRequestInfo.expectedStartTime}"/></td>
                     <td><c:out value="${orderRequestInfo.expectedEndTime}"/></td>
                     <td><c:out value="${orderRequestInfo.totalCost}"/></td>
+                    <td>
+                        <a class="btn btn-primary"
+                           href="home?command=CHECK_CUSTOMER_STATISTICS&order_request_id=${orderRequestInfo.orderRequestId}"
+                           role="button">
+                            TOCHANGE Check
+                        </a>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
+
     </form>
 </div>
 </body>

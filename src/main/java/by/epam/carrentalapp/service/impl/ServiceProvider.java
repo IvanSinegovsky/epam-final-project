@@ -9,6 +9,7 @@ public class ServiceProvider {
     private static OrderRequestService orderRequestService;
     private static AcceptedOrderService acceptedOrderService;
     private static PromoCodeService promoCodeService;
+    private static CustomerService customerService;
 
     public static CarService getCarService() {
         if (carService == null) {
@@ -50,5 +51,12 @@ public class ServiceProvider {
             promoCodeService = new PromoCodeServiceImpl();
         }
         return promoCodeService;
+    }
+
+    public static CustomerService getCustomerService() {
+        if (customerService == null) {
+            customerService = new CustomerServiceImpl();
+        }
+        return customerService;
     }
 }

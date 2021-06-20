@@ -98,19 +98,8 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
             ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
 
             while (acceptedOrdersResultSet.next()) {
-                Long orderId = acceptedOrdersResultSet.getLong(ORDER_ID_COLUMN_NAME);
-                Double bill = acceptedOrdersResultSet.getDouble(BILL_COLUMN_NAME);
-                Long orderRequestId = acceptedOrdersResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
-                Long carId = acceptedOrdersResultSet.getLong(CAR_ID_COLUMN_NAME);
-                Boolean isPaid = acceptedOrdersResultSet.getBoolean(IS_PAID_COLUMN_NAME);
-                Long adminUserAcceptedId = acceptedOrdersResultSet.getLong(ADMIN_USER_ACCEPTED_ID_COLUMN_NAME);
-                Long userDetailsId = acceptedOrdersResultSet.getLong(USER_DETAILS_ID_COLUMN_NAME);
-
-                acceptedOrdersByCarId.add(new AcceptedOrder(
-                        orderId, bill, orderRequestId, carId, isPaid, adminUserAcceptedId, userDetailsId
-                ));
+                acceptedOrdersByCarId.add(extractAcceptedOrderFromResultSet(acceptedOrdersResultSet));
             }
-
         } catch (SQLException e) {
             LOGGER.error("AcceptedOrderDaoImpl findByCarId(...): cannot extract acceptedOrder from ResultSet");
             throw new DaoException(e);
@@ -120,5 +109,42 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
         }
 
         return acceptedOrdersByCarId;
+    }
+
+    @Override
+    public List<AcceptedOrder> findByUserDetailsId(Long userDetailsId) {
+        List<AcceptedOrder> acceptedOrdersByUserDetailsId = new ArrayList<>();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_USER_DETAILS_ID_EQUALS.getQuery())) {
+
+            preparedStatement.setLong(1, userDetailsId);
+            ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
+
+            while (acceptedOrdersResultSet.next()) {
+                acceptedOrdersByUserDetailsId.add(extractAcceptedOrderFromResultSet(acceptedOrdersResultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findByUserDetailsId(...): cannot extract acceptedOrder from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findByUserDetailsId(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return acceptedOrdersByUserDetailsId;
+    }
+
+    private AcceptedOrder extractAcceptedOrderFromResultSet(ResultSet acceptedOrderResultSet) throws SQLException {
+        Long orderId = acceptedOrderResultSet.getLong(ORDER_ID_COLUMN_NAME);
+        Double bill = acceptedOrderResultSet.getDouble(BILL_COLUMN_NAME);
+        Long orderRequestId = acceptedOrderResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
+        Long carId = acceptedOrderResultSet.getLong(CAR_ID_COLUMN_NAME);
+        Boolean isPaid = acceptedOrderResultSet.getBoolean(IS_PAID_COLUMN_NAME);
+        Long adminUserAcceptedId = acceptedOrderResultSet.getLong(ADMIN_USER_ACCEPTED_ID_COLUMN_NAME);
+        Long userDetailsId = acceptedOrderResultSet.getLong(USER_DETAILS_ID_COLUMN_NAME);
+
+        return new AcceptedOrder(orderId, bill, orderRequestId, carId, isPaid, adminUserAcceptedId, userDetailsId);
     }
 }

@@ -61,14 +61,16 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
 
     @Override
     public List<OrderRequest> findAll() {
-        List<OrderRequest> orderRequests;
+        List<OrderRequest> orderRequests = new ArrayList<>();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet orderRequestsResultSet = statement.executeQuery(OrderRequestQuery
                     .SELECT_ALL_FROM_ORDER_REQUESTS.getQuery())) {
 
-            orderRequests = extractOrderRequestsFromResultSet(orderRequestsResultSet);
+            while (orderRequestsResultSet.next()) {
+                orderRequests.add(extractOrderRequestFromResultSet(orderRequestsResultSet));
+            }
         } catch (SQLException e) {
             LOGGER.error("OrderRequestDaoImpl findAll(...): cannot extract orderRequest from ResultSet");
             throw new DaoException(e);
@@ -82,13 +84,15 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
 
     @Override
     public List<OrderRequest> findAllByIsActive() {
-        List<OrderRequest> activeOrderRequests;
+        List<OrderRequest> activeOrderRequests = new ArrayList<>();
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet orderRequestsResultSet = statement.executeQuery(OrderRequestQuery
                     .SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_IS_ACTIVE_EQUALS_TRUE.getQuery())) {
 
-            activeOrderRequests = extractOrderRequestsFromResultSet(orderRequestsResultSet);
+            while (orderRequestsResultSet.next()) {
+                activeOrderRequests.add(extractOrderRequestFromResultSet(orderRequestsResultSet));
+            }
         } catch (SQLException e) {
             LOGGER.error("OrderRequestDaoImpl findAllByIsActive(...): cannot extract orderRequest from ResultSet");
             throw new DaoException(e);
@@ -102,7 +106,7 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
 
     @Override
     public List<OrderRequest> findAllByIsActiveAndUserDetailsId(Long userDetailsId) {
-        List<OrderRequest> customerActiveOrderRequests;
+        List<OrderRequest> customerActiveOrderRequests = new ArrayList<>();
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(OrderRequestQuery
                     .SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_IS_ACTIVE_EQUALS_TRUE_AND_USER_DETAILS_ID_EQUALS.getQuery())) {
@@ -110,7 +114,9 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
             preparedStatement.setLong(1 , userDetailsId);
             ResultSet orderRequestsResultSet = preparedStatement.executeQuery();
 
-            customerActiveOrderRequests = extractOrderRequestsFromResultSet(orderRequestsResultSet);
+            while (orderRequestsResultSet.next()) {
+                customerActiveOrderRequests.add(extractOrderRequestFromResultSet(orderRequestsResultSet));
+            }
         } catch (SQLException e) {
             LOGGER.error("OrderRequestDaoImpl findAllByIsActiveAndUserDetailsId(...): cannot extract orderRequest from ResultSet");
             throw new DaoException(e);
@@ -122,34 +128,26 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
         return customerActiveOrderRequests;
     }
 
-    private List<OrderRequest> extractOrderRequestsFromResultSet(ResultSet orderRequestsResultSet) throws SQLException {
-        List<OrderRequest> orderRequests = new ArrayList<>();
+    private OrderRequest extractOrderRequestFromResultSet(ResultSet orderRequestsResultSet) throws SQLException {
+        Long userId = orderRequestsResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
+        String expectedStartTime = orderRequestsResultSet.getString(EXPECTED_START_TIME_COLUMN_NAME);
+        String expectedEndTime = orderRequestsResultSet.getString(EXPECTED_END_TIME_COLUMN_NAME);
+        Long expectedCarId = orderRequestsResultSet.getLong(EXPECTED_CAR_ID_COLUMN_NAME);
+        Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
+        Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
+        Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
+        Long promoCodeId = orderRequestsResultSet.getLong(PROMO_CODES_PROMO_CODE_ID);
 
-        while (orderRequestsResultSet.next()){
-            Long userId = orderRequestsResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
-            String expectedStartTime = orderRequestsResultSet.getString(EXPECTED_START_TIME_COLUMN_NAME);
-            String expectedEndTime = orderRequestsResultSet.getString(EXPECTED_END_TIME_COLUMN_NAME);
-            Long expectedCarId = orderRequestsResultSet.getLong(EXPECTED_CAR_ID_COLUMN_NAME);
-            Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
-            Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
-            Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
-            Long promoCodeId = orderRequestsResultSet.getLong(PROMO_CODES_PROMO_CODE_ID);
-
-            OrderRequest orderRequest = new OrderRequest(
-                    userId,
-                    LocalDateTime.parse(expectedStartTime, dateTimeFormatter),
-                    LocalDateTime.parse(expectedEndTime, dateTimeFormatter),
-                    expectedCarId,
-                    userDetailsId,
-                    isActive,
-                    isChecked,
-                    promoCodeId
-            );
-
-            orderRequests.add(orderRequest);
-        }
-
-        return orderRequests;
+        return new OrderRequest(
+                userId,
+                LocalDateTime.parse(expectedStartTime, dateTimeFormatter),
+                LocalDateTime.parse(expectedEndTime, dateTimeFormatter),
+                expectedCarId,
+                userDetailsId,
+                isActive,
+                isChecked,
+                promoCodeId
+        );
     }
 
     @Override
@@ -185,25 +183,7 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
             ResultSet orderRequestsResultSet = preparedStatement.executeQuery();
 
             if (orderRequestsResultSet.next()){
-                Long userId = orderRequestsResultSet.getLong(ORDER_REQUEST_ID_COLUMN_NAME);
-                String expectedStartTime = orderRequestsResultSet.getString(EXPECTED_START_TIME_COLUMN_NAME);
-                String expectedEndTime = orderRequestsResultSet.getString(EXPECTED_END_TIME_COLUMN_NAME);
-                Long expectedCarId = orderRequestsResultSet.getLong(EXPECTED_CAR_ID_COLUMN_NAME);
-                Long userDetailsId = orderRequestsResultSet.getLong(USERS_DETAILS_ID_COLUMN_NAME);
-                Boolean isActive = orderRequestsResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
-                Boolean isChecked = orderRequestsResultSet.getBoolean(IS_CHECKED_COLUMN_NAME);
-                Long promoCodeId = orderRequestsResultSet.getLong(PROMO_CODES_PROMO_CODE_ID);
-
-                orderRequestOptional = Optional.of(new OrderRequest(
-                        userId,
-                        LocalDateTime.parse(expectedStartTime, dateTimeFormatter),
-                        LocalDateTime.parse(expectedEndTime, dateTimeFormatter),
-                        expectedCarId,
-                        userDetailsId,
-                        isActive,
-                        isChecked,
-                        promoCodeId
-                ));
+                orderRequestOptional = Optional.of(extractOrderRequestFromResultSet(orderRequestsResultSet));
             }
         } catch (SQLException e) {
             LOGGER.error("OrderRequestDaoImpl findByOrderRequestId(...): cannot extract orderRequest from ResultSet");
@@ -214,5 +194,32 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
         }
 
         return orderRequestOptional;
+    }
+
+    @Override
+    public List<OrderRequest> findAllByUserDetailsIdAndIsActiveAndIsChecked(Long userDetailsId, Boolean isActive, Boolean isChecked) {
+        List<OrderRequest> customerActiveOrderRequests = new ArrayList<>();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(OrderRequestQuery
+                    .SELECT_ALL_FROM_ORDER_REQUESTS_WHERE_USER_DETAILS_ID_EQUALS_IS_ACTIVE_EQUALS_IS_CHECKED_EQUALS.getQuery())) {
+
+            preparedStatement.setLong(1 , userDetailsId);
+            preparedStatement.setBoolean(2 , isActive);
+            preparedStatement.setBoolean(3 , isChecked);
+
+            ResultSet orderRequestsResultSet = preparedStatement.executeQuery();
+            while (orderRequestsResultSet.next()) {
+                customerActiveOrderRequests.add(extractOrderRequestFromResultSet(orderRequestsResultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("OrderRequestDaoImpl findAllByUserDetailsIdAndIsActiveAndIsChecked(...): cannot extract orderRequests from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("OrderRequestDaoImpl findAllByUserDetailsIdAndIsActiveAndIsChecked(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return customerActiveOrderRequests;
     }
 }

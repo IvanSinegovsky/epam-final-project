@@ -20,6 +20,7 @@ public interface OrderRequestDao {
     List<OrderRequest> findAll();
     List<OrderRequest> findAllByIsActive();
     List<OrderRequest> findAllByIsActiveAndUserDetailsId(Long userDetailsId);
+    List<OrderRequest> findAllByUserDetailsIdAndIsActiveAndIsChecked(Long userDetailsId, Boolean isActive, Boolean isChecked);
     void setNonActiveOrderRequests(List<OrderRequestInfoDto> orderRequestInfoDtos);
     Optional<OrderRequest> findByOrderRequestId(Long orderRequestId);
 }
