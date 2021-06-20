@@ -38,7 +38,7 @@ public class ActiveOrderRequestListCommand implements Command {
             orderRequestInfoDtos = orderRequestService.getCustomerActiveOrderRequestsInformation(userId);
 
             request.setAttribute(ORDER_REQUEST_INFOS_REQUEST_PARAMETER_NAME, orderRequestInfoDtos);
-            forward(Router.ACTIVE_ORDER_REQUEST_LIST.getPath(), request, response);
+            forward(Router.ACTIVE_ORDER_REQUEST_LIST_FORWARD_PATH.getPath(), request, response);
         } catch (ServiceException e) {
             LOGGER.error("ActiveOrderRequestListCommand execute(...): service crashed");
             request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot get order request list, please try again later");

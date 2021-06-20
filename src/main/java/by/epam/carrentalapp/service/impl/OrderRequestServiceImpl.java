@@ -255,4 +255,14 @@ public class OrderRequestServiceImpl implements OrderRequestService {
 
         return orderRequestInfoDtoList;
     }
+
+    @Override
+    public void undoOrderRequests(List<OrderRequestInfoDto> orderRequestInfoDtos) {
+        try {
+            orderRequestDao.setNonActiveOrderRequests(orderRequestInfoDtos);
+        } catch (DaoException e) {
+            LOGGER.error("OrderRequestServiceImpl undoOrderRequests(): DAO cannot update values");
+            throw new ServiceException(e);
+        }
+    }
 }

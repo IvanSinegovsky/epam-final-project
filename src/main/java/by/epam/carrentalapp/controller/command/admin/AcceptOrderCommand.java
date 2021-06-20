@@ -30,12 +30,8 @@ public class AcceptOrderCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String[] acceptedOrderRequestInfoStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
-        List<OrderRequestInfoDto> orderRequestInfoDtos = new ArrayList<>(acceptedOrderRequestInfoStrings.length);
         Long adminAcceptedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
-
-        for (String infoString : acceptedOrderRequestInfoStrings) {
-            orderRequestInfoDtos.add(OrderRequestInfoDto.valueOf(infoString));
-        }
+        List<OrderRequestInfoDto> orderRequestInfoDtos = OrderRequestInfoDto.valueOf(acceptedOrderRequestInfoStrings);
 
         try {
             orderRequestService.acceptOrderRequests(orderRequestInfoDtos, adminAcceptedId);

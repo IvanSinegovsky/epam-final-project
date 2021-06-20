@@ -17,4 +17,5 @@ public interface OrderRequestService {
                              Long adminRejectedId,
                              String rejectionReason);
     List<OrderRequestInfoDto> getCustomerActiveOrderRequestsInformation(Long userId);
+    void undoOrderRequests(List<OrderRequestInfoDto> orderRequestInfoDtos);
 }

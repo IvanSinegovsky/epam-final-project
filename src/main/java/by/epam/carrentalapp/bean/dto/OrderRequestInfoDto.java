@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,8 +33,18 @@ public class OrderRequestInfoDto {
         this.totalCost = totalCost;
     }
 
-    public static OrderRequestInfoDto valueOf(String orderRequestInformationString) {
-        String[] fields = orderRequestInformationString.split(",");
+    public static List<OrderRequestInfoDto> valueOf(String[] orderRequestInfoStringArray) {
+        List<OrderRequestInfoDto> orderRequestInfoDtos = new ArrayList<>(orderRequestInfoStringArray.length);
+
+        for (String infoString : orderRequestInfoStringArray) {
+            orderRequestInfoDtos.add(OrderRequestInfoDto.valueOf(infoString));
+        }
+
+        return orderRequestInfoDtos;
+    }
+
+    public static OrderRequestInfoDto valueOf(String orderRequestInfoString) {
+        String[] fields = orderRequestInfoString.split(",");
 
         Long orderRequestId = Long.valueOf(fields[0].substring(indexNumberAfterEqualsChar(fields[0])));
         Integer customerRate = Integer.valueOf(fields[1].substring(indexNumberAfterEqualsChar(fields[1])));
