@@ -19,6 +19,7 @@ public enum Router {
     PROMO_CODE_LIST_FORWARD_PATH("/WEB-INF/view/page/admin/promoCodeList.jsp"),
     ACTIVE_ORDER_REQUEST_LIST_FORWARD_PATH("/WEB-INF/view/page/customer/customerActiveOrderList.jsp"),
     CUSTOMER_STATISTICS_FORWARD_PATH("/WEB-INF/view/page/admin/customerStatistics.jsp"),
+    ACTIVE_ACCEPTED_ORDER_LIST_FORWARD_PATH("/WEB-INF/view/page/admin/activeAcceptedOrderList.jsp"),
 
     LOGIN_REDIRECT_PATH("/home?command=LOGIN"),
     REGISTER_REDIRECT_PATH("/home?command=REGISTER"),
@@ -32,7 +33,8 @@ public enum Router {
     REJECT_ORDER_REDIRECT_PATH("/home?command=REJECT_ORDER"),
     CAR_OCCUPATION_REDIRECT_COMMAND("/home?command=CAR_OCCUPATION"),
     PROMO_CODE_LIST_REDIRECT_PATH("/home?command=PROMO_CODE_LIST"),
-    ACTIVE_ORDER_REQUEST_LIST_REDIRECT_PATH("/home?command=ACTIVE_ORDER_REQUEST_LIST");
+    ACTIVE_ORDER_REQUEST_LIST_REDIRECT_PATH("/home?command=ACTIVE_ORDER_REQUEST_LIST"),
+    ACTIVE_ACCEPTED_ORDER_LIST_REDIRECT_PATH("/home?command=ACTIVE_ACCEPTED_ORDER_LIST");
 
     private final String path;
 }

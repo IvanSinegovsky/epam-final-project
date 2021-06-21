@@ -35,6 +35,9 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.DISABLE_PROMO_CODE.name(), new DisablePromoCodeCommand());
         nameToCommand.put(CommandTitle.ADD_PROMO_CODE.name(), new AddPromoCodeCommand());
         nameToCommand.put(CommandTitle.ACTIVE_ORDER_REQUEST_LIST.name(), new ActiveOrderRequestListCommand());
+        nameToCommand.put(CommandTitle.ACTIVE_ACCEPTED_ORDER_LIST.name(), new ActiveAcceptedOrderListCommand());
+        nameToCommand.put(CommandTitle.COMPLETE_ACCEPTED_ORDER.name(), new CompleteAcceptedOrderCommand());
+        nameToCommand.put(CommandTitle.MAKE_REPAIR_BILL.name(), new MakeRepairBillCommand());
     }
 
     public static Command getCommand(String commandTitle) {

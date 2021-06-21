@@ -3,6 +3,7 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.bean.dto.CarOccupationDto;
 import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
+import by.epam.carrentalapp.bean.entity.RepairBill;
 import by.epam.carrentalapp.dao.AcceptedOrderDao;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.impl.DaoProvider;
@@ -57,8 +58,18 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
     }
 
     @Override
-    public void sendRepairBill(AcceptedOrder acceptedOrder) {
+    public void sendRepairBill(RepairBill repairBill) {
         //send email
         //save repair bill to db
+    }
+
+    @Override
+    public List<AcceptedOrder> getActiveAcceptedOrderList() {
+        return null;
+    }
+
+    @Override
+    public void setAcceptedOrderListIsPaidTrue(List<AcceptedOrder> acceptedOrders) {
+
     }
 }

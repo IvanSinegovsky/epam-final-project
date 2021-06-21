@@ -77,7 +77,7 @@
                 <tr>
                     <td><div class="form-check">
                         <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="selectedOrderRequests" value="${orderRequestInfo}">
+                            <input type="checkbox" class="form-check-input" name="selected_accepted_orders" value="${orderRequestInfo}">
                         </label>
                     </div></td>
                     <td><c:out value="${orderRequestInfo.orderRequestId}"/></td>

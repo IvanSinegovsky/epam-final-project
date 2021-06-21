@@ -20,7 +20,7 @@ public class RejectOrderCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(RejectOrderCommand.class);
     private final OrderRequestService orderRequestService;
 
-    private final String SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME = "selectedOrderRequests";
+    private final String SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME = "selected_accepted_orders";
     private final String REJECTION_REASON_REQUEST_PARAMETER_NAME = "rejectionReason";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
 
@@ -32,12 +32,8 @@ public class RejectOrderCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String[] rejectedOrderRequestInfoStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
         String rejectionReason = request.getParameter(REJECTION_REASON_REQUEST_PARAMETER_NAME);
-        List<OrderRequestInfoDto> orderRequestInfoDtos = new ArrayList<>(rejectedOrderRequestInfoStrings.length);
+        List<OrderRequestInfoDto> orderRequestInfoDtos = OrderRequestInfoDto.valueOf(rejectedOrderRequestInfoStrings);
         Long adminRejectedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
-
-        for (String infoString : rejectedOrderRequestInfoStrings) {
-            orderRequestInfoDtos.add(OrderRequestInfoDto.valueOf(infoString));
-        }
 
         try {
             orderRequestService.rejectOrderRequests(orderRequestInfoDtos, adminRejectedId, rejectionReason);

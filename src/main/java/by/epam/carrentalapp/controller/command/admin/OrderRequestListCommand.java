@@ -18,6 +18,7 @@ import java.util.List;
 
 public class OrderRequestListCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(OrderRequestListCommand.class);
+
     private final OrderRequestService orderRequestService;
 
     private final String ORDER_REQUEST_INFOS_REQUEST_PARAMETER_NAME = "order_request_infos";
@@ -32,7 +33,7 @@ public class OrderRequestListCommand implements Command {
         if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
             forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         } else {
-            List<OrderRequestInfoDto> orderRequests = null;
+            List<OrderRequestInfoDto> orderRequests;
 
             try {
                 orderRequests = orderRequestService.getActiveOrderRequestsInformation();

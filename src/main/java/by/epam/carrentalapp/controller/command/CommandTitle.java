@@ -1,10 +1,9 @@
 package by.epam.carrentalapp.controller.command;
 
+import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import javax.management.relation.Role;
 
 @AllArgsConstructor
 @Getter
@@ -29,9 +28,12 @@ public enum CommandTitle {
     REJECT_ORDER(RoleName.ADMIN),
     ADD_PROMO_CODE(RoleName.ADMIN),
     PROMO_CODE_LIST(RoleName.ADMIN),
+    MAKE_REPAIR_BILL(RoleName.ADMIN),
     DISABLE_PROMO_CODE(RoleName.ADMIN),
     ORDER_REQUEST_LIST(RoleName.ADMIN),
-    CHECK_CUSTOMER_STATISTICS(RoleName.ADMIN);
+    COMPLETE_ACCEPTED_ORDER(RoleName.ADMIN),
+    CHECK_CUSTOMER_STATISTICS(RoleName.ADMIN),
+    ACTIVE_ACCEPTED_ORDER_LIST(RoleName.ADMIN);
 
     private final RoleName permission;
 }
