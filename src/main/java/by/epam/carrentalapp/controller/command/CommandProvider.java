@@ -20,7 +20,6 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.CAR_CATALOG.name(), new CarCatalogCommand());
         nameToCommand.put(CommandTitle.ERROR.name(), new ErrorCommand());
         nameToCommand.put(CommandTitle.ORDER_REQUEST_LIST.name(), new OrderRequestListCommand());
-        nameToCommand.put(CommandTitle.CHOOSE_CAR.name(), new ChooseCarCommand());
         nameToCommand.put(CommandTitle.LOGOUT.name(), new LogoutCommand());
         nameToCommand.put(CommandTitle.ACCEPT_ORDER.name(), new AcceptOrderCommand());
         nameToCommand.put(CommandTitle.REJECT_ORDER.name(), new RejectOrderCommand());

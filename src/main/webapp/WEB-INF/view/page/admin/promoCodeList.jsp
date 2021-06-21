@@ -5,28 +5,36 @@
 <html>
 <head>
     <title>Promo code list</title>
+
     <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/newPromoCodePopup.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
+
+    <fmt:message bundle="${loc}" key="admin.promo-codes.add-promo-code-button" var="addPromoCodeButton"/>
+    <fmt:message bundle="${loc}" key="admin.promo-codes.disable-promo-code-button" var="disablePromoCodeButton"/>
+    <fmt:message bundle="${loc}" key="admin.promo-codes.table.column-name.promo-code-id" var="promoCodeIdColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.promo-codes.table.column-name.promo-code" var="promoCodeColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.promo-codes.table.column-name.discount" var="discountColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.promo-codes.table.column-name.is-active" var="isActiveColumnName"/>
 </head>
 <body>
 <div class="container">
     <form method="POST" action="home">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPromoCodeModalModal">
-            TOCHANGE add promocode
+            <c:out value="${addPromoCodeButton}"/>
         </button>
         <button type="submit" name="command" value="DISABLE_PROMO_CODE" class="btn btn-outline-success">
-            TOCHANGE disable
+            <c:out value="${disablePromoCodeButton}"/>
         </button>
 
         <table class="table table-striped">
             <thead>
             <tr>
                 <th></th>
-                <th>TOCHANGE promoCodeId</th>
-                <th>TOCHANGE promoCode</th>
-                <th>TOCHANGE discount</th>
-                <th>TOCHANGE isActive</th>
+                <th><c:out value="${promoCodeIdColumnName}"/></th>
+                <th><c:out value="${promoCodeColumnName}"/></th>
+                <th><c:out value="${discountColumnName}"/></th>
+                <th><c:out value="${isActiveColumnName}"/></th>
             </tr>
             </thead>
             <tbody>

@@ -15,10 +15,13 @@
 <fmt:message bundle="${loc}" key="navbar.login-button" var="loginButton"/>
 <fmt:message bundle="${loc}" key="navbar.register-button" var="registerButton"/>
 <fmt:message bundle="${loc}" key="navbar.catalog-button" var="catalogButton"/>
-<fmt:message bundle="${loc}" key="customer.navbar.choose-car-button" var="chooseCarButton"/>
-<fmt:message bundle="${loc}" key="admin.navbar.order-list-command" var="orderListButton"/>
+<fmt:message bundle="${loc}" key="navbar.admin.order-list-command" var="orderRequestListButton"/>
+<fmt:message bundle="${loc}" key="navbar.admin.add-car-command" var="addCarButton"/>
+<fmt:message bundle="${loc}" key="navbar.admin.promo-codes-command" var="promoCodesButton"/>
+<fmt:message bundle="${loc}" key="navbar.admin.accepted-orders-command" var="acceptedOrdersButton"/>
 <fmt:message bundle="${loc}" key="navbar.language-button" var="languageButton"/>
 <fmt:message bundle="${loc}" key="navbar.logout-button" var="logoutButton"/>
+<fmt:message bundle="${loc}" key="navbar.customer.profile-command" var="profileButton"/>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,24 +35,18 @@
                 <a class="nav-link" href="home?command=CAR_CATALOG"><c:out value="${catalogButton}"/><span class="sr-only">(current)</span></a>
             </li>
 
-            <c:if test="${sessionScope.isCustomer == true}">
-            <li class="nav-item active">
-                <a class="nav-link" href="home?command=CHOOSE_CAR"><c:out value="${chooseCarButton}"/></a><span class="sr-only">(current)</span></a>
-            </li>
-            </c:if>
-
             <c:if test="${sessionScope.isAdmin == true}">
                 <li class="nav-item active">
-                    <a class="nav-link" href="home?command=ORDER_REQUEST_LIST"><c:out value="${orderListButton}"/></a><span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="home?command=ORDER_REQUEST_LIST"><c:out value="${orderRequestListButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="home?command=ADD_CAR">tochange add car</a><span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="home?command=ADD_CAR"><c:out value="${addCarButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="home?command=PROMO_CODE_LIST">tochange promo codes</a><span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="home?command=PROMO_CODE_LIST"><c:out value="${promoCodesButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="home?command=ACTIVE_ACCEPTED_ORDER_LIST">tochange accepted orders</a><span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="home?command=ACTIVE_ACCEPTED_ORDER_LIST"><c:out value="${acceptedOrdersButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
             </c:if>
         </ul>
@@ -72,7 +69,7 @@
             
             <c:if test="${sessionScope.isCustomer == true}">
                 <a class="btn btn-primary" href="home?command=LOGOUT" role="button"><c:out value="${logoutButton}"/></a>
-                <a class="btn btn-primary" href="home?command=ACTIVE_ORDER_REQUEST_LIST" role="button">TOCHANGE profile</a>
+                <a class="btn btn-primary" href="home?command=ACTIVE_ORDER_REQUEST_LIST" role="button"><c:out value="${profileButton}"/></a>
             </c:if>
         </ul>
     </div>

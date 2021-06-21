@@ -5,25 +5,33 @@
 <html>
 <head>
     <title>Order request list</title>
+
     <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
+
+    <fmt:message bundle="${loc}" key="customer.active-order-list.undo-button" var="undoButton"/>
+    <fmt:message bundle="${loc}" key="customer.active-order-list.column-name.order-request-id" var="orderRequestIdColumnName"/>
+    <fmt:message bundle="${loc}" key="customer.active-order-list.column-name.car-model" var="carModelColumnName"/>
+    <fmt:message bundle="${loc}" key="customer.active-order-list.column-name.expected-start-time" var="expectedStartTimeColumnName"/>
+    <fmt:message bundle="${loc}" key="customer.active-order-list.column-name.expected-end-time" var="expectedEndTimeColumnName"/>
+    <fmt:message bundle="${loc}" key="customer.active-order-list.column-name.total-cost" var="totalCostColumnName"/>
 </head>
 <body>
 <div class="container">
     <form method="POST" action="home">
         <button type="submit" name="command" value="UNDO_ORDER_REQUEST" class="btn btn-outline-success">
-            TOCHANGE undo
+            <c:out value="${undoButton}"/>
         </button>
 
         <table class="table table-striped">
             <thead>
             <tr>
                 <th></th>
-                <th>TOCHANGE order request id</th>
-                <th>TOCHANGE car model</th>
-                <th>TOCHANGE expected start time</th>
-                <th>TOCHANGE expected end time</th>
-                <th>TOCHANGE total cost</th>
+                <th><c:out value="${orderRequestIdColumnName}"/></th>
+                <th><c:out value="${carModelColumnName}"/></th>
+                <th><c:out value="${expectedStartTimeColumnName}"/></th>
+                <th><c:out value="${expectedEndTimeColumnName}"/></th>
+                <th><c:out value="${totalCostColumnName}"/></th>
             </tr>
             </thead>
             <tbody>

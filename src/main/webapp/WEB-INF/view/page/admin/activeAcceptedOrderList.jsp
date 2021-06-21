@@ -7,15 +7,26 @@
     <title>Active accepted order list</title>
     <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
+
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.mark-as-complete-button" var="markAsCompleteButton"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.make-repair-bill" var="makeRepairBillButton"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.order-id-column" var="orderIdColumn"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.bill-column" var="billColumn"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.car-id-column" var="carIdColumn"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.admin-accepted-id-column" var="adminAcceptedIdColumn"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.repair-bill-dialog.repair-bill-sign" var="repairBillSign"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.repair-bill-dialog.comment-input" var="commentInput"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.repair-bill-dialog.bill-input" var="billInput"/>
+    <fmt:message bundle="${loc}" key="admin.active-accepted-order-list.repair-bill-dialog.create-button" var="createButton"/>
 </head>
 <body>
 <div class="container">
     <form method="POST" action="home">
         <button type="submit" name="command" value="COMPLETE_ACCEPTED_ORDER" class="btn btn-outline-success">
-            tochange Mark as complete
+            <c:out value="${markAsCompleteButton}"/>
         </button>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeRepairBillModal">
-            TOCHANGE Make repair bill
+            <c:out value="${makeRepairBillButton}"/>
         </button>
 
         <div class="modal fade" id="makeRepairBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -23,7 +34,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
-                            tochange Repair bill
+                            <c:out value="${repairBillSign}"/>
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -33,19 +44,19 @@
                         <div class="form-group input-group">
                             <input name="comment"
                                    class="form-control"
-                                   placeholder="tochange comment"
+                                   placeholder="<c:out value="${commentInput}"/>"
                                    type="text">
                         </div>
                         <div class="form-group input-group">
                             <input name="bill"
                                    class="form-control"
-                                   placeholder="tochange bill"
+                                   placeholder="<c:out value="${billInput}"/>"
                                    type="number">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" name="command" value="MAKE_REPAIR_BILL" class="btn btn-primary">
-                            tochange Make repair bill
+                            <c:out value="${createButton}"/>
                         </button>
                     </div>
                 </div>
@@ -56,10 +67,10 @@
             <thead>
             <tr>
                 <th></th>
-                <th>TOCHANGE order id</th>
-                <th>TOCHANGE bill</th>
-                <th>TOCHANGE car id</th>
-                <th>TOCHANGE admin accepted id</th>
+                <th><c:out value="${orderIdColumn}"/></th>
+                <th><c:out value="${billColumn}"/></th>
+                <th><c:out value="${carIdColumn}"/></th>
+                <th><c:out value="${adminAcceptedIdColumn}"/></th>
             </tr>
             </thead>
             <tbody>

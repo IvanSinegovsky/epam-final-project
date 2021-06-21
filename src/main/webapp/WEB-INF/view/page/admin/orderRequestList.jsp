@@ -19,6 +19,8 @@
     <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.expected-start-time" var="expectedStartTimeColumnName"/>
     <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.expected-end-time" var="expectedEndTimeColumnName"/>
     <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.total-cost" var="totalCostColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.column-name.customer-statistics" var="customerStatisticsColumnName"/>
+    <fmt:message bundle="${loc}" key="admin.order-request-list.table.check-button" var="checkButton"/>
 </head>
 <body>
 <div class="container">
@@ -68,7 +70,7 @@
                 <th><c:out value="${expectedStartTimeColumnName}"/></th>
                 <th><c:out value="${expectedEndTimeColumnName}"/></th>
                 <th><c:out value="${totalCostColumnName}"/></th>
-                <th>TOCHANGE Customer statistics</th>
+                <th><c:out value="${customerStatisticsColumnName}"/></th>
             </tr>
             </thead>
             <tbody>
@@ -89,9 +91,7 @@
                     <td>
                         <a class="btn btn-primary"
                            href="home?command=CHECK_CUSTOMER_STATISTICS&order_request_id=${orderRequestInfo.orderRequestId}"
-                           role="button">
-                            TOCHANGE Check
-                        </a>
+                           role="button"><c:out value="${checkButton}"/></a>
                     </td>
                 </tr>
             </c:forEach>
