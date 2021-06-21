@@ -65,11 +65,25 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
 
     @Override
     public List<AcceptedOrder> getActiveAcceptedOrderList() {
-        return null;
+        List<AcceptedOrder> acceptedOrders;
+
+        try {
+            acceptedOrders = acceptedOrderDao.findAllByIsPaid(false);
+        } catch (DaoException e) {
+            LOGGER.error("AcceptedOrderServiceImpl getActiveAcceptedOrderList(...): DAO cannot return records");
+            throw new ServiceException(e);
+        }
+
+        return acceptedOrders;
     }
 
     @Override
     public void setAcceptedOrderListIsPaidTrue(List<AcceptedOrder> acceptedOrders) {
-
+        try {
+            acceptedOrderDao.setIsPaidAcceptedOrders(acceptedOrders, true);
+        } catch (DaoException e) {
+            LOGGER.error("AcceptedOrderServiceImpl setAcceptedOrderListIsPaidTrue(...): DAO cannot update records");
+            throw new ServiceException(e);
+        }
     }
 }

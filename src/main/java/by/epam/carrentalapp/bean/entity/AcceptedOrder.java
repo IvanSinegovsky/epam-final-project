@@ -43,10 +43,10 @@ public class AcceptedOrder implements Serializable {
 
         Long orderId = Long.valueOf(fields[0].substring(indexNumberAfterEqualsChar(fields[0])));
         Double bill = Double.valueOf(fields[1].substring(indexNumberAfterEqualsChar(fields[1])));
-        Long orderRequestId = Long.valueOf(fields[2].substring(indexNumberAfterEqualsChar(fields[0])));
-        Long carId = Long.valueOf(fields[3].substring(indexNumberAfterEqualsChar(fields[0])));
-        Boolean isPaid = Boolean.valueOf(fields[4].substring(indexNumberAfterEqualsChar(fields[0])));
-        Long adminUserAcceptedId = Long.valueOf(fields[5].substring(indexNumberAfterEqualsChar(fields[0])));
+        Long orderRequestId = Long.valueOf(fields[2].substring(indexNumberAfterEqualsChar(fields[2])));
+        Long carId = Long.valueOf(fields[3].substring(indexNumberAfterEqualsChar(fields[3])));
+        Boolean isPaid = Boolean.valueOf(fields[4].substring(indexNumberAfterEqualsChar(fields[4])));
+        Long adminUserAcceptedId = Long.valueOf(fields[5].substring(indexNumberAfterEqualsChar(fields[5])));
         Long userDetailsId = Long.valueOf(fields[6].substring(
                 indexNumberAfterEqualsChar(fields[6]), fields[6].length() - 1
         ));

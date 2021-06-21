@@ -87,6 +87,53 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
     }
 
     @Override
+    public List<AcceptedOrder> findAllByIsPaid(Boolean isPaid) {
+        List<AcceptedOrder> acceptedOrdersByIsPaid = new ArrayList<>();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_IS_PAID_EQUALS.getQuery())) {
+
+            preparedStatement.setBoolean(1, isPaid);
+            ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
+
+            while (acceptedOrdersResultSet.next()) {
+                acceptedOrdersByIsPaid.add(extractAcceptedOrderFromResultSet(acceptedOrdersResultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findAllByIsPaid(...): cannot extract acceptedOrder from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findAllByIsPaid(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return acceptedOrdersByIsPaid;
+    }
+
+    @Override
+    public void setIsPaidAcceptedOrders(List<AcceptedOrder> acceptedOrders, Boolean isPaid) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    AcceptedOrderQuery.UPDATE_SET_IS_PAID_WHERE_ORDER_ID_EQUALS.getQuery()
+            )) {
+
+            for (AcceptedOrder acceptedOrder : acceptedOrders) {
+                preparedStatement.setBoolean(1, isPaid);
+                preparedStatement.setLong(2, acceptedOrder.getOrderId());
+
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            LOGGER.error("AcceptedOrderDaoImpl setIsPaidAcceptedOrders(...): cannot execute update");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("AcceptedOrderDaoImpl setIsPaidAcceptedOrders(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
     public List<AcceptedOrder> findByCarId(Long carIdToFind) {
         List<AcceptedOrder> acceptedOrdersByCarId = new ArrayList<>();
 
