@@ -35,7 +35,6 @@ public class CompleteAcceptedOrderCommand implements Command {
         List<AcceptedOrder> completedAcceptedOrders = AcceptedOrder.valueOf(completedOrderStrings);
 
         try {
-            LOGGER.info("completed ===> " + completedAcceptedOrders);
             acceptedOrderService.setAcceptedOrderListIsPaidTrue(completedAcceptedOrders);
 
             redirect(Router.ACTIVE_ACCEPTED_ORDER_LIST_REDIRECT_PATH.getPath(), response);

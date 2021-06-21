@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class MakeRepairBillCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(MakeRepairBillCommand.class);
@@ -30,16 +31,14 @@ public class MakeRepairBillCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String acceptedOrderString = request.getParameter(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
+        String[] activeAcceptedOrders = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
         String comment = request.getParameter(COMMENT_REQUEST_PARAMETER_NAME);
-        String bill = request.getParameter(BILL_PARAMETER_NAME);
+        Double bill = Double.valueOf(request.getParameter(BILL_PARAMETER_NAME));
 
-        AcceptedOrder acceptedOrder = AcceptedOrder.valueOf(acceptedOrderString);
+        List<AcceptedOrder> acceptedOrders = AcceptedOrder.valueOf(activeAcceptedOrders);
 
         try {
-            RepairBill repairBill = new RepairBill(acceptedOrder.getOrderId(), Double.valueOf(bill), comment);
-            LOGGER.info("repair bill ===> " + repairBill);
-            acceptedOrderService.sendRepairBill(repairBill);
+            acceptedOrderService.sendRepairBill(acceptedOrders, bill, comment);
 
             redirect(Router.ACTIVE_ACCEPTED_ORDER_LIST_REDIRECT_PATH.getPath(), response);
         } catch (ServiceException e) {

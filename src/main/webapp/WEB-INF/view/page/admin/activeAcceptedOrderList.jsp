@@ -14,8 +14,11 @@
         <button type="submit" name="command" value="COMPLETE_ACCEPTED_ORDER" class="btn btn-outline-success">
             tochange Mark as complete
         </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeRepairBillModal">
+            TOCHANGE Make repair bill
+        </button>
 
-        <div class="modal fade" id="mareRepairBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="makeRepairBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -57,7 +60,6 @@
                 <th>TOCHANGE bill</th>
                 <th>TOCHANGE car id</th>
                 <th>TOCHANGE admin accepted id</th>
-                <th>TOCHANGE notify accedent</th>
             </tr>
             </thead>
             <tbody>
@@ -73,18 +75,10 @@
                     <td><c:out value="${activeAcceptedOrder.bill}"/></td>
                     <td><c:out value="${activeAcceptedOrder.carId}"/></td>
                     <td><c:out value="${activeAcceptedOrder.adminUserAcceptedId}"/></td>
-                    <td>
-                        <a class="btn btn-primary"
-                           data-target="#mareRepairBillModal"
-                           role="button">
-                            TOCHANGE Make repair bill
-                        </a>
-                    </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
-
     </form>
 </div>
 </body>

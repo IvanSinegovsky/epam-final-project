@@ -6,10 +6,14 @@ import by.epam.carrentalapp.bean.entity.OrderRequest;
 import by.epam.carrentalapp.bean.entity.RepairBill;
 import by.epam.carrentalapp.dao.AcceptedOrderDao;
 import by.epam.carrentalapp.dao.DaoException;
+import by.epam.carrentalapp.dao.RepairBillDao;
 import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import by.epam.carrentalapp.service.ServiceException;
+import by.epam.carrentalapp.service.impl.notification.EmailSender;
+import by.epam.carrentalapp.service.impl.notification.email.template.AcceptedOrderEmail;
+import by.epam.carrentalapp.service.impl.notification.email.template.RepairBillEmail;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -21,10 +25,12 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
 
     private final AcceptedOrderDao acceptedOrderDao;
     private final OrderRequestDao orderRequestDao;
+    private final RepairBillDao repairBillDao;
 
     public AcceptedOrderServiceImpl() {
         acceptedOrderDao = DaoProvider.getAcceptedOrderDao();
         orderRequestDao = DaoProvider.getOrderRequestDao();
+        repairBillDao = DaoProvider.getRepairBillDao();
     }
 
     @Override
@@ -58,9 +64,20 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
     }
 
     @Override
-    public void sendRepairBill(RepairBill repairBill) {
-        //send email
-        //save repair bill to db
+    public void sendRepairBill(List<AcceptedOrder> acceptedOrdersWithAccident, Double bill, String adminComment) {
+        try {
+            for (AcceptedOrder acceptedOrder : acceptedOrdersWithAccident) {
+                EmailSender.sendEmailByUserDetailsId(
+                        new RepairBillEmail(adminComment, bill), acceptedOrder.getUserDetailsId()
+                );
+
+                RepairBill repairBill = new RepairBill(acceptedOrder.getOrderId(), bill, adminComment);
+                repairBillDao.save(repairBill);
+            }
+        } catch (DaoException e) {
+            LOGGER.error("AcceptedOrderServiceImpl sendRepairBill(...): DAO cannot save value");
+            throw new ServiceException(e);
+        }
     }
 
     @Override

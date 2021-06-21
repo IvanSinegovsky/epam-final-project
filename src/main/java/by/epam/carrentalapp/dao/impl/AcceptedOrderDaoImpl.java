@@ -46,6 +46,31 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
     }
 
     @Override
+    public Optional<AcceptedOrder> findByOrderId(Long acceptedOrderId) {
+        Optional<AcceptedOrder> acceptedOrderOptional = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_ORDER_ID_EQUALS.getQuery())) {
+
+            preparedStatement.setLong(1, acceptedOrderId);
+            ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
+
+            if (acceptedOrdersResultSet.next()) {
+                acceptedOrderOptional = Optional.of(extractAcceptedOrderFromResultSet(acceptedOrdersResultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findByOrderId(...): cannot extract acceptedOrder from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("AcceptedOrderDaoImpl findByOrderId(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return acceptedOrderOptional;
+    }
+
+    @Override
     public List<Long> saveAll(List<AcceptedOrder> acceptedOrders) {
         List<Long> acceptedOrderIds = new ArrayList<>();
 

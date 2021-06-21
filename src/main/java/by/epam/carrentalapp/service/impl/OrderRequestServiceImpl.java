@@ -8,6 +8,7 @@ import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.notification.EmailNotification;
+import by.epam.carrentalapp.service.impl.notification.EmailSender;
 import by.epam.carrentalapp.service.impl.notification.email.Email;
 import by.epam.carrentalapp.service.impl.notification.email.template.AcceptedOrderEmail;
 import org.apache.log4j.Logger;
@@ -92,7 +93,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                                 adminAcceptedId,
                                 userDetailsId
                         ));
-                        sendEmailByUserDetailsId(new AcceptedOrderEmail(), userDetailsId);
+                        EmailSender.sendEmailByUserDetailsId(new AcceptedOrderEmail(), userDetailsId);
                     }
                 }
             }
@@ -130,7 +131,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                         .orElseThrow(
                                 () -> new ServiceException("OrderRequestServiceImpl acceptOrderRequests(...): orderRequest DAO cannot execute find by order request id operation")
                         ).getUserDetailsId();
-                sendEmailByUserDetailsId(new AcceptedOrderEmail(), userDetailsId);
+                EmailSender.sendEmailByUserDetailsId(new AcceptedOrderEmail(), userDetailsId);
             }
 
             rejectedOrderDao.saveAll(rejectedOrders);
@@ -138,20 +139,6 @@ public class OrderRequestServiceImpl implements OrderRequestService {
             LOGGER.error("OrderRequestServiceImpl rejectOrderRequests(...): DAO cannot execute operations");
             throw new ServiceException(e);
         }
-    }
-
-    private void sendEmailByUserDetailsId(Email email, Long userDetailsId) {
-        Long userId = customerUserDetailsDao.findById(userDetailsId).orElseThrow(
-                () -> new ServiceException(
-                        "OrderRequestServiceImpl acceptOrderRequests(...): userDetailsDao cannot execute findById() operation"
-                )
-        ).getUserId();
-
-        User user = userDao.findByUserId(userId).orElseThrow(() -> new ServiceException(
-                "OrderRequestServiceImpl acceptOrderRequests(...): users DAO cannot execute findById() operation")
-        );
-
-        EmailNotification.sendMessage(email, user);
     }
 
     @Override

@@ -16,6 +16,7 @@ public interface AcceptedOrderDao {
 
     Optional<Long> save(AcceptedOrder acceptedOrder);
     List<Long> saveAll(List<AcceptedOrder> acceptedOrders);
+    Optional<AcceptedOrder> findByOrderId(Long acceptedOrderId);
     List<AcceptedOrder> findAllByIsPaid(Boolean isPaid);
     List<AcceptedOrder> findByCarId(Long carId);
     List<AcceptedOrder> findByUserDetailsId(Long userDetailsId);

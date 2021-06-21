@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AcceptedOrderService {
     List<CarOccupationDto> getCarOccupationById(Long carId);
-    void sendRepairBill(RepairBill repairBill);
+    void sendRepairBill(List<AcceptedOrder> acceptedOrdersWithAccident, Double bill, String adminComment);
     List<AcceptedOrder> getActiveAcceptedOrderList();
     void setAcceptedOrderListIsPaidTrue(List<AcceptedOrder> acceptedOrders);
 }
