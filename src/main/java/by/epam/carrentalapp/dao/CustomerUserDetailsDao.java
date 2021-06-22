@@ -13,4 +13,5 @@ public interface CustomerUserDetailsDao {
     void save(CustomerUserDetails customerUserDetails);
     Optional<CustomerUserDetails> findById(Long userDetailsIdToFind);
     Optional<CustomerUserDetails> findByUserId(Long userIdToFind);
+    void setRateById(double rate, Long userDetailsId);
 }

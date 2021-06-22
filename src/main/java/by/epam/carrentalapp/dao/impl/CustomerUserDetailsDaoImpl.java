@@ -1,10 +1,12 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
+import by.epam.carrentalapp.dao.impl.query.AcceptedOrderQuery;
 import by.epam.carrentalapp.dao.impl.query.CustomerUserDetailsQuery;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import org.apache.log4j.Logger;
@@ -103,5 +105,25 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
         }
 
         return customerUserDetails;
+    }
+
+    @Override
+    public void setRateById(double rate, Long userDetailsId) {
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    CustomerUserDetailsQuery.UPDATE_SET_RATE_WHERE_USER_DETAILS_ID_EQUALS.getQuery()
+            )) {
+
+            preparedStatement.setDouble(1, rate);
+            preparedStatement.setLong(2, userDetailsId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("CustomerUserDetailsDaoImpl setRateById(...): cannot execute update");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CustomerUserDetailsDaoImpl setRateById(...): connection pool crashed");
+            throw new DaoException(e);
+        }
     }
 }

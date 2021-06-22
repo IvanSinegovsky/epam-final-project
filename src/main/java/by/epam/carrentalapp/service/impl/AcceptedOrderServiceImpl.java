@@ -14,6 +14,8 @@ import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.notification.EmailSender;
 import by.epam.carrentalapp.service.impl.notification.email.template.AcceptedOrderEmail;
 import by.epam.carrentalapp.service.impl.notification.email.template.RepairBillEmail;
+import by.epam.carrentalapp.service.impl.rate.RateEvent;
+import by.epam.carrentalapp.service.impl.rate.RateService;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
                 EmailSender.sendEmailByUserDetailsId(
                         new RepairBillEmail(adminComment, bill), acceptedOrder.getUserDetailsId()
                 );
+                RateService.changeRateByEvent(RateEvent.CAR_ACCIDENT, acceptedOrder.getUserDetailsId());
 
                 RepairBill repairBill = new RepairBill(acceptedOrder.getOrderId(), bill, adminComment);
                 repairBillDao.save(repairBill);
@@ -97,6 +100,10 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
     @Override
     public void setAcceptedOrderListIsPaidTrue(List<AcceptedOrder> acceptedOrders) {
         try {
+            for (AcceptedOrder acceptedOrder : acceptedOrders) {
+                RateService.changeRateByEvent(RateEvent.COMPLETE_ORDER, acceptedOrder.getUserDetailsId());
+            }
+
             acceptedOrderDao.setIsPaidAcceptedOrders(acceptedOrders, true);
         } catch (DaoException e) {
             LOGGER.error("AcceptedOrderServiceImpl setAcceptedOrderListIsPaidTrue(...): DAO cannot update records");

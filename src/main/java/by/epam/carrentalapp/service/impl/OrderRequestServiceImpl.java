@@ -2,15 +2,14 @@ package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.bean.entity.*;
-import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.dao.*;
 import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.notification.EmailNotification;
 import by.epam.carrentalapp.service.impl.notification.EmailSender;
-import by.epam.carrentalapp.service.impl.notification.email.Email;
 import by.epam.carrentalapp.service.impl.notification.email.template.AcceptedOrderEmail;
+import by.epam.carrentalapp.service.impl.rate.RateEvent;
+import by.epam.carrentalapp.service.impl.rate.RateService;
 import org.apache.log4j.Logger;
 
 import java.time.Duration;
@@ -246,6 +245,13 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     @Override
     public void undoOrderRequests(List<OrderRequestInfoDto> orderRequestInfoDtos) {
         try {
+            for (OrderRequestInfoDto infoDto : orderRequestInfoDtos) {
+                OrderRequest orderRequest = orderRequestDao.findByOrderRequestId(infoDto.getOrderRequestId())
+                        .orElseThrow(() -> new ServiceException("Cannot find orderRequest by its id"));
+
+                RateService.changeRateByEvent(RateEvent.UNDO_ORDER_REQUEST, orderRequest.getUserDetailsId());
+            }
+
             orderRequestDao.setNonActiveOrderRequests(orderRequestInfoDtos);
         } catch (DaoException e) {
             LOGGER.error("OrderRequestServiceImpl undoOrderRequests(): DAO cannot update values");
