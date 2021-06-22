@@ -6,7 +6,6 @@ import by.epam.carrentalapp.dao.RejectedOrderDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.impl.query.RejectedOrderQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -19,13 +18,16 @@ import java.util.List;
 public class RejectedOrderDaoImpl implements RejectedOrderDao {
     private final Logger LOGGER = Logger.getLogger(RejectedOrderDaoImpl.class);
 
+    private final String INSERT_INTO_REJECTED_ORDERS
+        = "INSERT INTO rejected_orders(rejection_reason, order_request_id, admin_user_rejected_id) VALUES (?,?,?);";
+
     @Override
     public List<Long> saveAll(List<RejectedOrder> rejectedOrders) {
         List<Long> rejectedOrderIds = new ArrayList<>();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    RejectedOrderQuery.INSERT_INTO_REJECTED_ORDERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    INSERT_INTO_REJECTED_ORDERS, Statement.RETURN_GENERATED_KEYS
             )) {
 
             for (RejectedOrder rejectedOrder : rejectedOrders) {

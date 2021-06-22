@@ -1,14 +1,11 @@
 package by.epam.carrentalapp.dao.impl;
 
-import by.epam.carrentalapp.bean.entity.AcceptedOrder;
+import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.impl.query.AcceptedOrderQuery;
-import by.epam.carrentalapp.dao.impl.query.CustomerUserDetailsQuery;
-import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -20,11 +17,20 @@ import java.util.Optional;
 public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
     private final Logger LOGGER = Logger.getLogger(CustomerUserDetailsDaoImpl.class);
 
+    private final String INSERT_INTO_CUSTOMER_USER_DETAILS =
+            "INSERT INTO customer_user_details (passport_number, rate, user_id) VALUES (?, ?, ?);";
+    private final String SELECT_ALL_FROM_CUSTOMER_USER_DETAILS_WHERE_USER_DETAILS_ID_EQUALS =
+            "SELECT * FROM customer_user_details WHERE user_details_id = ?;";
+    private final String SELECT_ALL_FROM_CUSTOMER_USER_DETAILS_WHERE_USER_ID_EQUALS =
+            "SELECT * FROM customer_user_details WHERE user_id = ?;";
+    private final String UPDATE_SET_RATE_WHERE_USER_DETAILS_ID_EQUALS =
+            "UPDATE customer_user_details SET rate = ? WHERE user_details_id = ?;";
+
     @Override
     public void save(CustomerUserDetails customerUserDetails) {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    CustomerUserDetailsQuery.INSERT_INTO_CUSTOMER_USER_DETAILS.getQuery(),
+                    INSERT_INTO_CUSTOMER_USER_DETAILS,
                     Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, customerUserDetails.getPassportNumber());
@@ -51,8 +57,8 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
         Optional<CustomerUserDetails> customerUserDetailsOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(CustomerUserDetailsQuery
-                        .SELECT_ALL_FROM_CUSTOMER_USER_DETAILS_WHERE_USER_DETAILS_ID_EQUALS.getQuery())) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    SELECT_ALL_FROM_CUSTOMER_USER_DETAILS_WHERE_USER_DETAILS_ID_EQUALS)) {
 
             preparedStatement.setLong(1, userDetailsIdToFind);
             customerUserDetailsOptional = Optional.of(extractCustomerUserDetailsFromResultSet(
@@ -74,8 +80,8 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
         Optional<CustomerUserDetails> customerUserDetailsOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(CustomerUserDetailsQuery
-                    .SELECT_ALL_FROM_CUSTOMER_USER_DETAILS_WHERE_USER_ID_EQUALS.getQuery())) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    SELECT_ALL_FROM_CUSTOMER_USER_DETAILS_WHERE_USER_ID_EQUALS)) {
 
             preparedStatement.setLong(1, userIdToFind);
             customerUserDetailsOptional = Optional.of(extractCustomerUserDetailsFromResultSet(
@@ -110,9 +116,7 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
     @Override
     public void setRateById(double rate, Long userDetailsId) {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    CustomerUserDetailsQuery.UPDATE_SET_RATE_WHERE_USER_DETAILS_ID_EQUALS.getQuery()
-            )) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SET_RATE_WHERE_USER_DETAILS_ID_EQUALS)) {
 
             preparedStatement.setDouble(1, rate);
             preparedStatement.setLong(2, userDetailsId);

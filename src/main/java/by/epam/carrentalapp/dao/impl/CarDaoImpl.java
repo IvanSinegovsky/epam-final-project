@@ -1,12 +1,11 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.dao.CarDao;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.impl.query.CarQuery;
-import by.epam.carrentalapp.bean.entity.Car;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -20,12 +19,17 @@ import java.util.Optional;
 public class CarDaoImpl implements CarDao {
     private final Logger LOGGER = Logger.getLogger(CarDaoImpl.class);
 
+    private final String SELECT_ALL_FROM_CARS = "SELECT * FROM cars;";
+    private final String SELECT_ALL_FROM_CARS_WHERE_CAR_ID_EQUALS = "SELECT * FROM cars WHERE car_id = ?;";
+    private final String SELECT_ALL_FROM_CARS_WHERE_MODEL_EQUALS = "SELECT * FROM cars WHERE model = ?;";
+    private final String INSERT_INTO_CARS = "INSERT INTO cars(model, number, hourly_cost, asset_url) VALUES (?,?,?,?);";
+
     public List<Car> findAll() {
         List<Car> allCars = new ArrayList<>();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
-            ResultSet carsResultSet = statement.executeQuery(CarQuery.SELECT_ALL_FROM_CARS.getQuery())) {
+            ResultSet carsResultSet = statement.executeQuery(SELECT_ALL_FROM_CARS)) {
 
             while (carsResultSet.next()){
                 Long carId = carsResultSet.getLong(CAR_ID_COLUMN_NAME);
@@ -52,8 +56,7 @@ public class CarDaoImpl implements CarDao {
         Optional<Car> carOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement(CarQuery.SELECT_ALL_FROM_CARS_WHERE_CAR_ID_EQUALS.getQuery())) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FROM_CARS_WHERE_CAR_ID_EQUALS)) {
 
             preparedStatement.setLong(1, carIdToFind);
             ResultSet carResultSet = preparedStatement.executeQuery();
@@ -84,8 +87,7 @@ public class CarDaoImpl implements CarDao {
         Optional<Car> carOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement(CarQuery.SELECT_ALL_FROM_CARS_WHERE_MODEL_EQUALS.getQuery())) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FROM_CARS_WHERE_MODEL_EQUALS)) {
 
             preparedStatement.setString(1, carModelToFind);
             ResultSet carResultSet = preparedStatement.executeQuery();
@@ -116,7 +118,8 @@ public class CarDaoImpl implements CarDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    CarQuery.INSERT_INTO_CARS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    INSERT_INTO_CARS,
+                    Statement.RETURN_GENERATED_KEYS
             )) {
 
             preparedStatement.setString(1, carToSave.getModel());

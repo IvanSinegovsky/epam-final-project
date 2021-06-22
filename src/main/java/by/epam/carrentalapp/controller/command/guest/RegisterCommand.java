@@ -5,8 +5,8 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceProvider;
 import by.epam.carrentalapp.service.UserService;
+import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;

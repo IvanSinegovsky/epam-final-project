@@ -2,7 +2,6 @@ package by.epam.carrentalapp.service;
 
 import by.epam.carrentalapp.bean.dto.CarOccupationDto;
 import by.epam.carrentalapp.bean.entity.AcceptedOrder;
-import by.epam.carrentalapp.bean.entity.RepairBill;
 
 import java.util.List;
 

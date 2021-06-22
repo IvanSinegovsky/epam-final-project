@@ -4,7 +4,6 @@ import by.epam.carrentalapp.dao.connection.ConnectionPool;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 //@WebListener
 //todo fix error with creating listener

@@ -1,15 +1,17 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.UserDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.impl.query.UserQuery;
-import by.epam.carrentalapp.bean.entity.user.User;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +19,18 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
 
+    private final String SELECT_ALL_FROM_USERS = "SELECT * FROM users;";
+    private final String SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS = "SELECT * FROM users WHERE email = ?;";
+    private final String SELECT_ALL_FROM_USERS_WHERE_USER_ID_EQUALS = "SELECT * FROM users WHERE user_id = ?;";
+    private final String INSERT_INTO_USERS = "INSERT INTO users(email, password, name, lastname) VALUES (?,?,?,?);";
+
     @Override
     public List<User> findAll() {
         List<User> allUsers = new ArrayList<>();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
-            ResultSet usersResultSet = statement.executeQuery(UserQuery.SELECT_ALL_FROM_USERS.getQuery())) {
+            ResultSet usersResultSet = statement.executeQuery(SELECT_ALL_FROM_USERS)) {
 
             while (usersResultSet.next()){
                 Long userId = usersResultSet.getLong(USER_ID_COLUMN_NAME);
@@ -50,8 +57,8 @@ public class UserDaoImpl implements UserDao {
         Optional<User> userOptional;
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UserQuery
-                    .SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS.getQuery())) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS)) {
 
             preparedStatement.setString(1, emailToFind);
 
@@ -73,7 +80,8 @@ public class UserDaoImpl implements UserDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    UserQuery.INSERT_INTO_USERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    INSERT_INTO_USERS,
+                    Statement.RETURN_GENERATED_KEYS
             )) {
 
             preparedStatement.setString(1, userToSave.getEmail());
@@ -103,8 +111,8 @@ public class UserDaoImpl implements UserDao {
         Optional<User> userOptional;
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UserQuery
-                    .SELECT_ALL_FROM_USERS_WHERE_USER_ID_EQUALS.getQuery())) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    SELECT_ALL_FROM_USERS_WHERE_USER_ID_EQUALS)) {
 
             preparedStatement.setLong(1, userIdToFind);
 

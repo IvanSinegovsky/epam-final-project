@@ -1,6 +1,5 @@
 package by.epam.carrentalapp.controller.command;
 
-import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

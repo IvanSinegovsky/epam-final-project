@@ -1,10 +1,8 @@
 package by.epam.carrentalapp.controller.command.customer;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
-import by.epam.carrentalapp.bean.entity.OrderRequest;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
-import by.epam.carrentalapp.controller.command.admin.AcceptOrderCommand;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;

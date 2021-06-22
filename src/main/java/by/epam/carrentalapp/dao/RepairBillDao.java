@@ -2,7 +2,6 @@ package by.epam.carrentalapp.dao;
 
 import by.epam.carrentalapp.bean.entity.RepairBill;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface RepairBillDao {

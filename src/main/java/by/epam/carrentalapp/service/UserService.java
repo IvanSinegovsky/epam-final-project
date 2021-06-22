@@ -3,7 +3,6 @@ package by.epam.carrentalapp.service;
 import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.user.User;
 
-import javax.security.auth.login.CredentialNotFoundException;
 import java.util.Optional;
 
 public interface UserService {

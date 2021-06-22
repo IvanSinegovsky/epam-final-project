@@ -6,7 +6,6 @@ import by.epam.carrentalapp.dao.PromoCodeDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.impl.query.PromoCodeQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -20,13 +19,21 @@ import java.util.Optional;
 public class PromoCodeDaoImpl implements PromoCodeDao {
     private final Logger LOGGER = Logger.getLogger(PromoCodeDaoImpl.class);
 
+    private final String SELECT_ALL_FROM_PROMO_CODES = "SELECT * FROM promo_codes;";
+    private final String INSERT_INTO_PROMO_CODES =
+            "INSERT INTO promo_codes(promo_code, discount, is_active) VALUES (?,?,?);";
+    private final String UPDATE_PROMO_CODES_SET_IS_ACTIVE_FALSE_WHERE_PROMO_CODE =
+            "UPDATE promo_codes SET is_active=0 WHERE promo_code=?;";
+    private final String SELECT_ALL_FROM_PROMO_CODES_WHERE_PROMO_CODE_EQUALS =
+            "SELECT * FROM promo_codes WHERE promo_code = ?;";
+
     @Override
     public Optional<PromoCode> findByPromoCode(String promoCodeToFind) {
         Optional<PromoCode> promoCodeOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement(PromoCodeQuery.SELECT_ALL_FROM_PROMO_CODES_WHERE_PROMO_CODE_EQUALS.getQuery())) {
+                    .prepareStatement(SELECT_ALL_FROM_PROMO_CODES_WHERE_PROMO_CODE_EQUALS)) {
 
             preparedStatement.setString(1, promoCodeToFind);
             ResultSet promoCodeResultSet = preparedStatement.executeQuery();
@@ -56,7 +63,8 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    PromoCodeQuery.INSERT_INTO_PROMO_CODES.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    INSERT_INTO_PROMO_CODES,
+                    Statement.RETURN_GENERATED_KEYS
             )) {
 
             preparedStatement.setString(1, promoCodeToSave.getPromoCode());
@@ -84,8 +92,7 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
     public void setValuesNonActiveByPromoCodes(List<String> promoCodes)  {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    PromoCodeQuery.UPDATE_PROMO_CODES_SET_IS_ACTIVE_FALSE_WHERE_PROMO_CODE.getQuery()
-            )) {
+                    UPDATE_PROMO_CODES_SET_IS_ACTIVE_FALSE_WHERE_PROMO_CODE)) {
 
             for (String promoCode : promoCodes) {
                 preparedStatement.setString(1 , promoCode);
@@ -107,7 +114,7 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             Statement statement = connection.createStatement();
-            ResultSet promoCodesResultSet = statement.executeQuery(PromoCodeQuery.SELECT_ALL_FROM_PROMO_CODES.getQuery())) {
+            ResultSet promoCodesResultSet = statement.executeQuery(SELECT_ALL_FROM_PROMO_CODES)) {
 
             while (promoCodesResultSet.next()){
                 Long promoCodeId = promoCodesResultSet.getLong(PROMO_CODE_ID_COLUMN_NAME);

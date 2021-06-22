@@ -1,6 +1,5 @@
 package by.epam.carrentalapp.controller.command.admin;
 
-import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;

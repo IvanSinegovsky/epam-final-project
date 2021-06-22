@@ -6,7 +6,6 @@ import by.epam.carrentalapp.dao.RepairBillDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.impl.query.RepairBillQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -18,13 +17,18 @@ import java.util.Optional;
 public class RepairBillDaoImpl implements RepairBillDao {
     private final Logger LOGGER = Logger.getLogger(RepairBillDaoImpl.class);
 
+    private final String SELECT_ALL_FROM_REPAIR_BILLS_WHERE_ACCEPTED_ORDER_ID_EQUALS =
+            "SELECT * FROM repair_bills WHERE accepted_order_id = ?;";
+    private final String INSERT_INTO_REPAIR_BILLS =
+            "INSERT INTO repair_bills(accepted_order_id, bill, comment) VALUES (?,?,?);";
+
     @Override
     public Optional<RepairBill> findByAcceptedOrderId(Long acceptedOrderId) {
         Optional<RepairBill> repairBill;
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    RepairBillQuery.SELECT_ALL_FROM_REPAIR_BILLS_WHERE_ACCEPTED_ORDER_ID_EQUALS.getQuery()
+                    SELECT_ALL_FROM_REPAIR_BILLS_WHERE_ACCEPTED_ORDER_ID_EQUALS
             )) {
 
             preparedStatement.setLong(1, acceptedOrderId);
@@ -46,7 +50,8 @@ public class RepairBillDaoImpl implements RepairBillDao {
     public void save(RepairBill repairBill) {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    RepairBillQuery.INSERT_INTO_REPAIR_BILLS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    INSERT_INTO_REPAIR_BILLS,
+                    Statement.RETURN_GENERATED_KEYS
             )) {
 
             preparedStatement.setLong(1, repairBill.getAcceptedOrderId());

@@ -6,7 +6,6 @@ import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
-import by.epam.carrentalapp.dao.impl.query.AcceptedOrderQuery;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -20,13 +19,26 @@ import java.util.Optional;
 public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
     private final Logger LOGGER = Logger.getLogger(AcceptedOrderDaoImpl.class);
 
+    private final String INSERT_INTO_ACCEPTED_ORDERS =
+            "INSERT INTO accepted_orders(bill, order_request_id, car_id, is_paid, admin_user_accepted_id, user_details_id) VALUES (?,?,?,?,?,?);";
+    private final String SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_ORDER_ID_EQUALS =
+            "SELECT * FROM accepted_orders WHERE order_id = ?;";
+    private final String SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_CAR_ID_EQUALS =
+            "SELECT * FROM accepted_orders WHERE car_id = ?;";
+    private final String SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_USER_DETAILS_ID_EQUALS =
+            "SELECT * FROM accepted_orders WHERE user_details_id = ?;";
+    private final String SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_IS_PAID_EQUALS =
+            "SELECT * FROM accepted_orders WHERE is_paid = ?;";
+    private final String UPDATE_SET_IS_PAID_WHERE_ORDER_ID_EQUALS =
+            "UPDATE accepted_orders SET is_paid = ? WHERE order_id = ? ;";
+
     @Override
     public Optional<Long> save(AcceptedOrder acceptedOrder) {
         Optional<Long> acceptedOrderId = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    AcceptedOrderQuery.INSERT_INTO_ACCEPTED_ORDERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    INSERT_INTO_ACCEPTED_ORDERS, Statement.RETURN_GENERATED_KEYS
             )) {
 
             ResultSet acceptedOrderResultSet = insertAndGetGeneratedKey(preparedStatement, acceptedOrder);
@@ -51,7 +63,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_ORDER_ID_EQUALS.getQuery())) {
+                    .prepareStatement(SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_ORDER_ID_EQUALS)) {
 
             preparedStatement.setLong(1, acceptedOrderId);
             ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
@@ -76,7 +88,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    AcceptedOrderQuery.INSERT_INTO_ACCEPTED_ORDERS.getQuery(), Statement.RETURN_GENERATED_KEYS
+                    INSERT_INTO_ACCEPTED_ORDERS, Statement.RETURN_GENERATED_KEYS
             )) {
 
             for (AcceptedOrder acceptedOrder : acceptedOrders) {
@@ -117,7 +129,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_IS_PAID_EQUALS.getQuery())) {
+                    .prepareStatement(SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_IS_PAID_EQUALS)) {
 
             preparedStatement.setBoolean(1, isPaid);
             ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
@@ -140,7 +152,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
     public void setIsPaidAcceptedOrders(List<AcceptedOrder> acceptedOrders, Boolean isPaid) {
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    AcceptedOrderQuery.UPDATE_SET_IS_PAID_WHERE_ORDER_ID_EQUALS.getQuery()
+                    UPDATE_SET_IS_PAID_WHERE_ORDER_ID_EQUALS
             )) {
 
             for (AcceptedOrder acceptedOrder : acceptedOrders) {
@@ -164,7 +176,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_CAR_ID_EQUALS.getQuery())) {
+                    .prepareStatement(SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_CAR_ID_EQUALS)) {
 
             preparedStatement.setLong(1, carIdToFind);
             ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();
@@ -189,7 +201,7 @@ public class AcceptedOrderDaoImpl implements AcceptedOrderDao {
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection
-                    .prepareStatement(AcceptedOrderQuery.SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_USER_DETAILS_ID_EQUALS.getQuery())) {
+                    .prepareStatement(SELECT_ALL_FROM_ACCEPTED_ORDERS_WHERE_USER_DETAILS_ID_EQUALS)) {
 
             preparedStatement.setLong(1, userDetailsId);
             ResultSet acceptedOrdersResultSet = preparedStatement.executeQuery();

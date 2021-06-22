@@ -3,7 +3,6 @@ package by.epam.carrentalapp.controller.command.admin;
 import by.epam.carrentalapp.bean.entity.PromoCode;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
-import by.epam.carrentalapp.controller.command.guest.LoginAndMakeOrderCommand;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.PromoCodeService;

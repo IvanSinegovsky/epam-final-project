@@ -1,7 +1,6 @@
 package by.epam.carrentalapp.controller.command.admin;
 
 import by.epam.carrentalapp.bean.entity.AcceptedOrder;
-import by.epam.carrentalapp.bean.entity.RepairBill;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;

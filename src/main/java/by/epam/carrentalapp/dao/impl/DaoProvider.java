@@ -1,7 +1,6 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.*;
-import by.epam.carrentalapp.dao.impl.*;
 
 public class DaoProvider {
     private static CarDao carDao;

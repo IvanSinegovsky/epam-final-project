@@ -1,20 +1,19 @@
 package by.epam.carrentalapp.controller.command.guest;
 
+import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.CommandTitle;
 import by.epam.carrentalapp.controller.command.Router;
-import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.service.CarService;
+import by.epam.carrentalapp.service.PaginationService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
-import by.epam.carrentalapp.service.PaginationService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CarCatalogCommand implements Command {

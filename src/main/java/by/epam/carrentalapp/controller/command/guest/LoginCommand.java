@@ -1,14 +1,15 @@
 package by.epam.carrentalapp.controller.command.guest;
 
-import by.epam.carrentalapp.controller.command.*;
-import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.bean.entity.user.User;
+import by.epam.carrentalapp.controller.command.Command;
+import by.epam.carrentalapp.controller.command.Router;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.service.ServiceException;
+import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.UsersRolesService;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
-import by.epam.carrentalapp.service.UserService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
