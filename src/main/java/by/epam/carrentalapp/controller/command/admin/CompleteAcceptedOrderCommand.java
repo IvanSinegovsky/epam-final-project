@@ -5,6 +5,8 @@ import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
@@ -31,17 +33,22 @@ public class CompleteAcceptedOrderCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String[] completedOrderStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
-        List<AcceptedOrder> completedAcceptedOrders = AcceptedOrder.valueOf(completedOrderStrings);
+        if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
+            forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+        } else {
+            String[] completedOrderStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
+            List<AcceptedOrder> completedAcceptedOrders = AcceptedOrder.valueOf(completedOrderStrings);
 
-        try {
-            acceptedOrderService.setAcceptedOrderListIsPaidTrue(completedAcceptedOrders);
+            try {
+                acceptedOrderService.setAcceptedOrderListIsPaidTrue(completedAcceptedOrders);
 
-            redirect(Router.ACTIVE_ACCEPTED_ORDER_LIST_REDIRECT_PATH.getPath(), response);
-        } catch (ServiceException e) {
-            LOGGER.error("CompleteAcceptedOrderCommand execute(...): service crashed");
-            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot complete order, please try again later");
-            redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
+                redirect(Router.ACTIVE_ACCEPTED_ORDER_LIST_REDIRECT_PATH.getPath(), response);
+            } catch (ServiceException e) {
+                LOGGER.error("CompleteAcceptedOrderCommand execute(...): service crashed");
+                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot complete order, please try again later");
+                redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
+            }
         }
     }
 }

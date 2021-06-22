@@ -11,7 +11,6 @@ import java.io.IOException;
 public class LogoutCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        //or not invalidate but remove all attributes in loop
         request.getSession(true).invalidate();
 
         redirect(Router.HOME_REDIRECT_PATH.getPath(), response);

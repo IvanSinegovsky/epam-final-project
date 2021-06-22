@@ -4,6 +4,8 @@ import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
@@ -31,24 +33,29 @@ public class AddCarCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (request.getParameter(MODEL_REQUEST_PARAMETER_NAME) == null){
-            forward(Router.ADD_CAR_FORWARD_PATH.getPath(), request, response);
+        if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
+            forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         } else {
-            try {
-                Car car = new Car(
-                        request.getParameter(MODEL_REQUEST_PARAMETER_NAME),
-                        request.getParameter(NUMBER_REQUEST_PARAMETER_NAME),
-                        Double.valueOf(request.getParameter(HOURLY_COST_REQUEST_PARAMETER_NAME)),
-                        request.getParameter(ASSET_URL_REQUEST_PARAMETER_NAME)
-                );
+            if (request.getParameter(MODEL_REQUEST_PARAMETER_NAME) == null){
+                forward(Router.ADD_CAR_FORWARD_PATH.getPath(), request, response);
+            } else {
+                try {
+                    Car car = new Car(
+                            request.getParameter(MODEL_REQUEST_PARAMETER_NAME),
+                            request.getParameter(NUMBER_REQUEST_PARAMETER_NAME),
+                            Double.valueOf(request.getParameter(HOURLY_COST_REQUEST_PARAMETER_NAME)),
+                            request.getParameter(ASSET_URL_REQUEST_PARAMETER_NAME)
+                    );
 
-                carService.addCar(car);
+                    carService.addCar(car);
 
-                redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
-            } catch (ServiceException e) {
-                LOGGER.error("AddCarCommand execute(...): service crashed");
-                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Wrong car data");
-                forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+                    redirect(Router.CAR_CATALOG_REDIRECT_PATH.getPath(), response);
+                } catch (ServiceException e) {
+                    LOGGER.error("AddCarCommand execute(...): service crashed");
+                    request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Wrong car data");
+                    forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+                }
             }
         }
     }

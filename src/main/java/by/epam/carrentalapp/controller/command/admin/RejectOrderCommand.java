@@ -4,6 +4,8 @@ import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
@@ -30,19 +32,24 @@ public class RejectOrderCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String[] rejectedOrderRequestInfoStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
-        String rejectionReason = request.getParameter(REJECTION_REASON_REQUEST_PARAMETER_NAME);
-        List<OrderRequestInfoDto> orderRequestInfoDtos = OrderRequestInfoDto.valueOf(rejectedOrderRequestInfoStrings);
-        Long adminRejectedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
+        if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
+            forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+        } else {
+            String[] rejectedOrderRequestInfoStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
+            String rejectionReason = request.getParameter(REJECTION_REASON_REQUEST_PARAMETER_NAME);
+            List<OrderRequestInfoDto> orderRequestInfoDtos = OrderRequestInfoDto.valueOf(rejectedOrderRequestInfoStrings);
+            Long adminRejectedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
-        try {
-            orderRequestService.rejectOrderRequests(orderRequestInfoDtos, adminRejectedId, rejectionReason);
+            try {
+                orderRequestService.rejectOrderRequests(orderRequestInfoDtos, adminRejectedId, rejectionReason);
 
-            redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
-        } catch (ServiceException e) {
-            LOGGER.error("RejectOrderCommand execute(...): service crashed");
-            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot reject order, please try again later");
-            redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
+                redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
+            } catch (ServiceException e) {
+                LOGGER.error("RejectOrderCommand execute(...): service crashed");
+                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot reject order, please try again later");
+                redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
+            }
         }
     }
 }

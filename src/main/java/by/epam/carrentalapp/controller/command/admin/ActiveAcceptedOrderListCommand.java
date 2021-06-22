@@ -32,6 +32,7 @@ public class ActiveAcceptedOrderListCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
             forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         } else {
             List<AcceptedOrder> activeAcceptedOrders;

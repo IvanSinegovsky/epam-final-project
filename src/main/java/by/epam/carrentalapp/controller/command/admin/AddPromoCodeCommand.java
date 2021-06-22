@@ -4,6 +4,8 @@ import by.epam.carrentalapp.bean.entity.PromoCode;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginAndMakeOrderCommand;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.PromoCodeService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
@@ -29,24 +31,29 @@ public class AddPromoCodeCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String promoCode = request.getParameter(PROMO_CODE_REQUEST_PARAMETER_NAME);
-        Integer discount = Integer.valueOf(request.getParameter(DISCOUNT_REQUEST_PARAMETER_NAME));
-
-        if (promoCode == null || "".equals(promoCode)) {
-            forward(Router.PROMO_CODE_LIST_FORWARD_PATH.getPath(), request, response);
+        if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
+            forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         } else {
-            try {
-                promoCodeService.addPromoCode(new PromoCode(
-                        promoCode,
-                        discount,
-                        true
-                ));
+            String promoCode = request.getParameter(PROMO_CODE_REQUEST_PARAMETER_NAME);
+            Integer discount = Integer.valueOf(request.getParameter(DISCOUNT_REQUEST_PARAMETER_NAME));
 
-                redirect(Router.PROMO_CODE_LIST_REDIRECT_PATH.getPath(), response);
-            }  catch (ServiceException e) {
-                LOGGER.error("AddPromoCodeCommand execute(...): service crashed");
-                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Invalid promo code values");
-                forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+            if (promoCode == null || "".equals(promoCode)) {
+                forward(Router.PROMO_CODE_LIST_FORWARD_PATH.getPath(), request, response);
+            } else {
+                try {
+                    promoCodeService.addPromoCode(new PromoCode(
+                            promoCode,
+                            discount,
+                            true
+                    ));
+
+                    redirect(Router.PROMO_CODE_LIST_REDIRECT_PATH.getPath(), response);
+                }  catch (ServiceException e) {
+                    LOGGER.error("AddPromoCodeCommand execute(...): service crashed");
+                    request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Invalid promo code values");
+                    forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+                }
             }
         }
     }

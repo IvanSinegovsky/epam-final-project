@@ -6,6 +6,8 @@ import by.epam.carrentalapp.controller.ControllerException;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
@@ -42,30 +44,35 @@ public class MakeOrderRequestCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        try {
-            Long carId = Long.valueOf(request.getParameter(CAR_ID_REQUEST_PARAMETER_NAME));
-            Long userId = (Long) request.getSession().getAttribute(LoginCommand.getUserIdSessionParameterName());
-            LocalDateTime start = LocalDateTime.parse(request.getParameter(START_DATE_AND_TIME_REQUEST_PARAMETER_NAME), dateTimeFormatter);
-            LocalDateTime end = LocalDateTime.parse(request.getParameter(END_DATE_AND_TIME_REQUEST_PARAMETER_NAME), dateTimeFormatter);
-            String promoCode = request.getParameter(PROMO_CODE_REQUEST_PARAMETER_NAME);
-
-            OrderRequest savedOrderRequest = orderRequestService.saveOrderRequest(carId, userId, start, end, promoCode)
-                    .orElseThrow(() -> new ControllerException(
-                            "Server exception. Cannot save order request. Please, try again later"
-                    ));
-
-            Car expectedCar = carService.getCarById(carId).orElseThrow(
-                    () -> new ControllerException("Cannot make order request with this car. Please, choose another one"
-            ));
-
-            request.setAttribute(SAVED_ORDER_REQUEST_PARAMETER_NAME, savedOrderRequest);
-            request.setAttribute(EXPECTED_CAR_REQUEST_PARAMETER_NAME, expectedCar);
-
-            forward(Router.SAVED_ORDER_REQUEST_INFO_FORWARD_PATH.getPath(), request, response);
-        } catch (ServiceException e) {
-            LOGGER.error("MakeOrderRequestCommand execute(...): service crashed");
-            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Wrong input data format");
+        if (!AccessManager.checkPermission(request, RoleName.CUSTOMER)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
             forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+        } else {
+            try {
+                Long carId = Long.valueOf(request.getParameter(CAR_ID_REQUEST_PARAMETER_NAME));
+                Long userId = (Long) request.getSession().getAttribute(LoginCommand.getUserIdSessionParameterName());
+                LocalDateTime start = LocalDateTime.parse(request.getParameter(START_DATE_AND_TIME_REQUEST_PARAMETER_NAME), dateTimeFormatter);
+                LocalDateTime end = LocalDateTime.parse(request.getParameter(END_DATE_AND_TIME_REQUEST_PARAMETER_NAME), dateTimeFormatter);
+                String promoCode = request.getParameter(PROMO_CODE_REQUEST_PARAMETER_NAME);
+
+                OrderRequest savedOrderRequest = orderRequestService.saveOrderRequest(carId, userId, start, end, promoCode)
+                        .orElseThrow(() -> new ControllerException(
+                                "Server exception. Cannot save order request. Please, try again later"
+                        ));
+
+                Car expectedCar = carService.getCarById(carId).orElseThrow(
+                        () -> new ControllerException("Cannot make order request with this car. Please, choose another one"
+                ));
+
+                request.setAttribute(SAVED_ORDER_REQUEST_PARAMETER_NAME, savedOrderRequest);
+                request.setAttribute(EXPECTED_CAR_REQUEST_PARAMETER_NAME, expectedCar);
+
+                forward(Router.SAVED_ORDER_REQUEST_INFO_FORWARD_PATH.getPath(), request, response);
+            } catch (ServiceException e) {
+                LOGGER.error("MakeOrderRequestCommand execute(...): service crashed");
+                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Wrong input data format");
+                forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+            }
         }
     }
 }

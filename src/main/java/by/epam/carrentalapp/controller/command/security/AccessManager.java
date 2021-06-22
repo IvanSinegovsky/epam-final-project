@@ -11,19 +11,11 @@ public class AccessManager {
     public static boolean checkPermission(HttpServletRequest httpServletRequest, RoleName roleToCheck) {
         Object userRole = httpServletRequest.getSession().getAttribute(roleToCheck.getSessionAttributeName());
 
-        return (Boolean) userRole;
-    }
-
-    private static boolean hasPermission(String commandRoleAccess, String userRole) {
-        if (commandRoleAccess.equals(RoleName.ALL.name())) {
-            return true;
-        } else if (commandRoleAccess.equals(RoleName.CUSTOMER.name()) && userRole.equals(RoleName.CUSTOMER.name())) {
-            return true;
-        } else if (commandRoleAccess.equals(RoleName.ADMIN.name())
-                && (userRole.equals(RoleName.CUSTOMER.name()) || userRole.equals(RoleName.ADMIN.name()))) {
-            return true;
+        if (userRole == null) {
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     public static void setRoleListToSession(HttpServletRequest request, List<Role> userRoles) {

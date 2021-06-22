@@ -31,6 +31,7 @@ public class OrderRequestListCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!AccessManager.checkPermission(request, RoleName.ADMIN)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
             forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
         } else {
             List<OrderRequestInfoDto> orderRequests;

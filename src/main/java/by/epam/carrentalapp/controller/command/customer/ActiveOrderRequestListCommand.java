@@ -6,6 +6,8 @@ import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.admin.AcceptOrderCommand;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
+import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
@@ -31,18 +33,23 @@ public class ActiveOrderRequestListCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<OrderRequestInfoDto> orderRequestInfoDtos;
-        Long userId = (Long) request.getSession().getAttribute(LoginCommand.getUserIdSessionParameterName());
+        if (!AccessManager.checkPermission(request, RoleName.CUSTOMER)) {
+            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "403");
+            forward(Router.ERROR_FORWARD_PATH.getPath(), request, response);
+        } else {
+            List<OrderRequestInfoDto> orderRequestInfoDtos;
+            Long userId = (Long) request.getSession().getAttribute(LoginCommand.getUserIdSessionParameterName());
 
-        try {
-            orderRequestInfoDtos = orderRequestService.getCustomerActiveOrderRequestsInformation(userId);
+            try {
+                orderRequestInfoDtos = orderRequestService.getCustomerActiveOrderRequestsInformation(userId);
 
-            request.setAttribute(ORDER_REQUEST_INFOS_REQUEST_PARAMETER_NAME, orderRequestInfoDtos);
-            forward(Router.ACTIVE_ORDER_REQUEST_LIST_FORWARD_PATH.getPath(), request, response);
-        } catch (ServiceException e) {
-            LOGGER.error("ActiveOrderRequestListCommand execute(...): service crashed");
-            request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot get order request list, please try again later");
-            redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
+                request.setAttribute(ORDER_REQUEST_INFOS_REQUEST_PARAMETER_NAME, orderRequestInfoDtos);
+                forward(Router.ACTIVE_ORDER_REQUEST_LIST_FORWARD_PATH.getPath(), request, response);
+            } catch (ServiceException e) {
+                LOGGER.error("ActiveOrderRequestListCommand execute(...): service crashed");
+                request.setAttribute(EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME, "Cannot get order request list, please try again later");
+                redirect(Router.ERROR_REDIRECT_PATH.getPath(), response);
+            }
         }
     }
 }
