@@ -1,5 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="car" uri="carrentalapp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -40,8 +41,12 @@
                     </button>
                 </c:if>
             </div>
-                <c:if test="${counter.index % 2 == 1}"></div><div class="card-group"></c:if>
+                <c:if test="${counter.index % 2 == 1}">
+
+        </div><div class="card-group"></c:if>
         </c:forEach>
         </div>
+
+        <car:pagination command="${command}" currentPage="${currentPage}" lastPage="${lastPage}"/>
 </body>
 </html>

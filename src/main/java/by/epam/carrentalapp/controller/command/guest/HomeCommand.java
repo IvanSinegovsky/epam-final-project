@@ -15,6 +15,6 @@ public class HomeCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        forward(Router.REGISTER_FORWARD_PATH.getPath(), request, response);
+        forward(Router.LOGIN_FORWARD_PATH.getPath(), request, response);
     }
 }

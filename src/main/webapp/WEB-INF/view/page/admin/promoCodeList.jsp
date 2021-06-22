@@ -41,11 +41,13 @@
             <jsp:useBean id="all_promo_codes" scope="request" type="java.util.List"/>
             <c:forEach var="promo_code" items="${all_promo_codes}">
                 <tr>
-                    <td><div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" name="selected_promo_codes" value="${promo_code.promoCode}">
-                        </label>
-                    </div></td>
+                    <td>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="selected_promo_codes" value="${promo_code.promoCode}">
+                            </label>
+                        </div>
+                    </td>
                     <td><c:out value="${promo_code.promoCodeId}"/></td>
                     <td><c:out value="${promo_code.promoCode}"/></td>
                     <td><c:out value="${promo_code.discount}"/></td>

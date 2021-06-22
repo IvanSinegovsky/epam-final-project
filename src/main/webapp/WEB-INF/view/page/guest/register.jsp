@@ -31,9 +31,6 @@
             <input type="hidden" name="command" value="REGISTER"/>
 
             <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                </div>
                 <input name="name"
                        class="form-control"
                        placeholder="<c:out value="${nameInput}"/>"
@@ -41,10 +38,6 @@
             </div>
 
             <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                </div>
-
                 <input name="lastname"
                        class="form-control"
                        placeholder="<c:out value="${lastNameInput}"/>"
@@ -52,9 +45,6 @@
             </div>
 
             <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
-                </div>
                 <input name="email"
                        class="form-control"
                        placeholder="<c:out value="${emailAddressInput}"/>"
@@ -62,9 +52,6 @@
             </div>
 
             <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                </div>
                 <input name="password"
                        class="form-control"
                        placeholder="<c:out value="${passwordInput}"/>"
@@ -72,9 +59,6 @@
             </div>
 
             <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                </div>
                 <input name="passport_number"
                        class="form-control"
                        placeholder="<c:out value="${passportNumberInput}"/>"

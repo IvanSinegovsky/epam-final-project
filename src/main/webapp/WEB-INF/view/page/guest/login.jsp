@@ -26,18 +26,12 @@
         </h4>
         <form method="POST" action="http://localhost:8080/home?command=LOGIN">
             <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
-                </div>
                 <input name="email"
                        class="form-control"
                        placeholder="<c:out value="${emailInput}"/>"
                        type="email">
             </div>
             <div class="form-group input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                </div>
                 <input name="password"
                        class="form-control"
                        placeholder="<c:out value="${passwordInput}"/>"
