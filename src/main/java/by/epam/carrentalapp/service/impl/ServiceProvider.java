@@ -10,6 +10,7 @@ public class ServiceProvider {
     private static AcceptedOrderService acceptedOrderService;
     private static PromoCodeService promoCodeService;
     private static CustomerService customerService;
+    private static PaginationService paginationService;
 
     public static CarService getCarService() {
         if (carService == null) {
@@ -58,5 +59,12 @@ public class ServiceProvider {
             customerService = new CustomerServiceImpl();
         }
         return customerService;
+    }
+
+    public static PaginationService getPaginationService() {
+        if (paginationService == null) {
+            paginationService = new PaginationServiceImpl();
+        }
+        return paginationService;
     }
 }

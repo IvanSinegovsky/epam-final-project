@@ -23,6 +23,30 @@ public class CarDaoImpl implements CarDao {
     private final String SELECT_ALL_FROM_CARS_WHERE_CAR_ID_EQUALS = "SELECT * FROM cars WHERE car_id = ?;";
     private final String SELECT_ALL_FROM_CARS_WHERE_MODEL_EQUALS = "SELECT * FROM cars WHERE model = ?;";
     private final String INSERT_INTO_CARS = "INSERT INTO cars(model, number, hourly_cost, asset_url) VALUES (?,?,?,?);";
+    private final String SELECT_ALL_FROM_CARS_LIMIT_EQUALS_OFFSET_EQUALS = "SELECT * FROM cars LIMIT ? OFFSET ?";
+    private final String SELECT_COUNT_FROM_CARS = "SELECT COUNT(*) FROM cars";
+
+    @Override
+    public Optional<Integer> findCount()  {
+        Optional<Integer> carsCountOptional = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet carsResultSet = statement.executeQuery(SELECT_COUNT_FROM_CARS)) {
+
+            if (carsResultSet.next()){
+                carsCountOptional = Optional.of(carsResultSet.getInt(1));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("CarDao findCount(...): cannot find records count");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CarDao findCount(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return carsCountOptional;
+    }
 
     public List<Car> findAll() {
         List<Car> allCars = new ArrayList<>();
@@ -32,13 +56,7 @@ public class CarDaoImpl implements CarDao {
             ResultSet carsResultSet = statement.executeQuery(SELECT_ALL_FROM_CARS)) {
 
             while (carsResultSet.next()){
-                Long carId = carsResultSet.getLong(CAR_ID_COLUMN_NAME);
-                String model = carsResultSet.getString(MODEL_COLUMN_NAME);
-                String number = carsResultSet.getString(NUMBER_COLUMN_NAME);
-                Double hourlyCost = carsResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
-                String assetURL = carsResultSet.getString(ASSET_URL_COLUMN_NAME);
-
-                allCars.add(new Car(carId, model, number, hourlyCost, assetURL));
+                allCars.add(extractCarFromResultSet(carsResultSet));
             }
         } catch (SQLException e) {
             LOGGER.error("CarDao findAll(...): cannot extract car from ResultSet");
@@ -62,13 +80,7 @@ public class CarDaoImpl implements CarDao {
             ResultSet carResultSet = preparedStatement.executeQuery();
 
             if (carResultSet.next()) {
-                Long carId = carResultSet.getLong(CAR_ID_COLUMN_NAME);
-                String model = carResultSet.getString(MODEL_COLUMN_NAME);
-                String number = carResultSet.getString(NUMBER_COLUMN_NAME);
-                Double hourlyCost = carResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
-                String assetURL = carResultSet.getString(ASSET_URL_COLUMN_NAME);
-
-                carOptional = Optional.of(new Car(carId, model, number, hourlyCost, assetURL));
+                carOptional = Optional.of(extractCarFromResultSet(carResultSet));
             }
 
         } catch (SQLException e) {
@@ -93,13 +105,7 @@ public class CarDaoImpl implements CarDao {
             ResultSet carResultSet = preparedStatement.executeQuery();
 
             if (carResultSet.next()) {
-                Long carId = carResultSet.getLong(CAR_ID_COLUMN_NAME);
-                String model = carResultSet.getString(MODEL_COLUMN_NAME);
-                String number = carResultSet.getString(NUMBER_COLUMN_NAME);
-                Double hourlyCost = carResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
-                String assetURL = carResultSet.getString(ASSET_URL_COLUMN_NAME);
-
-                carOptional = Optional.of(new Car(carId, model, number, hourlyCost, assetURL));
+                carOptional = Optional.of(extractCarFromResultSet(carResultSet));
             }
         } catch (SQLException e) {
             LOGGER.error("CarDao findByModel(...): cannot extract car from ResultSet");
@@ -110,6 +116,41 @@ public class CarDaoImpl implements CarDao {
         }
 
         return carOptional;
+    }
+
+    @Override
+    public List<Car> findAllByLimitAndOffset(int limit, int offset) {
+        List<Car> carsByRange = new ArrayList<>(limit);
+
+        try (ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FROM_CARS_LIMIT_EQUALS_OFFSET_EQUALS)) {
+
+            preparedStatement.setLong(1, limit);
+            preparedStatement.setLong(2, offset);
+            ResultSet carResultSet = preparedStatement.executeQuery();
+
+            while (carResultSet.next()) {
+                carsByRange.add(extractCarFromResultSet(carResultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("CarDao findAllByLimitAndOffset(...): cannot extract car from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("CarDao findAllByLimitAndOffset(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return carsByRange;
+    }
+
+    private Car extractCarFromResultSet(ResultSet carResultSet) throws SQLException {
+        Long carId = carResultSet.getLong(CAR_ID_COLUMN_NAME);
+        String model = carResultSet.getString(MODEL_COLUMN_NAME);
+        String number = carResultSet.getString(NUMBER_COLUMN_NAME);
+        Double hourlyCost = carResultSet.getDouble(HOURLY_COST_COLUMN_NAME);
+        String assetURL = carResultSet.getString(ASSET_URL_COLUMN_NAME);
+
+        return new Car(carId, model, number, hourlyCost, assetURL);
     }
 
     @Override

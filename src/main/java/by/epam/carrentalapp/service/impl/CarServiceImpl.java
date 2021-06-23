@@ -34,6 +34,19 @@ public class CarServiceImpl implements CarService {
         return cars;
     }
 
+    public List<Car> getCarsPage(int limit, int offset) {
+        List<Car> carsPage;
+
+        try {
+            carsPage = carDao.findAllByLimitAndOffset(limit, offset);
+        } catch (DaoException e) {
+            LOGGER.error("CarServiceImpl getCarsPage(): DAO cannot return car list");
+            throw new ServiceException(e);
+        }
+
+        return carsPage;
+    }
+
     @Override
     public Optional<Car> getCarById(Long carId) {
         Optional<Car> carOptional = Optional.empty();
@@ -64,5 +77,21 @@ public class CarServiceImpl implements CarService {
             LOGGER.error("CarServiceImpl addCar(...): DAO cannot save car");
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public int getCarsQuantity() {
+        int carsQuantity = 0;
+
+        try {
+            carsQuantity = carDao.findCount().orElseThrow(
+                    () -> new ServiceException("CarServiceImpl getCarsQuantity(...): DAO cannot cars count")
+            );
+        } catch (DaoException e) {
+            LOGGER.error("CarServiceImpl addCar(...): DAO cannot save car");
+            throw new ServiceException(e);
+        }
+
+        return carsQuantity;
     }
 }

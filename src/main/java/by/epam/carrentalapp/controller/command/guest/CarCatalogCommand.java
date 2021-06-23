@@ -6,6 +6,7 @@ import by.epam.carrentalapp.controller.command.CommandTitle;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.PaginationService;
+import by.epam.carrentalapp.service.impl.PaginationServiceImpl;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
@@ -28,9 +29,11 @@ public class CarCatalogCommand implements Command {
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
     private final String COMMAND_REQUEST_PARAMETER_NAME = "command";
 
+    private final int CARS_ON_PAGE_QUANTITY = 2;
+
     public CarCatalogCommand() {
         carService = ServiceProvider.getCarService();
-        paginationService = new PaginationService(2);
+        paginationService = ServiceProvider.getPaginationService();
     }
 
     //todo change by offset db reading
@@ -38,28 +41,23 @@ public class CarCatalogCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String currentPageParameter =  request.getParameter(CURRENT_PAGE_REQUEST_PARAMETER_NAME);
+
             int currentPage = 1;
             if (currentPageParameter != null) {
                 currentPage = Integer.parseInt(currentPageParameter);
             }
 
-            List<Car> allCars = carService.getAllCars();
-            List<Car> pageCars;
+            paginationService.setElementsOnPage(CARS_ON_PAGE_QUANTITY);
+            paginationService.setElementsTotal(carService.getCarsQuantity());
 
-            int totalRecords = allCars.size();
-            int pages = paginationService.pages(totalRecords);
-            int lastPage = paginationService.lastPage(pages, totalRecords);
+            List<Car> carsPage = carService.getCarsPage(
+                    paginationService.getLimit(),
+                    paginationService.getOffset(currentPage)
+            );
 
-            if (currentPage != 1){
-                pageCars = allCars.subList(
-                        paginationService.beginListIndex(currentPage),
-                        paginationService.lastListIndex(currentPage)
-                );
-            } else {
-                pageCars = allCars.subList(0, paginationService.getElementsOnPage());
-            }
+            int lastPage = paginationService.getLastPageNumber();
 
-            request.setAttribute(ALL_CARS_REQUEST_PARAMETER_NAME, pageCars);
+            request.setAttribute(ALL_CARS_REQUEST_PARAMETER_NAME, carsPage);
             request.setAttribute(CURRENT_PAGE_REQUEST_PARAMETER_NAME, currentPage);
             request.setAttribute(LAST_PAGE_REQUEST_PARAMETER_NAME, lastPage);
             request.setAttribute(COMMAND_REQUEST_PARAMETER_NAME, CommandTitle.CAR_CATALOG.name());
