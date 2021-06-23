@@ -22,7 +22,6 @@ public class AcceptOrderCommand implements Command {
 
     private final OrderRequestService orderRequestService;
 
-    //todo change with pattern
     private final String SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME = "selected_accepted_orders";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
 

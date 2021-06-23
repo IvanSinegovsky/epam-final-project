@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This bean is used for HTTP request/response {@link OrderRequest} data reduction with addition fields
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +36,12 @@ public class OrderRequestInfoDto {
         this.totalCost = totalCost;
     }
 
+    /**
+     * Parses array of OrderRequestInfoDto(converted to String with {@link #toString()} method) instances
+     * into ArrayList of OrderRequestInfoDto objects using {@link #valueOf(String)}, which parses single String value
+     * @param orderRequestInfoStringArray String array with toString() instances
+     * @return parsed OrderRequestInfoDto ArrayList
+     */
     public static List<OrderRequestInfoDto> valueOf(String[] orderRequestInfoStringArray) {
         List<OrderRequestInfoDto> orderRequestInfoDtos = new ArrayList<>(orderRequestInfoStringArray.length);
 
@@ -43,6 +52,12 @@ public class OrderRequestInfoDto {
         return orderRequestInfoDtos;
     }
 
+    /**
+     * Parses OrderRequestInfoDto(converted to String with {@link #toString()} method) instance
+     * into OrderRequestInfoDto object
+     * @param orderRequestInfoString single OrderRequestInfoDto converted to String value
+     * @return parsed OrderRequestInfoDto single object
+     */
     public static OrderRequestInfoDto valueOf(String orderRequestInfoString) {
         String[] fields = orderRequestInfoString.split(",");
 
@@ -60,7 +75,12 @@ public class OrderRequestInfoDto {
         );
     }
 
-    private static int indexNumberAfterEqualsChar(String value) {
-        return value.indexOf('=') + 1;
+    /**
+     * Finds begin index of single String OrderRequestInfoDto object field
+     * @param fieldKeyAndValue field title = field value parameter
+     * @return value begin index
+     */
+    private static int indexNumberAfterEqualsChar(String fieldKeyAndValue) {
+        return fieldKeyAndValue.indexOf('=') + 1;
     }
 }

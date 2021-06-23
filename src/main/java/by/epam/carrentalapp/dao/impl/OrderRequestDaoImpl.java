@@ -1,6 +1,7 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
+import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.OrderRequestDao;
@@ -48,16 +49,7 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
                     INSERT_INTO_ORDER_REQUESTS, Statement.RETURN_GENERATED_KEYS
             )) {
 
-            preparedStatement.setString(1, orderRequest.getExpectedStartTime().format(dateTimeFormatter));
-            preparedStatement.setString(2, orderRequest.getExpectedEndTime().format(dateTimeFormatter));
-            preparedStatement.setLong(3, orderRequest.getExpectedCarId());
-            preparedStatement.setLong(4, orderRequest.getUserDetailsId());
-            preparedStatement.setBoolean(5, orderRequest.getIsActive());
-            preparedStatement.setBoolean(6, orderRequest.getIsChecked());
-            preparedStatement.setLong(7, orderRequest.getPromoCodeId());
-
-            preparedStatement.executeUpdate();
-            ResultSet orderRequestResultSet = preparedStatement.getGeneratedKeys();
+            ResultSet orderRequestResultSet = insertAndGetGeneratedKey(preparedStatement, orderRequest);
 
             if (orderRequestResultSet != null && orderRequestResultSet.next()) {
                 savedOrderRequestId = Optional.of(orderRequestResultSet.getLong(1));
@@ -71,6 +63,21 @@ public class OrderRequestDaoImpl implements OrderRequestDao {
         }
 
         return savedOrderRequestId;
+    }
+
+    private ResultSet insertAndGetGeneratedKey(PreparedStatement preparedStatement, OrderRequest orderRequest)
+            throws SQLException {
+        preparedStatement.setString(1, orderRequest.getExpectedStartTime().format(dateTimeFormatter));
+        preparedStatement.setString(2, orderRequest.getExpectedEndTime().format(dateTimeFormatter));
+        preparedStatement.setLong(3, orderRequest.getExpectedCarId());
+        preparedStatement.setLong(4, orderRequest.getUserDetailsId());
+        preparedStatement.setBoolean(5, orderRequest.getIsActive());
+        preparedStatement.setBoolean(6, orderRequest.getIsChecked());
+        preparedStatement.setLong(7, orderRequest.getPromoCodeId());
+
+        preparedStatement.executeUpdate();
+
+        return preparedStatement.getGeneratedKeys();
     }
 
     @Override

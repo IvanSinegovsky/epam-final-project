@@ -1,7 +1,9 @@
 package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.service.*;
-
+/**
+ * ...Service interface specific implementation provider
+ */
 public class ServiceProvider {
     private static CarService carService;
     private static UserService userService;

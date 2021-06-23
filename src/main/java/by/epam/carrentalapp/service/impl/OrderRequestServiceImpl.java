@@ -22,7 +22,7 @@ import java.util.Optional;
 public class OrderRequestServiceImpl implements OrderRequestService {
     private final Logger LOGGER = Logger.getLogger(OrderRequestServiceImpl.class);
 
-    private final String ZERO_DISCOUNT_PROMOCODE = "ZERODISCOUNT";
+    private final String ZERO_DISCOUNT_PROMO_CODE = "ZERODISCOUNT";
 
     private final OrderRequestDao orderRequestDao;
     private final CarDao carDao;
@@ -149,25 +149,10 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         Optional<OrderRequest> orderRequestOptional;
 
         try {
-            Long customerUserDetailsId = null;
-            Long promoCodeId = null;
-            Optional<PromoCode> promoCodeOptional;
-
-            if (promoCode == null) {
-                promoCodeId = getZeroDiscountPromoCodeId();
-            } else {
-                promoCodeOptional = promoCodeDao.findByPromoCode(promoCode);
-
-                if (promoCodeOptional.isEmpty()) {
-                    promoCodeId = getZeroDiscountPromoCodeId();
-                }
-            }
-
-            Optional<CustomerUserDetails> customerUserDetailsOptional = customerUserDetailsDao.findByUserId(userId);
-
-            if (customerUserDetailsOptional.isPresent()) {
-                customerUserDetailsId = customerUserDetailsOptional.get().getUserDetailsId();
-            }
+            Long promoCodeId = appointPromoCodeId(promoCode);
+            Long customerUserDetailsId = customerUserDetailsDao.findByUserId(userId).orElseThrow(
+                    () -> new ServiceException("Cannot get CustomerUserDetails record from db")
+            ).getUserDetailsId();
 
             orderRequestToSave = new OrderRequest(
                     expectedStartTime,
@@ -185,7 +170,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
 
             Optional<Long> savedOrderRequestId = orderRequestDao.save(orderRequestToSave);
             orderRequestOptional = orderRequestDao.findByOrderRequestId(savedOrderRequestId.orElseThrow(
-                    () -> new ServiceException("Something with saving went wrong")
+                    () -> new ServiceException("Cannot save order request to db")
             ));
         } catch (DaoException e) {
             LOGGER.error("OrderRequestServiceImpl saveOrderRequest(...): DAO cannot execute operations");
@@ -195,8 +180,27 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         return orderRequestOptional;
     }
 
+    private Long appointPromoCodeId(String promoCode) {
+        Optional<PromoCode> promoCodeOptional;
+        Long promoCodeId;
+
+        if (promoCode == null) {
+            promoCodeId = getZeroDiscountPromoCodeId();
+        } else {
+            promoCodeOptional = promoCodeDao.findByPromoCode(promoCode);
+
+            if (promoCodeOptional.isEmpty()) {
+                promoCodeId = getZeroDiscountPromoCodeId();
+            } else {
+                promoCodeId = promoCodeOptional.get().getPromoCodeId();
+            }
+        }
+
+        return promoCodeId;
+    }
+
     private Long getZeroDiscountPromoCodeId() {
-        return promoCodeDao.findByPromoCode(ZERO_DISCOUNT_PROMOCODE).orElseThrow(
+        return promoCodeDao.findByPromoCode(ZERO_DISCOUNT_PROMO_CODE).orElseThrow(
                 () -> new ServiceException("Wrong customers and default promoCode")
         ).getPromoCodeId();
     }
@@ -204,10 +208,9 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     @Override
     public List<OrderRequestInfoDto> getCustomerActiveOrderRequestsInformation(Long userId) {
         List<OrderRequestInfoDto> customerOrderRequestInfoDtoList;
-        Long userDetailsId;
 
         try {
-            userDetailsId = customerUserDetailsDao.findByUserId(userId).orElseThrow(
+            Long userDetailsId = customerUserDetailsDao.findByUserId(userId).orElseThrow(
                     () -> new ServiceException("Current user is not a customer")
             ).getUserDetailsId();
             List<OrderRequest> orderRequestList = orderRequestDao.findAllByIsActiveAndUserDetailsId(userDetailsId);
@@ -234,8 +237,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
             if (expectedCarOptional.isPresent() && customerUserDetails.isPresent()) {
                 totalCost = Math.abs(expectedCarOptional.get().getHourlyCost()
                         * twoLocalDateTimeHourDifference(
-                        orderRequest.getExpectedStartTime(),
-                        orderRequest.getExpectedEndTime()
+                                orderRequest.getExpectedStartTime(), orderRequest.getExpectedEndTime()
                 ));
 
                 orderRequestInfoDtoList.add(new OrderRequestInfoDto(

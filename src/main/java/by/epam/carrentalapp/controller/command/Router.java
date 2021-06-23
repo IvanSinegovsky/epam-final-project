@@ -3,6 +3,9 @@ package by.epam.carrentalapp.controller.command;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * Contains required paths and hrefs to execute {@link Command} response and redirect methods
+ */
 @AllArgsConstructor
 @Getter
 public enum Router {

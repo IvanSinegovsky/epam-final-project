@@ -29,9 +29,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerStatisticsDto getCustomerStatisticsByOrderRequestId(Long orderRequestId) {
-        Integer ridesQuantity;
+        int ridesQuantity;
         Integer carAccidentQuantity;
-        Integer undidOrderRequestQuantity;
+        int undidOrderRequestQuantity;
         Integer rate;
         Double moneySpent;
 

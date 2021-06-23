@@ -1,5 +1,6 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.bean.entity.PromoCode;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.PromoCodeDao;
@@ -39,12 +40,7 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
             ResultSet promoCodeResultSet = preparedStatement.executeQuery();
 
             if (promoCodeResultSet.next()) {
-                Long promoCodeId = promoCodeResultSet.getLong(PROMO_CODE_ID_COLUMN_NAME);
-                String promoCode = promoCodeResultSet.getString(PROMO_CODE_COLUMN_NAME);
-                Integer discount = promoCodeResultSet.getInt(DISCOUNT_COLUMN_NAME);
-                Boolean isActive = promoCodeResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
-
-                promoCodeOptional = Optional.of(new PromoCode(promoCodeId, promoCode, discount, isActive));
+                promoCodeOptional = Optional.of(extractPromoCodeFromResultSet(promoCodeResultSet));
             }
         } catch (SQLException e) {
             LOGGER.error("PromoCodeDaoImpl findByPromoCode(...): cannot extract promoCode from ResultSet");
@@ -57,8 +53,17 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
         return promoCodeOptional;
     }
 
+    private PromoCode extractPromoCodeFromResultSet(ResultSet promoCodeResultSet) throws SQLException {
+        Long promoCodeId = promoCodeResultSet.getLong(PROMO_CODE_ID_COLUMN_NAME);
+        String promoCode = promoCodeResultSet.getString(PROMO_CODE_COLUMN_NAME);
+        Integer discount = promoCodeResultSet.getInt(DISCOUNT_COLUMN_NAME);
+        Boolean isActive = promoCodeResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
+
+        return new PromoCode(promoCodeId, promoCode, discount, isActive);
+    }
+
     @Override
-    public Optional<Long> save(PromoCode promoCodeToSave) {
+    public Optional<Long> save(PromoCode promoCode) {
         Optional<Long> savedPromoCodeId = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -67,12 +72,7 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
                     Statement.RETURN_GENERATED_KEYS
             )) {
 
-            preparedStatement.setString(1, promoCodeToSave.getPromoCode());
-            preparedStatement.setInt(2, promoCodeToSave.getDiscount());
-            preparedStatement.setBoolean(3, promoCodeToSave.getIsActive());
-
-            preparedStatement.executeUpdate();
-            ResultSet promoCodeResultSet = preparedStatement.getGeneratedKeys();
+            ResultSet promoCodeResultSet = insertAndGetGeneratedKey(preparedStatement, promoCode);
 
             if (promoCodeResultSet != null && promoCodeResultSet.next()) {
                 savedPromoCodeId = Optional.of(promoCodeResultSet.getLong(1));
@@ -86,6 +86,17 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
         }
 
         return savedPromoCodeId;
+    }
+
+    private ResultSet insertAndGetGeneratedKey(PreparedStatement preparedStatement, PromoCode promoCode)
+            throws SQLException {
+        preparedStatement.setString(1, promoCode.getPromoCode());
+        preparedStatement.setInt(2, promoCode.getDiscount());
+        preparedStatement.setBoolean(3, promoCode.getIsActive());
+
+        preparedStatement.executeUpdate();
+
+        return preparedStatement.getGeneratedKeys();
     }
 
     @Override
@@ -117,12 +128,7 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
             ResultSet promoCodesResultSet = statement.executeQuery(SELECT_ALL_FROM_PROMO_CODES)) {
 
             while (promoCodesResultSet.next()){
-                Long promoCodeId = promoCodesResultSet.getLong(PROMO_CODE_ID_COLUMN_NAME);
-                String promoCode = promoCodesResultSet.getString(PROMO_CODE_COLUMN_NAME);
-                Integer discount = promoCodesResultSet.getInt(DISCOUNT_COLUMN_NAME);
-                Boolean isActive = promoCodesResultSet.getBoolean(IS_ACTIVE_COLUMN_NAME);
-
-                allPromoCodes.add(new PromoCode(promoCodeId, promoCode, discount, isActive));
+                allPromoCodes.add(extractPromoCodeFromResultSet(promoCodesResultSet));
             }
         } catch (SQLException e) {
             LOGGER.error("PromoCodeDaoImpl findAll(...): cannot extract PromoCode from resultSet");

@@ -2,6 +2,9 @@ package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.dao.*;
 
+/**
+ * ...DAO interface specific implementation provider
+ */
 public class DaoProvider {
     private static CarDao carDao;
     private static UserDao userDao;

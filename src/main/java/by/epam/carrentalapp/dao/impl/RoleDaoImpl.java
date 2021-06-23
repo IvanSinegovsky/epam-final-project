@@ -54,7 +54,6 @@ public class RoleDaoImpl implements RoleDao {
 
             ResultSet roleResultSet = preparedStatement.executeQuery();
             while (roleResultSet.next()) {
-                LOGGER.info("RESULT SET -> " + roleResultSet.getLong(1));
                 roleOptional = roleResultSetToRole(roleResultSet);
             }
         } catch (SQLException e) {

@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contains {@link Command} implementation values by {@link CommandTitle} key
+ */
 @NoArgsConstructor
 public class CommandProvider {
     private static final Map<String, Command> nameToCommand = new HashMap<>();
@@ -39,6 +42,10 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.MAKE_REPAIR_BILL.name(), new MakeRepairBillCommand());
     }
 
+    /**
+     * @param commandTitle title converting to {@link CommandTitle} key
+     * @return {@link Command} implementation values
+     */
     public static Command getCommand(String commandTitle) {
         return nameToCommand.get(commandTitle.toUpperCase());
     }

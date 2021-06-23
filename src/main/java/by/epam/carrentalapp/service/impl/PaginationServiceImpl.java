@@ -13,10 +13,6 @@ public class PaginationServiceImpl implements PaginationService {
     private int elementsOnPage;
     private int elementsTotal;
 
-    public PaginationServiceImpl(int elementsOnPage) {
-        this.elementsOnPage = elementsOnPage;
-    }
-
     public int getOffset(int currentPage) {
         return elementsOnPage * (currentPage - 1);
     }

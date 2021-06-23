@@ -28,18 +28,30 @@ public class AcceptedOrder implements Serializable {
         this.userDetailsId = userDetailsId;
     }
 
-    public static List<AcceptedOrder> valueOf(String[] completedOrderStrings) {
-        List<AcceptedOrder> completedOrders = new ArrayList<>(completedOrderStrings.length);
+    /**
+     * Parses array of AcceptedOrder(converted to String with {@link #toString()} method) instances
+     * into ArrayList of AcceptedOrder objects using {@link #valueOf(String)}, which parses single String value
+     * @param acceptedOrderStrings String array with toString() instances
+     * @return parsed AcceptedOrder ArrayList
+     */
+    public static List<AcceptedOrder> valueOf(String[] acceptedOrderStrings) {
+        List<AcceptedOrder> completedOrders = new ArrayList<>(acceptedOrderStrings.length);
 
-        for (String completedOrderString : completedOrderStrings) {
+        for (String completedOrderString : acceptedOrderStrings) {
             completedOrders.add(AcceptedOrder.valueOf(completedOrderString));
         }
 
         return completedOrders;
     }
 
-    public static AcceptedOrder valueOf(String orderRequestInfoString) {
-        String[] fields = orderRequestInfoString.split(",");
+    /**
+     * Parses AcceptedOrder(converted to String with {@link #toString()} method) instance
+     * into AcceptedOrder object
+     * @param acceptedOrderString single AcceptedOrder converted to String value
+     * @return parsed AcceptedOrder single object
+     */
+    public static AcceptedOrder valueOf(String acceptedOrderString) {
+        String[] fields = acceptedOrderString.split(",");
 
         Long orderId = Long.valueOf(fields[0].substring(indexNumberAfterEqualsChar(fields[0])));
         Double bill = Double.valueOf(fields[1].substring(indexNumberAfterEqualsChar(fields[1])));
@@ -55,8 +67,12 @@ public class AcceptedOrder implements Serializable {
                 orderId, bill, orderRequestId, carId, isPaid, adminUserAcceptedId, userDetailsId
         );
     }
-
-    private static int indexNumberAfterEqualsChar(String value) {
-        return value.indexOf('=') + 1;
+    /**
+     * Finds begin index of single String AcceptedOrder object field
+     * @param fieldKeyAndValue field title = field value parameter
+     * @return value begin index
+     */
+    private static int indexNumberAfterEqualsChar(String fieldKeyAndValue) {
+        return fieldKeyAndValue.indexOf('=') + 1;
     }
 }

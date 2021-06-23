@@ -36,11 +36,10 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
 
     @Override
     public List<CarOccupationDto> getCarOccupationById(Long carId) {
-        List<CarOccupationDto> carOccupationDtoList;
+        List<CarOccupationDto> carOccupationDtoList = new ArrayList<>();
 
         try {
             List<AcceptedOrder> acceptedOrders = acceptedOrderDao.findByCarId(carId);
-            carOccupationDtoList = new ArrayList<>(acceptedOrders.size());
 
             for (AcceptedOrder acceptedOrder : acceptedOrders) {
                 Optional<OrderRequest> orderRequestOptional = orderRequestDao
@@ -73,8 +72,7 @@ public class AcceptedOrderServiceImpl implements AcceptedOrderService {
                 );
                 RateService.changeRateByEvent(RateEvent.CAR_ACCIDENT, acceptedOrder.getUserDetailsId());
 
-                RepairBill repairBill = new RepairBill(acceptedOrder.getOrderId(), bill, adminComment);
-                repairBillDao.save(repairBill);
+                repairBillDao.save(new RepairBill(acceptedOrder.getOrderId(), bill, adminComment));
             }
         } catch (DaoException e) {
             LOGGER.error("AcceptedOrderServiceImpl sendRepairBill(...): DAO cannot save value");

@@ -5,7 +5,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Middleware between Controller servlet and service layer
+ */
 public interface Command {
+    /**
+     * Generates response to execute {@link #forward(String, HttpServletRequest, HttpServletResponse)}
+     * or {@link #redirect(String, HttpServletResponse)} methods
+     */
     void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
     default void forward(String path,

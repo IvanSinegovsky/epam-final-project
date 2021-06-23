@@ -33,12 +33,7 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
                     INSERT_INTO_CUSTOMER_USER_DETAILS,
                     Statement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.setString(1, customerUserDetails.getPassportNumber());
-            preparedStatement.setInt(2, customerUserDetails.getRate());
-            preparedStatement.setLong(3, customerUserDetails.getUserId());
-
-            preparedStatement.executeUpdate();
-            ResultSet userDetailsResultSet = preparedStatement.getGeneratedKeys();
+            ResultSet userDetailsResultSet = insertAndGetGeneratedKey(preparedStatement, customerUserDetails);
 
             if (userDetailsResultSet == null) {
                 throw new DaoException("Cannot insert customerUserDetails record");
@@ -50,6 +45,18 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
             LOGGER.error("CustomerUserDetailsDaoImpl save(...): connection pool crashed");
             throw new DaoException(e);
         }
+    }
+
+    private ResultSet insertAndGetGeneratedKey(PreparedStatement preparedStatement,
+                                               CustomerUserDetails customerUserDetails) throws SQLException {
+
+        preparedStatement.setString(1, customerUserDetails.getPassportNumber());
+        preparedStatement.setInt(2, customerUserDetails.getRate());
+        preparedStatement.setLong(3, customerUserDetails.getUserId());
+
+        preparedStatement.executeUpdate();
+
+        return preparedStatement.getGeneratedKeys();
     }
 
     @Override

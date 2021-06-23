@@ -1,5 +1,6 @@
 package by.epam.carrentalapp.dao.impl;
 
+import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.dao.CarDao;
 import by.epam.carrentalapp.dao.DaoException;
@@ -154,7 +155,7 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public Optional<Long> save(Car carToSave) {
+    public Optional<Long> save(Car car) {
         Optional<Long> savedCarId = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
@@ -163,13 +164,7 @@ public class CarDaoImpl implements CarDao {
                     Statement.RETURN_GENERATED_KEYS
             )) {
 
-            preparedStatement.setString(1, carToSave.getModel());
-            preparedStatement.setString(2, carToSave.getNumber());
-            preparedStatement.setDouble(3, carToSave.getHourlyCost());
-            preparedStatement.setString(4, carToSave.getAssetURL());
-
-            preparedStatement.executeUpdate();
-            ResultSet carResultSet = preparedStatement.getGeneratedKeys();
+            ResultSet carResultSet = insertAndGetGeneratedKey(preparedStatement, car);
 
             if (carResultSet != null && carResultSet.next()) {
                 savedCarId = Optional.of(carResultSet.getLong(1));
@@ -183,5 +178,18 @@ public class CarDaoImpl implements CarDao {
         }
 
         return savedCarId;
+    }
+
+    private ResultSet insertAndGetGeneratedKey(PreparedStatement preparedStatement, Car car)
+            throws SQLException {
+
+        preparedStatement.setString(1, car.getModel());
+        preparedStatement.setString(2, car.getNumber());
+        preparedStatement.setDouble(3, car.getHourlyCost());
+        preparedStatement.setString(4, car.getAssetURL());
+
+        preparedStatement.executeUpdate();
+
+        return preparedStatement.getGeneratedKeys();
     }
 }

@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Controller - main servlet, which depending on the command request parameter executes specific command
+ */
 @WebServlet("/home")
 public class Controller extends HttpServlet {
     private final Logger LOGGER = Logger.getLogger(Controller.class);
@@ -37,6 +40,9 @@ public class Controller extends HttpServlet {
         executeCommand(commandParameter, req, resp);
     }
 
+    /**
+     * @param command - request parameter value used like key for getting {@link Command} from {@link CommandProvider}
+     */
     private void executeCommand(String command, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Command currentCommand = CommandProvider.getCommand(command);

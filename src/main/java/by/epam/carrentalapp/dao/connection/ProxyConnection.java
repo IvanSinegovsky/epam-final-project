@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * Implementation of Proxy design pattern for overriding {@link #close()} method
+ */
 public class ProxyConnection implements Connection {
 
     private Connection connection;
@@ -13,6 +16,9 @@ public class ProxyConnection implements Connection {
         this.connection = connection;
     }
 
+    /**
+     * Overriding of super method not to close connection, but return it tp connection pool
+     */
     @Override
     public void close() throws SQLException {
         ConnectionPool.getInstance().releaseConnection(this);

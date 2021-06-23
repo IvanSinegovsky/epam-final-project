@@ -36,7 +36,6 @@ public class CarCatalogCommand implements Command {
         paginationService = ServiceProvider.getPaginationService();
     }
 
-    //todo change by offset db reading
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

@@ -54,15 +54,18 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String emailToFind) {
-        Optional<User> userOptional;
+        Optional<User> userOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     SELECT_ALL_FROM_USERS_WHERE_EMAIL_EQUALS)) {
 
             preparedStatement.setString(1, emailToFind);
+            ResultSet userResultSet = preparedStatement.executeQuery();
 
-            userOptional = extractUserFromResultSet(preparedStatement.executeQuery());
+            if (userResultSet.next()) {
+                userOptional = Optional.of(extractUserFromResultSet(userResultSet));
+            }
         } catch (SQLException e) {
             LOGGER.error("UserDaoImpl findByEmail(...): cannot extract user from ResultSet");
             throw new DaoException(e);
@@ -108,15 +111,18 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByUserId(Long userIdToFind) {
-        Optional<User> userOptional;
+        Optional<User> userOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     SELECT_ALL_FROM_USERS_WHERE_USER_ID_EQUALS)) {
 
             preparedStatement.setLong(1, userIdToFind);
+            ResultSet userResultSet = preparedStatement.executeQuery();
 
-            userOptional = extractUserFromResultSet(preparedStatement.executeQuery());
+            if (userResultSet.next()) {
+                userOptional = Optional.of(extractUserFromResultSet(userResultSet));
+            }
         } catch (SQLException e) {
             LOGGER.error("UserDaoImpl findByEmail(...): cannot extract user from ResultSet");
             throw new DaoException(e);
@@ -128,19 +134,13 @@ public class UserDaoImpl implements UserDao {
         return userOptional;
     }
 
-    private Optional<User> extractUserFromResultSet(ResultSet userResultSet) throws SQLException {
-        Optional<User> userOptional = Optional.empty();
+    private User extractUserFromResultSet(ResultSet userResultSet) throws SQLException {
+        Long userId = userResultSet.getLong(USER_ID_COLUMN_NAME);
+        String email = userResultSet.getString(EMAIL_COLUMN_NAME);
+        String password = userResultSet.getString(PASSWORD_COLUMN_NAME);
+        String name = userResultSet.getString(NAME_COLUMN_NAME);
+        String lastname = userResultSet.getString(LASTNAME_COLUMN_NAME);
 
-        if (userResultSet.next()) {
-            Long userId = userResultSet.getLong(USER_ID_COLUMN_NAME);
-            String email = userResultSet.getString(EMAIL_COLUMN_NAME);
-            String password = userResultSet.getString(PASSWORD_COLUMN_NAME);
-            String name = userResultSet.getString(NAME_COLUMN_NAME);
-            String lastname = userResultSet.getString(LASTNAME_COLUMN_NAME);
-
-            userOptional = Optional.of(new User(userId, name, lastname, email, password));
-        }
-
-        return userOptional;
+        return new User(userId, name, lastname, email, password);
     }
 }
