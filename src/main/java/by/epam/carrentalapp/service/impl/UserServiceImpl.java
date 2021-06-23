@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private Long saveUser(String name, String lastname, String email, String encodedPassword){
-        Long registeredUserId = null;
+        Long registeredUserId;
 
         try {
             User customerUser = new User(name, lastname, email, encodedPassword);

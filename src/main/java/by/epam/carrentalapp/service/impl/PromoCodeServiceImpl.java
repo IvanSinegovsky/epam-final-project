@@ -6,6 +6,7 @@ import by.epam.carrentalapp.dao.PromoCodeDao;
 import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.service.PromoCodeService;
 import by.epam.carrentalapp.service.ServiceException;
+import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -23,6 +24,10 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     @Override
     public void addPromoCode(PromoCode promoCode) {
         try {
+            if (!Validator.validatePromoCode(promoCode)) {
+                throw new ServiceException("Invalid promo code data");
+            }
+
             Optional<Long> savedPromoCodeIdOptional = promoCodeDao.save(promoCode);
 
             if (savedPromoCodeIdOptional.isEmpty()) {

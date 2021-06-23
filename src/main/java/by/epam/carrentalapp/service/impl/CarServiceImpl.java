@@ -6,6 +6,7 @@ import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.ServiceException;
+import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -50,6 +51,10 @@ public class CarServiceImpl implements CarService {
     @Override
     public void addCar(Car car) {
         try {
+            if (!Validator.validateCar(car)) {
+                throw new ServiceException("Invalid car data");
+            }
+
             Optional<Long> savedCarIdOptional = carDao.save(car);
 
             if (savedCarIdOptional.isEmpty()) {

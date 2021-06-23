@@ -10,6 +10,7 @@ import by.epam.carrentalapp.service.impl.notification.EmailSender;
 import by.epam.carrentalapp.service.impl.notification.email.template.AcceptedOrderEmail;
 import by.epam.carrentalapp.service.impl.rate.RateEvent;
 import by.epam.carrentalapp.service.impl.rate.RateService;
+import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;
 
 import java.time.Duration;
@@ -144,12 +145,13 @@ public class OrderRequestServiceImpl implements OrderRequestService {
     public Optional<OrderRequest> saveOrderRequest(Long carId, Long userId,
                                  LocalDateTime expectedStartTime, LocalDateTime expectedEndTime,
                                  String promoCode) {
-        Optional<OrderRequest> orderRequestOptional = Optional.empty();
+        OrderRequest orderRequestToSave;
+        Optional<OrderRequest> orderRequestOptional;
 
         try {
             Long customerUserDetailsId = null;
             Long promoCodeId = null;
-            Optional<PromoCode> promoCodeOptional = Optional.empty();
+            Optional<PromoCode> promoCodeOptional;
 
             if (promoCode == null) {
                 promoCodeId = getZeroDiscountPromoCodeId();
@@ -167,7 +169,7 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                 customerUserDetailsId = customerUserDetailsOptional.get().getUserDetailsId();
             }
 
-            Optional<Long> savedOrderRequestId = orderRequestDao.save(new OrderRequest(
+            orderRequestToSave = new OrderRequest(
                     expectedStartTime,
                     expectedEndTime,
                     carId,
@@ -175,7 +177,13 @@ public class OrderRequestServiceImpl implements OrderRequestService {
                     true,
                     false,
                     promoCodeId
-            ));
+            );
+
+            if (!Validator.validateOrderRequest(orderRequestToSave)) {
+                throw new ServiceException("Invalid order request data");
+            }
+
+            Optional<Long> savedOrderRequestId = orderRequestDao.save(orderRequestToSave);
             orderRequestOptional = orderRequestDao.findByOrderRequestId(savedOrderRequestId.orElseThrow(
                     () -> new ServiceException("Something with saving went wrong")
             ));
@@ -224,11 +232,11 @@ public class OrderRequestServiceImpl implements OrderRequestService {
             expectedCarOptional = carDao.findById(orderRequest.getExpectedCarId());
 
             if (expectedCarOptional.isPresent() && customerUserDetails.isPresent()) {
-                totalCost = expectedCarOptional.get().getHourlyCost()
+                totalCost = Math.abs(expectedCarOptional.get().getHourlyCost()
                         * twoLocalDateTimeHourDifference(
                         orderRequest.getExpectedStartTime(),
                         orderRequest.getExpectedEndTime()
-                );
+                ));
 
                 orderRequestInfoDtoList.add(new OrderRequestInfoDto(
                         orderRequest,
