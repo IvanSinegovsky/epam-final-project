@@ -18,35 +18,141 @@
     <fmt:message bundle="${loc}" key="guest.car-catalog.order-popup.choose-end-date-and-time-sign" var="chooseEndDateAndTimeSign"/>
     <fmt:message bundle="${loc}" key="guest.car-catalog.order-popup.make-an-order-request-button" var="makeAnOrderRequestButton"/>
 </head>
-<body>
         <jsp:useBean id="all_cars" scope="request" type="java.util.List"/>
-
-        <div class="card-group">
-        <c:forEach items="${all_cars}" var="car" varStatus="counter">
-            <div class="card">
-            <img class="card-img-top" src="${car.assetURL}" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">${car.model}</h5>
-                <p class="card-text">${car.number}</p>
-                <p class="card-text"><small class="text-muted">${car.hourlyCost}</small></p>
+        <div class="row" style="width: 1100px;margin-left: 70px;margin-top: 15px">
+            <c:if test="${all_cars.size() > 0}">
+            <div class="col-sm-4">
+                <div class="card">
+                    <img class="card-img-top" src="${all_cars.get(0).assetURL}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${all_cars.get(0).model}</h5>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(0).hourlyCost}</small></p>
+                        <c:if test="${sessionScope.isCustomer == true}">
+                            <button type="button" class="btn btn-primary">
+                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(0).carId}"><c:out value="${makeAnOrderButton}"/></a>
+                            </button>
+                        </c:if>
+                        <c:if test="${sessionScope.isCustomer != true}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                                <c:out value="${makeAnOrderButton}"/>
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
             </div>
-                <c:if test="${sessionScope.isCustomer == true}">
-                    <button type="button" class="btn btn-primary">
-                        <a href="home?command=CAR_OCCUPATION&car_id_to_check=${car.carId}"><c:out value="${makeAnOrderButton}"/></a>
-                    </button>
-                </c:if>
-                <c:if test="${sessionScope.isCustomer != true}">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
-                        <c:out value="${makeAnOrderButton}"/>
-                    </button>
-                </c:if>
+            </c:if>
+            <c:if test="${all_cars.size() > 1}">
+            <div class="col-sm-4">
+                <div class="card">
+                    <img class="card-img-top" src="${all_cars.get(1).assetURL}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${all_cars.get(1).model}</h5>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(1).hourlyCost}</small></p>
+                        <c:if test="${sessionScope.isCustomer == true}">
+                            <button type="button" class="btn btn-primary">
+                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(1).carId}"><c:out value="${makeAnOrderButton}"/></a>
+                            </button>
+                        </c:if>
+                        <c:if test="${sessionScope.isCustomer != true}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                                <c:out value="${makeAnOrderButton}"/>
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
             </div>
-                <c:if test="${counter.index % 2 == 1}">
-
-        </div><div class="card-group"></c:if>
-        </c:forEach>
+            </c:if>
+            <c:if test="${all_cars.size() > 2}">
+            <div class="col-sm-4">
+                <div class="card">
+                    <img class="card-img-top" src="${all_cars.get(2).assetURL}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${all_cars.get(2).model}</h5>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(2).hourlyCost}</small></p>
+                        <c:if test="${sessionScope.isCustomer == true}">
+                            <button type="button" class="btn btn-primary">
+                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(2).carId}"><c:out value="${makeAnOrderButton}"/></a>
+                            </button>
+                        </c:if>
+                        <c:if test="${sessionScope.isCustomer != true}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                                <c:out value="${makeAnOrderButton}"/>
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+            </c:if>
+        </div>
+        <br/>
+        <div class="row" style="width: 1100px;margin-left: 70px;">
+            <c:if test="${all_cars.size() > 3}">
+            <div class="col-sm-4">
+                <div class="card">
+                    <img class="card-img-top" src="${all_cars.get(3).assetURL}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${all_cars.get(3).model}</h5>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(3).hourlyCost}</small></p>
+                        <c:if test="${sessionScope.isCustomer == true}">
+                            <button type="button" class="btn btn-primary">
+                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(3).carId}"><c:out value="${makeAnOrderButton}"/></a>
+                            </button>
+                        </c:if>
+                        <c:if test="${sessionScope.isCustomer != true}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                                <c:out value="${makeAnOrderButton}"/>
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+            </c:if>
+            <c:if test="${all_cars.size() > 4}">
+            <div class="col-sm-4">
+                <div class="card">
+                    <img class="card-img-top" src="${all_cars.get(4).assetURL}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${all_cars.get(4).model}</h5>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(4).hourlyCost}</small></p>
+                        <c:if test="${sessionScope.isCustomer == true}">
+                            <button type="button" class="btn btn-primary">
+                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(4).carId}"><c:out value="${makeAnOrderButton}"/></a>
+                            </button>
+                        </c:if>
+                        <c:if test="${sessionScope.isCustomer != true}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                                <c:out value="${makeAnOrderButton}"/>
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+            </c:if>
+            <c:if test="${all_cars.size() > 5}">
+            <div class="col-sm-4">
+                <div class="card">
+                    <img class="card-img-top" src="${all_cars.get(5).assetURL}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${all_cars.get(5).model}</h5>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(5).hourlyCost}</small></p>
+                        <c:if test="${sessionScope.isCustomer == true}">
+                            <button type="button" class="btn btn-primary">
+                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(5).carId}"><c:out value="${makeAnOrderButton}"/></a>
+                            </button>
+                        </c:if>
+                        <c:if test="${sessionScope.isCustomer != true}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                                <c:out value="${makeAnOrderButton}"/>
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+            </c:if>
         </div>
 
-        <car:pagination command="${command}" currentPage="${currentPage}" lastPage="${lastPage}"/>
+        <div class="d-flex justify-content-center"style="margin-top: 20px;">
+            <car:pagination command="${command}" currentPage="${currentPage}" lastPage="${lastPage}"/>
+        </div>
 </body>
 </html>

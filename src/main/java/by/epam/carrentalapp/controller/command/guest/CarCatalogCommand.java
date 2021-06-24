@@ -28,7 +28,7 @@ public class CarCatalogCommand implements Command {
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
     private final String COMMAND_REQUEST_PARAMETER_NAME = "command";
 
-    private final int CARS_ON_PAGE_QUANTITY = 2;
+    private final int CARS_ON_PAGE_QUANTITY = 6;
 
     public CarCatalogCommand() {
         carService = ServiceProvider.getCarService();
