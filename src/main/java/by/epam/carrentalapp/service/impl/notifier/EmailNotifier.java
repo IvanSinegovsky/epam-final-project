@@ -1,9 +1,9 @@
-package by.epam.carrentalapp.service.impl.notification;
+package by.epam.carrentalapp.service.impl.notifier;
 
 import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.CarServiceImpl;
-import by.epam.carrentalapp.service.impl.notification.email.Email;
+import by.epam.carrentalapp.service.impl.notifier.email.Email;
 import org.apache.log4j.Logger;
 
 import javax.mail.*;
@@ -12,7 +12,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-public class EmailNotification {
+public class EmailNotifier {
     private static final Logger LOGGER = Logger.getLogger(CarServiceImpl.class);
 
     private static final String EMAIL_CONFIG_PATH = "email";

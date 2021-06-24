@@ -1,7 +1,6 @@
 package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.service.PaginationService;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

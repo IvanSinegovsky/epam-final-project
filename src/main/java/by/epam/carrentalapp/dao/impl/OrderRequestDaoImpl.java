@@ -1,7 +1,6 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
-import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.bean.entity.OrderRequest;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.OrderRequestDao;

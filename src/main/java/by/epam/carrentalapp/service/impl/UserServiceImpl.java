@@ -2,17 +2,17 @@ package by.epam.carrentalapp.service.impl;
 
 import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
-import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.dao.*;
+import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
-import by.epam.carrentalapp.service.impl.validator.Validator;
 import org.apache.log4j.Logger;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
@@ -54,59 +54,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerCustomer(String name, String lastname, String email, String password, String passportNumber) {
         try {
-            checkEmailExistence(email);
-            String encodedPassword = BCryptPasswordEncoder.encode(password);
-            Long registeredUserId = saveUser(name, lastname, email, encodedPassword);
-            saveCustomerUserDetails(passportNumber, registeredUserId);
-            saveCustomerUserRole(registeredUserId);
+            if (userDao.findByEmail(email).isPresent()) {
+                throw new ServiceException("User with such email already exists");
+            }
+
+            customerUserDetailsDao.registerCustomer(
+                    new User(name, lastname, email, BCryptPasswordEncoder.encode(password)),
+                    new CustomerUserDetails(passportNumber, INITIAL_CUSTOMER_RATE),
+                    INITIAL_CUSTOMER_ROLE
+            );
         } catch (DaoException e) {
             LOGGER.error("UserServiceImpl registerCustomer(...): DAO cannot execute operations");
             throw new ServiceException(e);
-        }
-    }
-
-    private Long saveUser(String name, String lastname, String email, String encodedPassword){
-        Long registeredUserId;
-
-        try {
-            User customerUser = new User(name, lastname, email, encodedPassword);
-
-            if (!Validator.validateUser(customerUser)) {
-                throw new ServiceException("User's credentials are invalid");
-            }
-
-            registeredUserId = userDao.save(customerUser);
-        } catch (DaoException e) {
-            LOGGER.error("UserServiceImpl saveUser(...): DAO cannot execute operations");
+        } catch (ConnectionException | SQLException e) {
+            LOGGER.error("UserServiceImpl registerCustomer(...): DAO error. Check connection and SQL syntax");
             throw new ServiceException(e);
-        }
-
-        return registeredUserId;
-    }
-
-    private void saveCustomerUserDetails(String passportNumber, Long userId) {
-        CustomerUserDetails customerUserDetails = new CustomerUserDetails(passportNumber, INITIAL_CUSTOMER_RATE, userId);
-
-        if (!Validator.validateCustomerUserDetails(customerUserDetails)) {
-            throw new ServiceException("Cannot save customerUserDetails. Customer's credentials are invalid");
-        }
-
-        customerUserDetailsDao.save(customerUserDetails);
-    }
-
-    private void saveCustomerUserRole(Long userId) {
-        Optional<Role> role = roleDao.findByTitle(INITIAL_CUSTOMER_ROLE);
-
-        if (role.isPresent()) {
-            usersRolesDao.save(userId, role.get().getRoleId());
-        } else {
-            throw new ServiceException("Cannot find role by name " + INITIAL_CUSTOMER_ROLE + " in DAO layer");
-        }
-    }
-
-    private void checkEmailExistence(String email) {
-        if (userDao.findByEmail(email).isPresent()) {
-            throw new ServiceException("User with such email already exists");
         }
     }
 }

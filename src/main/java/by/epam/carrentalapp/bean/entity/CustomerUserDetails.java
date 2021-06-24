@@ -20,4 +20,9 @@ public class CustomerUserDetails implements Serializable {
         this.rate = rate;
         this.userId = userId;
     }
+
+    public CustomerUserDetails(String passportNumber, Integer rate) {
+        this.passportNumber = passportNumber;
+        this.rate = rate;
+    }
 }

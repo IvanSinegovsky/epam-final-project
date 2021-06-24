@@ -1,6 +1,6 @@
-package by.epam.carrentalapp.service.impl.notification.email.template;
+package by.epam.carrentalapp.service.impl.notifier.email.template;
 
-import by.epam.carrentalapp.service.impl.notification.email.Email;
+import by.epam.carrentalapp.service.impl.notifier.email.Email;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

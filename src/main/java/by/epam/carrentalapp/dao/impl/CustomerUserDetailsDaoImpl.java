@@ -1,8 +1,10 @@
 package by.epam.carrentalapp.dao.impl;
 
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.DaoException;
+import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
 import by.epam.carrentalapp.dao.connection.ConnectionPool;
 import by.epam.carrentalapp.dao.connection.ProxyConnection;
@@ -25,6 +27,14 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
             "SELECT * FROM customer_user_details WHERE user_id = ?;";
     private final String UPDATE_SET_RATE_WHERE_USER_DETAILS_ID_EQUALS =
             "UPDATE customer_user_details SET rate = ? WHERE user_details_id = ?;";
+
+
+    private final String INSERT_INTO_USERS =
+            "INSERT INTO users(email, password, name, lastname) VALUES (?,?,?,?);";
+    private final String SELECT_ALL_FROM_ROLES_WHERE_ROLE_TITLE_EQUALS =
+            "SELECT * FROM roles WHERE role_title = ?;";
+    private final String INSERT_INTO_USERS_ROLES =
+            "INSERT INTO users_roles (users_user_id, roles_role_id) VALUES (?, ?);";
 
     @Override
     public void save(CustomerUserDetails customerUserDetails) {
@@ -136,5 +146,78 @@ public class CustomerUserDetailsDaoImpl implements CustomerUserDetailsDao {
             LOGGER.error("CustomerUserDetailsDaoImpl setRateById(...): connection pool crashed");
             throw new DaoException(e);
         }
+    }
+
+    public void registerCustomer(User userToSave, CustomerUserDetails customerUserDetails, String roleTitleToFind)
+            throws ConnectionException, SQLException {
+        ProxyConnection connection = connection = ConnectionPool.getInstance().getConnection();
+
+        try(PreparedStatement saveUserPreparedStatement = connection
+                .prepareStatement(INSERT_INTO_USERS, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement saveDetailsPreparedStatement = connection
+                    .prepareStatement(INSERT_INTO_CUSTOMER_USER_DETAILS, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement findRolePreparedStatement = connection
+                    .prepareStatement(SELECT_ALL_FROM_ROLES_WHERE_ROLE_TITLE_EQUALS);
+            PreparedStatement saveUserRolePreparedStatement = connection
+                    .prepareStatement(INSERT_INTO_USERS_ROLES, Statement.RETURN_GENERATED_KEYS)) {
+
+            connection.setAutoCommit(false);
+
+            ResultSet savedUserResultSet = insertUserAndGetGeneratedKey(saveUserPreparedStatement, userToSave);
+            long savedUserId;
+
+            if (savedUserResultSet != null && savedUserResultSet.next()) {
+                savedUserId = savedUserResultSet.getLong(1);
+            } else {
+                throw new DaoException("Cannot insert user record");
+            }
+
+            customerUserDetails.setUserId(savedUserId);
+            insertAndGetGeneratedKey(saveDetailsPreparedStatement, customerUserDetails);
+
+            Long roleId = findRoleId(findRolePreparedStatement, roleTitleToFind);
+
+            insertUserRoleAndGetGeneratedKey(saveUserRolePreparedStatement, savedUserId, roleId);
+
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            connection.setAutoCommit(true);
+            connection.close();
+        }
+    }
+
+    private ResultSet insertUserAndGetGeneratedKey(PreparedStatement saveDetailsPreparedStatement,
+                                                   User userToSave) throws SQLException {
+        saveDetailsPreparedStatement.setString(1, userToSave.getEmail());
+        saveDetailsPreparedStatement.setString(2, userToSave.getPassword());
+        saveDetailsPreparedStatement.setString(3, userToSave.getName());
+        saveDetailsPreparedStatement.setString(4, userToSave.getLastname());
+
+        saveDetailsPreparedStatement.executeUpdate();
+
+        return saveDetailsPreparedStatement.getGeneratedKeys();
+    }
+
+    private Long findRoleId(PreparedStatement findRolePreparedStatement, String roleTitleToFind) throws SQLException {
+        findRolePreparedStatement.setString(1, roleTitleToFind);
+        ResultSet roleResultSet = findRolePreparedStatement.executeQuery();
+
+        if (roleResultSet.next()) {
+            return roleResultSet.getLong(RoleDao.ROLE_ID_COLUMN_NAME);
+        } else {
+            throw new DaoException("Cannot find role by title " + roleTitleToFind);
+        }
+    }
+
+    private ResultSet insertUserRoleAndGetGeneratedKey(PreparedStatement saveUserRolePreparedStatement,
+                                                       Long userId,
+                                                       Long roleId) throws SQLException {
+        saveUserRolePreparedStatement.setLong(1, userId);
+        saveUserRolePreparedStatement.setLong(2, roleId);
+
+        saveUserRolePreparedStatement.executeUpdate();
+
+        return saveUserRolePreparedStatement.getGeneratedKeys();
     }
 }

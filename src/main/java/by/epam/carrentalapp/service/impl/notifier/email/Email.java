@@ -1,4 +1,4 @@
-package by.epam.carrentalapp.service.impl.notification.email;
+package by.epam.carrentalapp.service.impl.notifier.email;
 
 public interface Email {
     String MESSAGE_SUBJECT = "PICKUP request";

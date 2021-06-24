@@ -1,11 +1,11 @@
-package by.epam.carrentalapp.service.impl.notification;
+package by.epam.carrentalapp.service.impl.notifier;
 
 import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
 import by.epam.carrentalapp.dao.UserDao;
 import by.epam.carrentalapp.dao.impl.DaoProvider;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.notification.email.Email;
+import by.epam.carrentalapp.service.impl.notifier.email.Email;
 
 public class EmailSender {
     private static final CustomerUserDetailsDao customerUserDetailsDao = DaoProvider.getCustomerUserDetailsDao();
@@ -23,6 +23,6 @@ public class EmailSender {
                 )
         );
 
-        EmailNotification.sendMessage(email, user);
+        EmailNotifier.sendMessage(email, user);
     }
 }

@@ -1,7 +1,10 @@
 package by.epam.carrentalapp.dao;
 
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
+import by.epam.carrentalapp.bean.entity.user.User;
+import by.epam.carrentalapp.dao.connection.ConnectionException;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public interface CustomerUserDetailsDao {
@@ -14,4 +17,6 @@ public interface CustomerUserDetailsDao {
     Optional<CustomerUserDetails> findById(Long userDetailsIdToFind);
     Optional<CustomerUserDetails> findByUserId(Long userIdToFind);
     void setRateById(double rate, Long userDetailsId);
+    void registerCustomer(User userToSave, CustomerUserDetails customerUserDetails, String roleTitleToFind)
+            throws ConnectionException, SQLException;
 }
