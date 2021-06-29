@@ -2,6 +2,9 @@ package by.epam.carrentalapp.controller;
 
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.CommandProvider;
+import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.JavaConfig;
+import by.epam.carrentalapp.ioc.ObjectFactory;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
@@ -19,25 +22,31 @@ import java.io.IOException;
 public class Controller extends HttpServlet {
     private final Logger LOGGER = Logger.getLogger(Controller.class);
 
+    private final String APPLICATION_PACKAGE_TO_SCAN = "by.epam.carrentalapp";
+
     @Override
     public void init(ServletConfig config) throws ServletException {
+        initializeApplicationContext();
         super.init(config);
+    }
+
+    private void initializeApplicationContext() {
+        JavaConfig applicationConfig = new JavaConfig(APPLICATION_PACKAGE_TO_SCAN);
+        ApplicationContext.setConfig(applicationConfig);
+        ObjectFactory objectFactory = new ObjectFactory();
+        ApplicationContext.setFactory(objectFactory);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setLocaleAttributeToSession(req);
-        String commandParameter = req.getParameter("command");
-        LOGGER.info("GET command -> " + commandParameter);
-        executeCommand(commandParameter, req, resp);
+        executeCommand(req.getParameter("command"), req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setLocaleAttributeToSession(req);
-        String commandParameter = req.getParameter("command");
-        LOGGER.info(" POST command -> " + commandParameter);
-        executeCommand(commandParameter, req, resp);
+        executeCommand(req.getParameter("command"), req, resp);
     }
 
     /**

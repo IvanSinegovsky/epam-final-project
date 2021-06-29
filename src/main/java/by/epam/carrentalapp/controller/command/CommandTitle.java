@@ -14,7 +14,6 @@ public enum CommandTitle {
     CAR_CATALOG(RoleName.ALL),
     GO_TO_REGISTER(RoleName.ALL),
     CAR_OCCUPATION(RoleName.ALL),
-    LOGIN_AND_MAKE_ORDER(RoleName.ALL),
 
     LOGOUT(RoleName.CUSTOMER),
     MAKE_ORDER_REQUEST(RoleName.CUSTOMER),

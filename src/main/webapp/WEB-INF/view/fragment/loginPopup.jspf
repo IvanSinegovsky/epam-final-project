@@ -7,7 +7,7 @@
 <fmt:message bundle="${loc}" key="guest.login.not-registered-yet" var="notRegisteredYetSign"/>
 <fmt:message bundle="${loc}" key="guest.login.register-reference" var="registerReferenceSign"/>
 
-<div class="modal fade" id="makeOrderRequestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,7 +18,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="http://localhost:8080/home?command=LOGIN_AND_MAKE_ORDER&car_id_to_check=${car.carId}">
+            <form method="POST" action="http://localhost:8080/home?command=LOGIN">
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>

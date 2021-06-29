@@ -7,8 +7,8 @@
 <head>
     <title>Car catalog</title>
     <%@ include file="/WEB-INF/view/fragment/navbar.jspf"%>
-    <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
     <%@ include file="/WEB-INF/view/fragment/bootstrapImport.jspf"%>
+    <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
 
     <fmt:setLocale value="${sessionScope.local}"/>
     <fmt:setBundle basename="resources" var="loc"/>
@@ -33,7 +33,8 @@
                             </button>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                            <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -54,7 +55,7 @@
                             </button>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -75,7 +76,8 @@
                             </button>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                            <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -99,7 +101,8 @@
                             </button>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                            <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -120,7 +123,8 @@
                             </button>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                            <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -141,7 +145,8 @@
                             </button>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeOrderRequestModal">
+                            <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>

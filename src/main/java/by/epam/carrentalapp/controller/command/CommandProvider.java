@@ -20,11 +20,6 @@ public class CommandProvider {
     private static final Map<String, Command> nameToCommand = new HashMap<>();
 
     static {
-        JavaConfig applicationConfig = new JavaConfig("by.epam.carrentalapp");
-        ApplicationContext context = new ApplicationContext(applicationConfig);
-        ObjectFactory objectFactory = new ObjectFactory();
-        ApplicationContext.setFactory(objectFactory);
-
         nameToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
         nameToCommand.put(CommandTitle.REGISTER.name(), new RegisterCommand());
         nameToCommand.put(CommandTitle.HOME.name(), new HomeCommand());
@@ -35,7 +30,6 @@ public class CommandProvider {
         nameToCommand.put(CommandTitle.ACCEPT_ORDER.name(), new AcceptOrderCommand());
         nameToCommand.put(CommandTitle.REJECT_ORDER.name(), new RejectOrderCommand());
         nameToCommand.put(CommandTitle.CAR_OCCUPATION.name(), new CarOccupationCommand());
-        nameToCommand.put(CommandTitle.LOGIN_AND_MAKE_ORDER.name(), new LoginAndMakeOrderCommand());
         nameToCommand.put(CommandTitle.MAKE_ORDER_REQUEST.name(), new MakeOrderRequestCommand());
         nameToCommand.put(CommandTitle.GO_TO_REGISTER.name(), new GoToRegisterCommand());
         nameToCommand.put(CommandTitle.ADD_CAR.name(), new AddCarCommand());

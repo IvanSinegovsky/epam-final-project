@@ -15,6 +15,7 @@ public class ApplicationContext {
     private static ObjectFactory factory;
     private static Map<Class, Object> cache = new ConcurrentHashMap<>();
     @Getter
+    @Setter
     private static Config config;
 
     public ApplicationContext(Config config) {
