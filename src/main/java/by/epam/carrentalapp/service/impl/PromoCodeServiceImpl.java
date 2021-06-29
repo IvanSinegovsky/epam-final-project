@@ -3,23 +3,22 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.bean.entity.PromoCode;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.PromoCodeDao;
-import by.epam.carrentalapp.dao.impl.DaoProvider;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.PromoCodeService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.validator.Validator;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor
 public class PromoCodeServiceImpl implements PromoCodeService {
     private final Logger LOGGER = Logger.getLogger(PromoCodeServiceImpl.class);
 
-    private final PromoCodeDao promoCodeDao;
-
-    public PromoCodeServiceImpl() {
-        promoCodeDao = DaoProvider.getPromoCodeDao();
-    }
+    @Autowired
+    private PromoCodeDao promoCodeDao;
 
     @Override
     public void addPromoCode(PromoCode promoCode) {

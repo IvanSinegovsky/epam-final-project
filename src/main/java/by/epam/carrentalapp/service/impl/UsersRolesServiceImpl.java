@@ -4,25 +4,24 @@ import by.epam.carrentalapp.bean.entity.Role;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.RoleDao;
 import by.epam.carrentalapp.dao.UsersRolesDao;
-import by.epam.carrentalapp.dao.impl.DaoProvider;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UsersRolesService;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor
 public class UsersRolesServiceImpl implements UsersRolesService {
     private final Logger LOGGER = Logger.getLogger(UsersRolesServiceImpl.class);
 
-    private final RoleDao roleDao;
-    private final UsersRolesDao usersRolesDao;
-
-    public UsersRolesServiceImpl() {
-        roleDao = DaoProvider.getRoleDao();
-        usersRolesDao = DaoProvider.getUsersRolesDao();
-    }
+    @Autowired
+    private RoleDao roleDao;
+    @Autowired
+    private UsersRolesDao usersRolesDao;
 
     @Override
     public List<Role> getAllUserRoles(Long userId) {

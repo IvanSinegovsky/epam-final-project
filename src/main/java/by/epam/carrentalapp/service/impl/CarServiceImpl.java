@@ -3,22 +3,22 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.dao.CarDao;
 import by.epam.carrentalapp.dao.DaoException;
-import by.epam.carrentalapp.dao.impl.DaoProvider;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.validator.Validator;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor
 public class CarServiceImpl implements CarService {
     private final Logger LOGGER = Logger.getLogger(CarServiceImpl.class);
-    private final CarDao carDao;
 
-    public CarServiceImpl() {
-        carDao = DaoProvider.getCarDao();
-    }
+    @Autowired
+    private CarDao carDao;
 
     @Override
     public List<Car> getAllCars() {

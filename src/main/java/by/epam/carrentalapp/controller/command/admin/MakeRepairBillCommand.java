@@ -5,9 +5,9 @@ import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
+import by.epam.carrentalapp.ioc.ApplicationContext;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -27,7 +27,7 @@ public class MakeRepairBillCommand implements Command {
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
 
     public MakeRepairBillCommand() {
-        acceptedOrderService = ServiceProvider.getAcceptedOrderService();
+        acceptedOrderService = ApplicationContext.getObject(AcceptedOrderService.class);
     }
 
     @Override

@@ -3,7 +3,7 @@ package by.epam.carrentalapp.service.impl;
 import by.epam.carrentalapp.bean.dto.OrderRequestInfoDto;
 import by.epam.carrentalapp.bean.entity.*;
 import by.epam.carrentalapp.dao.*;
-import by.epam.carrentalapp.dao.impl.DaoProvider;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.notifier.EmailSender;
@@ -11,6 +11,7 @@ import by.epam.carrentalapp.service.impl.notifier.email.template.AcceptedOrderEm
 import by.epam.carrentalapp.service.impl.rate.RateEvent;
 import by.epam.carrentalapp.service.impl.rate.RateService;
 import by.epam.carrentalapp.service.impl.validator.Validator;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
 import java.time.Duration;
@@ -19,28 +20,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor
 public class OrderRequestServiceImpl implements OrderRequestService {
     private final Logger LOGGER = Logger.getLogger(OrderRequestServiceImpl.class);
 
     private final String ZERO_DISCOUNT_PROMO_CODE = "ZERODISCOUNT";
 
-    private final OrderRequestDao orderRequestDao;
-    private final CarDao carDao;
-    private final CustomerUserDetailsDao customerUserDetailsDao;
-    private final AcceptedOrderDao acceptedOrderDao;
-    private final RejectedOrderDao rejectedOrderDao;
-    private final PromoCodeDao promoCodeDao;
-    private final UserDao userDao;
-
-    public OrderRequestServiceImpl() {
-        orderRequestDao = DaoProvider.getOrderRequestDao();
-        carDao = DaoProvider.getCarDao();
-        customerUserDetailsDao = DaoProvider.getCustomerUserDetailsDao();
-        acceptedOrderDao = DaoProvider.getAcceptedOrderDao();
-        rejectedOrderDao = DaoProvider.getRejectedOrderDao();
-        promoCodeDao = DaoProvider.getPromoCodeDao();
-        userDao = DaoProvider.getUserDao();
-    }
+    @Autowired
+    private OrderRequestDao orderRequestDao;
+    @Autowired
+    private CarDao carDao;
+    @Autowired
+    private CustomerUserDetailsDao customerUserDetailsDao;
+    @Autowired
+    private AcceptedOrderDao acceptedOrderDao;
+    @Autowired
+    private RejectedOrderDao rejectedOrderDao;
+    @Autowired
+    private PromoCodeDao promoCodeDao;
 
     @Override
     public List<OrderRequestInfoDto> getActiveOrderRequestsInformation() {

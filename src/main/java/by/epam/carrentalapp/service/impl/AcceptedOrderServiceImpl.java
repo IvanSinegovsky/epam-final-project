@@ -8,31 +8,30 @@ import by.epam.carrentalapp.dao.AcceptedOrderDao;
 import by.epam.carrentalapp.dao.DaoException;
 import by.epam.carrentalapp.dao.OrderRequestDao;
 import by.epam.carrentalapp.dao.RepairBillDao;
-import by.epam.carrentalapp.dao.impl.DaoProvider;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.impl.notifier.EmailSender;
 import by.epam.carrentalapp.service.impl.notifier.email.template.RepairBillEmail;
 import by.epam.carrentalapp.service.impl.rate.RateEvent;
 import by.epam.carrentalapp.service.impl.rate.RateService;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor
 public class AcceptedOrderServiceImpl implements AcceptedOrderService {
     private final Logger LOGGER = Logger.getLogger(CarServiceImpl.class);
 
-    private final AcceptedOrderDao acceptedOrderDao;
-    private final OrderRequestDao orderRequestDao;
-    private final RepairBillDao repairBillDao;
-
-    public AcceptedOrderServiceImpl() {
-        acceptedOrderDao = DaoProvider.getAcceptedOrderDao();
-        orderRequestDao = DaoProvider.getOrderRequestDao();
-        repairBillDao = DaoProvider.getRepairBillDao();
-    }
+    @Autowired
+    private AcceptedOrderDao acceptedOrderDao;
+    @Autowired
+    private OrderRequestDao orderRequestDao;
+    @Autowired
+    private RepairBillDao repairBillDao;
 
     @Override
     public List<CarOccupationDto> getCarOccupationById(Long carId) {

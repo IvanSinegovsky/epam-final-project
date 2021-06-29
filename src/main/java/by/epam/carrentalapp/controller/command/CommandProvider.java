@@ -4,6 +4,9 @@ import by.epam.carrentalapp.controller.command.admin.*;
 import by.epam.carrentalapp.controller.command.customer.*;
 import by.epam.carrentalapp.controller.command.error.ErrorCommand;
 import by.epam.carrentalapp.controller.command.guest.*;
+import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.JavaConfig;
+import by.epam.carrentalapp.ioc.ObjectFactory;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
@@ -17,6 +20,11 @@ public class CommandProvider {
     private static final Map<String, Command> nameToCommand = new HashMap<>();
 
     static {
+        JavaConfig applicationConfig = new JavaConfig("by.epam.carrentalapp");
+        ApplicationContext context = new ApplicationContext(applicationConfig);
+        ObjectFactory objectFactory = new ObjectFactory();
+        ApplicationContext.setFactory(objectFactory);
+
         nameToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
         nameToCommand.put(CommandTitle.REGISTER.name(), new RegisterCommand());
         nameToCommand.put(CommandTitle.HOME.name(), new HomeCommand());

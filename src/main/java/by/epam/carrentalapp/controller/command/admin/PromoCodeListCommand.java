@@ -5,9 +5,9 @@ import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
+import by.epam.carrentalapp.ioc.ApplicationContext;
 import by.epam.carrentalapp.service.PromoCodeService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -24,7 +24,7 @@ public class PromoCodeListCommand implements Command {
     private final String ALL_PROMO_CODES_REQUEST_PARAMETER_NAME = "all_promo_codes";
 
     public PromoCodeListCommand() {
-        promoCodeService = ServiceProvider.getPromoCodeService();
+        promoCodeService = ApplicationContext.getObject(PromoCodeService.class);
     }
 
     @Override

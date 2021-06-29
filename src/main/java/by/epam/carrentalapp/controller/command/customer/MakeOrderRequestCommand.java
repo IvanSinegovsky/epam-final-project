@@ -8,10 +8,10 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
+import by.epam.carrentalapp.ioc.ApplicationContext;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -38,8 +38,8 @@ public class MakeOrderRequestCommand implements Command {
     private final CarService carService;
 
     public MakeOrderRequestCommand() {
-        orderRequestService = ServiceProvider.getOrderRequestService();
-        carService = ServiceProvider.getCarService();
+        orderRequestService = ApplicationContext.getObject(OrderRequestService.class);
+        carService = ApplicationContext.getObject(CarService.class);
     }
 
     @Override

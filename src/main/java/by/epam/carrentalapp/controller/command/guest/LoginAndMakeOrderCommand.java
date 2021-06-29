@@ -6,10 +6,10 @@ import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
+import by.epam.carrentalapp.ioc.ApplicationContext;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.UsersRolesService;
-import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -33,8 +33,8 @@ public class LoginAndMakeOrderCommand implements Command {
     private final String CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME = "car_id_to_check";
 
     public LoginAndMakeOrderCommand() {
-        userService = ServiceProvider.getUserService();
-        usersRolesService = ServiceProvider.getUsersRolesService();
+        userService = ApplicationContext.getObject(UserService.class);
+        usersRolesService = ApplicationContext.getObject(UsersRolesService.class);
     }
 
     @Override

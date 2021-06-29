@@ -4,28 +4,27 @@ import by.epam.carrentalapp.bean.dto.CustomerStatisticsDto;
 import by.epam.carrentalapp.bean.entity.AcceptedOrder;
 import by.epam.carrentalapp.bean.entity.RepairBill;
 import by.epam.carrentalapp.dao.*;
-import by.epam.carrentalapp.dao.impl.DaoProvider;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.CustomerService;
 import by.epam.carrentalapp.service.ServiceException;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 
+@NoArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final Logger LOGGER = Logger.getLogger(CustomerServiceImpl.class);
 
-    private final OrderRequestDao orderRequestDao;
-    private final RepairBillDao repairBillDao;
-    private final AcceptedOrderDao acceptedOrderDao;
-    private final CustomerUserDetailsDao customerUserDetailsDao;
-
-    public CustomerServiceImpl() {
-        orderRequestDao = DaoProvider.getOrderRequestDao();
-        repairBillDao = DaoProvider.getRepairBillDao();
-        acceptedOrderDao = DaoProvider.getAcceptedOrderDao();
-        customerUserDetailsDao = DaoProvider.getCustomerUserDetailsDao();
-    }
+    @Autowired
+    private OrderRequestDao orderRequestDao;
+    @Autowired
+    private RepairBillDao repairBillDao;
+    @Autowired
+    private AcceptedOrderDao acceptedOrderDao;
+    @Autowired
+    private CustomerUserDetailsDao customerUserDetailsDao;
 
     @Override
     public CustomerStatisticsDto getCustomerStatisticsByOrderRequestId(Long orderRequestId) {

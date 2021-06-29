@@ -4,10 +4,10 @@ import by.epam.carrentalapp.bean.entity.Car;
 import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.CommandTitle;
 import by.epam.carrentalapp.controller.command.Router;
+import by.epam.carrentalapp.ioc.ApplicationContext;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.PaginationService;
 import by.epam.carrentalapp.service.ServiceException;
-import by.epam.carrentalapp.service.impl.ServiceProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -31,8 +31,8 @@ public class CarCatalogCommand implements Command {
     private final int CARS_ON_PAGE_QUANTITY = 6;
 
     public CarCatalogCommand() {
-        carService = ServiceProvider.getCarService();
-        paginationService = ServiceProvider.getPaginationService();
+        carService = ApplicationContext.getObject(CarService.class);
+        paginationService = ApplicationContext.getObject(PaginationService.class);
     }
 
     @Override

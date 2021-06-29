@@ -4,34 +4,32 @@ import by.epam.carrentalapp.bean.dto.LoginUserDto;
 import by.epam.carrentalapp.bean.entity.CustomerUserDetails;
 import by.epam.carrentalapp.bean.entity.user.User;
 import by.epam.carrentalapp.controller.command.security.RoleName;
-import by.epam.carrentalapp.dao.*;
+import by.epam.carrentalapp.dao.CustomerUserDetailsDao;
+import by.epam.carrentalapp.dao.DaoException;
+import by.epam.carrentalapp.dao.UserDao;
 import by.epam.carrentalapp.dao.connection.ConnectionException;
-import by.epam.carrentalapp.dao.impl.DaoProvider;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
+@NoArgsConstructor
 public class UserServiceImpl implements UserService {
     private final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
 
-    private final UserDao userDao;
-    private final CustomerUserDetailsDao customerUserDetailsDao;
-    private final RoleDao roleDao;
-    private final UsersRolesDao usersRolesDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private CustomerUserDetailsDao customerUserDetailsDao;
 
     private final Integer INITIAL_CUSTOMER_RATE = 50;
     private final String INITIAL_CUSTOMER_ROLE = RoleName.CUSTOMER.name();
 
-    public UserServiceImpl() {
-        userDao = DaoProvider.getUserDao();
-        customerUserDetailsDao = DaoProvider.getCustomerUserDetailsDao();
-        roleDao = DaoProvider.getRoleDao();
-        usersRolesDao = DaoProvider.getUsersRolesDao();
-    }
 
     @Override
     public Optional<User> login(LoginUserDto userDto) {
