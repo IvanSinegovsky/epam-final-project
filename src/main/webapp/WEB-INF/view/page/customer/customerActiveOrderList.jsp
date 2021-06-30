@@ -19,10 +19,13 @@
 <body>
 <div class="container">
     <form method="POST" action="home">
-        <button type="submit" name="command" value="UNDO_ORDER_REQUEST" class="btn btn-outline-success">
-            <c:out value="${undoButton}"/>
-        </button>
+        <div style="margin-top: 15px; margin-bottom: 15px">
+            <button type="submit" name="command" value="UNDO_ORDER_REQUEST" class="btn btn-outline-success">
+                <c:out value="${undoButton}"/>
+            </button>
+        </div>
 
+        <div style="margin-left: 20px">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -50,7 +53,8 @@
                     <td><c:out value="${orderRequestInfo.totalCost}"/></td>
                 </tr>
             </c:forEach>
-            </tbody>
+            </tbody
+        </div>>
         </table>
     </form>
 </div>

@@ -22,12 +22,14 @@
 <body>
 <div class="container">
     <form method="POST" action="home">
+        <div style="margin-top: 15px; margin-bottom: 15px">
         <button type="submit" name="command" value="COMPLETE_ACCEPTED_ORDER" class="btn btn-outline-success">
             <c:out value="${markAsCompleteButton}"/>
         </button>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeRepairBillModal">
             <c:out value="${makeRepairBillButton}"/>
         </button>
+        </div>
 
         <div class="modal fade" id="makeRepairBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -63,6 +65,8 @@
             </div>
         </div>
 
+
+        <div style="margin-left: 20px;margin-right: 20px">
         <table class="table table-striped">
             <thead>
             <tr>

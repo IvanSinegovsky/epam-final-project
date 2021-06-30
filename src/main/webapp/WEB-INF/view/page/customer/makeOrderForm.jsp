@@ -21,59 +21,78 @@
 </head>
 
 <body>
-<h3><c:out value="${carOccupationSign}"/></h3>
 <jsp:useBean id="car_occupation" scope="request" type="java.util.List"/>
 
-<c:if test="${empty car_occupation}">
-    <h3><c:out value="${currentCarIsNotOccupiedSign}"/></h3>
-</c:if>
-<c:if test="${!empty car_occupation}">
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col"><c:out value="${carOccupationStartTimeSign}"/></th>
-        <th scope="col"><c:out value="${carOccupationEndTimeSign}"/></th>
-    </tr>
-    </thead>
-    <tbody>
-        <c:forEach items="${car_occupation}" var="occupation" varStatus="counter">
-        <tr>
-            <div>
-                <td><c:out value="${occupation.startTime}"/></td>
-                <td><c:out value="${occupation.endTime}"/></td>
-            </div>
-        </tr>
-        </c:forEach>
-    </tbody>
-</table>
-</c:if>
 
-<h4><c:out value="${occupation.startTime}"/></h4>
-<h4><c:out value="${selectTimeIntervalSign}"/></h4>
-    <form method="POST" action="http://localhost:8080/home?command=MAKE_ORDER_REQUEST">
-        <jsp:useBean id="car_id_to_check" scope="request" type="java.lang.Long"/>
-        <input type="hidden" name="car_id" value="${car_id_to_check}"/>
-        <div class="form-group row">
-           <label for="start_date_and_time" class="col-2 col-form-label"><c:out value="${chooseRideStartTimeInput}"/></label>
-           <div class="col-10">
-               <input class="form-control" type="datetime-local" id="start_date_and_time" name="start_date_and_time">
-           </div>
-        </div>
-        <div class="form-group row">
-            <label for="end_date_and_time" class="col-2 col-form-label"><c:out value="${chooseRideEndTimeInput}"/></label>
-            <div class="col-10">
-                <input class="form-control" type="datetime-local" id="end_date_and_time" name="end_date_and_time">
+<div class="row">
+    <div class="col">
+        <div>
+            <div style="margin-left: 10%;margin-top: 25px;margin-bottom: 25px">
+                <h3><c:out value="${carOccupationSign}"/>:</h3>
             </div>
+
+            <c:if test="${empty car_occupation}">
+                <div style="margin-left: 10%;">
+                    <h5>
+                        <i><c:out value="${currentCarIsNotOccupiedSign}"/></i>
+                    </h5>
+                </div>
+            </c:if>
+            <c:if test="${!empty car_occupation}">
+                <div style="margin-left: 10%;margin-right: 10%">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col"><c:out value="${carOccupationStartTimeSign}"/></th>
+                        <th scope="col"><c:out value="${carOccupationEndTimeSign}"/></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${car_occupation}" var="occupation" varStatus="counter">
+                        <tr>
+                            <div>
+                                <td><c:out value="${occupation.startTime}"/></td>
+                                <td><c:out value="${occupation.endTime}"/></td>
+                            </div>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                </div>
+            </c:if>
         </div>
-        <div class="form-group row">
-            <label for="promo_code" class="col-2 col-form-label"><c:out value="${promoCodeInput}"/></label>
-            <div class="col-10">
-                <input class="form-control" type="text" id="promo_code" name="promo_code">
-            </div>
+    </div>
+
+    <div class="col">
+        <div style="margin-left: 10%;margin-top: 25px">
+            <h3><c:out value="${selectTimeIntervalSign}:"/></h3>
+            <form method="POST" action="http://localhost:8080/home?command=MAKE_ORDER_REQUEST">
+                <jsp:useBean id="car_id_to_check" scope="request" type="java.lang.Long"/>
+                <input type="hidden" name="car_id" value="${car_id_to_check}"/>
+                <div class="form-group row w-75" style="margin-top: 30px">
+                    <label for="start_date_and_time"><c:out value="${chooseRideStartTimeInput}:"/></label>
+                    <div class="col-10">
+                        <input class="form-control" type="datetime-local" id="start_date_and_time" name="start_date_and_time">
+                    </div>
+                </div>
+                <div class="form-group row w-75">
+                    <label for="end_date_and_time"><c:out value="${chooseRideEndTimeInput}:"/></label>
+                    <div class="col-10">
+                        <input class="form-control" type="datetime-local" id="end_date_and_time" name="end_date_and_time">
+                    </div>
+                </div>
+                <div class="form-group row w-75">
+                    <label for="promo_code"><c:out value="${promoCodeInput}:"/></label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" id="promo_code" name="promo_code">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-left: 10%">
+                    <button type="submit" class="btn btn-primary"><c:out value="${submitButton}"/></button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary"><c:out value="${submitButton}"/></button>
-        </div>
-    </form>
+    </div>
+</div>
 </body>
 </html>

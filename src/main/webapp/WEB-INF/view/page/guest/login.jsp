@@ -19,9 +19,8 @@
 </head>
 
 <body>
-<div class="card bg-light">
-    <article class="card-body mx-auto" style="max-width: 400px;">
-        <h4 class="card-title mt-3 text-center">
+<div style="max-width: 250px;text-align:center;margin-left:40%;margin-top: 7%">
+        <h4 class="card-title mt-3 text-center" style="margin-bottom: 20px">
             <c:out value="${loginSign}"/>
         </h4>
         <form method="POST" action="http://localhost:8080/home?command=LOGIN">
@@ -37,12 +36,15 @@
                        placeholder="<c:out value="${passwordInput}"/>"
                        type="password">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-top: 30px">
                 <button type="submit" class="btn btn-primary"><c:out value="${loginButton}"/></button>
             </div>
-            <p class="text-center"><c:out value="${notRegisteredYetSign}"/><a href="http://localhost:8080/home?command=HOME"><c:out value="${registerReferenceSign}"/></a></p>
+            <p class="text-center"><c:out value="${notRegisteredYetSign}"/>
+                <a href="http://localhost:8080/home?command=HOME" style="margin-left: 5px">
+                    <c:out value="${registerReferenceSign}"/>
+                </a>
+            </p>
         </form>
-    </article>
 </div>
 </body>
 </html>

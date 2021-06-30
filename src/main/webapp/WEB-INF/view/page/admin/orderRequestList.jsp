@@ -25,12 +25,14 @@
 <body>
 <div class="container">
     <form method="POST" action="home">
+        <div style="margin-top: 15px; margin-bottom: 15px">
         <button type="submit" name="command" value="ACCEPT_ORDER" class="btn btn-outline-success">
             <c:out value="${acceptButton}"/>
         </button>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rejectionReasonModal">
             <c:out value="${rejectButton}"/>
         </button>
+        </div>
 
         <div class="modal fade" id="rejectionReasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

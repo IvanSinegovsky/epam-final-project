@@ -31,20 +31,29 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-                <a class="nav-link" href="home?command=CAR_CATALOG"><c:out value="${catalogButton}"/><span class="sr-only">(current)</span></a>
-            </li>
+            <div style="margin-left: 10px">
+                <li class="nav-item active">
+                    <a class="nav-link" href="home?command=CAR_CATALOG">
+                        <c:out value="${catalogButton}"/>
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </div>
 
             <c:if test="${sessionScope.isAdmin == true}">
+                <div style="margin-left: 8px; margin-right: 8px">
                 <li class="nav-item active">
                     <a class="nav-link" href="home?command=ORDER_REQUEST_LIST"><c:out value="${orderRequestListButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
+                </div>
                 <li class="nav-item active">
                     <a class="nav-link" href="home?command=ADD_CAR"><c:out value="${addCarButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
+                <div style="margin-left: 8px; margin-right: 8px">
                 <li class="nav-item active">
                     <a class="nav-link" href="home?command=PROMO_CODE_LIST"><c:out value="${promoCodesButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
+                </div>
                 <li class="nav-item active">
                     <a class="nav-link" href="home?command=ACTIVE_ACCEPTED_ORDER_LIST"><c:out value="${acceptedOrdersButton}"/></a><span class="sr-only">(current)</span></a>
                 </li>
@@ -53,24 +62,42 @@
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
             <c:if test="${sessionScope.isCustomer != true}">
-                <a class="btn btn-primary" href="home?command=LOGIN" role="button"><c:out value="${loginButton}"/></a>
-                <a class="btn btn-primary" href="home?command=GO_TO_REGISTER" role="button"><c:out value="${registerButton}"/></a>
-            </c:if>
-
-            <li class="nav-item dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <c:out value="${languageButton}"/>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="home?command=${pageContext.request.getParameter("command")}&local=en">EN</a>
-                    <a class="dropdown-item" href="home?command=${pageContext.request.getParameter("command")}&local=ru">РУ</a>
+                <div style="margin-left: 100%;margin-right: 5px">
+                    <a class="btn btn-light" href="home?command=LOGIN" role="button">
+                        <c:out value="${loginButton}"/>
+                    </a>
                 </div>
-            </li>
+                <div style="margin-right: 5px">
+                    <a class="btn btn-light" href="home?command=GO_TO_REGISTER" role="button">
+                        <c:out value="${registerButton}"/>
+                    </a>
+                </div>
+            </c:if>
             
             <c:if test="${sessionScope.isCustomer == true}">
-                <a class="btn btn-primary" href="home?command=LOGOUT" role="button"><c:out value="${logoutButton}"/></a>
-                <a class="btn btn-primary" href="home?command=ACTIVE_ORDER_REQUEST_LIST" role="button"><c:out value="${profileButton}"/></a>
+                <div style="margin-left: 30%;text-align: right">
+                    <a class="btn btn-light pull-right" href="home?command=ACTIVE_ORDER_REQUEST_LIST" role="button">
+                        <c:out value="${profileButton}"/>
+                    </a>
+                </div>
+                <div>
+                    <a class="btn btn-light" href="home?command=LOGOUT" role="button">
+                        <c:out value="${logoutButton}"/>
+                    </a>
+                </div>
             </c:if>
+
+            <div style="margin-right: 10px">
+                <li class="nav-item dropdown">
+                    <button class="btn btn-secondary dropdown-toggle pull-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <c:out value="${languageButton}"/>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="home?command=${pageContext.request.getParameter("command")}&local=en">EN</a>
+                        <a class="dropdown-item" href="home?command=${pageContext.request.getParameter("command")}&local=ru">РУ</a>
+                    </div>
+                </li>
+            </div>
         </ul>
     </div>
 </nav>

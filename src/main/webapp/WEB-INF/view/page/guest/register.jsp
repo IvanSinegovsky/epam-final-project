@@ -20,10 +20,8 @@
 </head>
 
 <body>
-<div class="card bg-light">
-    
-    <article class="card-body mx-auto" style="max-width: 400px;">
-        <h4 class="card-title mt-3 text-center">
+<div style="max-width: 250px;text-align:center;margin-left:40%">
+        <h4 class="card-title mt-3 text-center" style="margin-top: 40px; margin-bottom: 20px">
             <c:out value="${createAccountSign}"/>
         </h4>
 
@@ -65,12 +63,16 @@
                        type="text">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="margin-top: 30px">
                 <button type="submit" class="btn btn-primary"><c:out value="${registerButton}"/></button>
             </div>
-            <p class="text-center"><c:out value="${haveAnAccountSign}"/><a href="home?command=LOGIN"><c:out value="${logInReferenceSign}"/></a></p>
+            <p class="text-center" style="margin-left: 5px">
+                <c:out value="${haveAnAccountSign}"/>
+                <a href="home?command=LOGIN">
+                    <c:out value="${logInReferenceSign}"/>
+                </a>
+            </p>
         </form>
-    </article>
 </div>
 </body>
 </html>

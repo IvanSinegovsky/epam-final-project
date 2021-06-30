@@ -20,13 +20,16 @@
 <body>
 <div class="container">
     <form method="POST" action="home">
+        <div style="margin-top: 15px; margin-bottom: 15px">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPromoCodeModalModal">
             <c:out value="${addPromoCodeButton}"/>
         </button>
         <button type="submit" name="command" value="DISABLE_PROMO_CODE" class="btn btn-outline-success">
             <c:out value="${disablePromoCodeButton}"/>
         </button>
+        </div>
 
+        <div style="margin-left: 20px">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -56,6 +59,7 @@
             </c:forEach>
             </tbody>
         </table>
+        </div>
     </form>
 </div>
 </body>

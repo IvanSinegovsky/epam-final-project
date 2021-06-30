@@ -16,15 +16,23 @@
 <body>
 <jsp:useBean id="order_request_info" scope="request" type="by.epam.carrentalapp.bean.entity.OrderRequest"/>
 <jsp:useBean id="expected_car" scope="request" type="by.epam.carrentalapp.bean.entity.Car"/>
-<h1><c:out value="${thanksSign}"/></h1>
-<br/>
-<h3><c:out value="${orderInfoSign}"/></h3>
-<div>
-    <img class="card-img-top" src="${expected_car.assetURL}" alt="Card image cap">
-    <h5><c:out value="${expected_car.model}"/></h5>
-    <h5><c:out value="${order_request_info.expectedStartTime}"/></h5>
-    <h5><c:out value="${order_request_info.expectedEndTime}"/></h5>
+
+<div class="row">
+    <div class="col" style="margin-left: 5%">
+        <img class="card-img-top" src="${expected_car.assetURL}" alt="Card image cap">
+    </div>
+    <div class="col">
+        <h1><c:out value="${thanksSign}"/></h1>
+        <br/>
+        <h3><c:out value="${orderInfoSign}"/></h3>
+        <div style="margin-bottom: 20px;margin-top: 20px">
+            <h5><c:out value="${expected_car.model}"/></h5>
+            <h5><c:out value="${order_request_info.expectedStartTime}"/></h5>
+            <h5><c:out value="${order_request_info.expectedEndTime}"/></h5>
+        </div>
+        <h5><i><c:out value="${emailNotificationSign}"/></i></h5>
+
+    </div>
 </div>
-<h5><c:out value="${emailNotificationSign}"/></h5>
 </body>
 </html>
