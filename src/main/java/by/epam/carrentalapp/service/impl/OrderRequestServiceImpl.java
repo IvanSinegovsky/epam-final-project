@@ -226,16 +226,20 @@ public class OrderRequestServiceImpl implements OrderRequestService {
         Optional<CustomerUserDetails> customerUserDetails;
         Optional<Car> expectedCarOptional;
         double totalCost;
+        Optional<PromoCode> discount;
 
         for (OrderRequest orderRequest : orderRequestList) {
             customerUserDetails = customerUserDetailsDao.findById(orderRequest.getUserDetailsId());
             expectedCarOptional = carDao.findById(orderRequest.getExpectedCarId());
+            discount = promoCodeDao.findByPromoCodeId(orderRequest.getPromoCodeId());
 
-            if (expectedCarOptional.isPresent() && customerUserDetails.isPresent()) {
-                totalCost = Math.abs(expectedCarOptional.get().getHourlyCost()
+            if (expectedCarOptional.isPresent() && customerUserDetails.isPresent() && discount.isPresent()) {
+                totalCost = Math.abs(
+                        expectedCarOptional.get().getHourlyCost()
                         * twoLocalDateTimeHourDifference(
-                                orderRequest.getExpectedStartTime(), orderRequest.getExpectedEndTime()
-                ));
+                                orderRequest.getExpectedStartTime(), orderRequest.getExpectedEndTime())
+                        * (1.0 - (discount.get().getDiscount() / 100.0))
+                );
 
                 orderRequestInfoDtoList.add(new OrderRequestInfoDto(
                         orderRequest,

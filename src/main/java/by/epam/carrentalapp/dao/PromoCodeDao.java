@@ -15,4 +15,5 @@ public interface PromoCodeDao {
     Optional<Long> save(PromoCode promoCodeToSave);
     void setValuesNonActiveByPromoCodes(List<String> promoCodes);
     List<PromoCode> findAll();
+    Optional<PromoCode> findByPromoCodeId(Long promoCodeId);
 }

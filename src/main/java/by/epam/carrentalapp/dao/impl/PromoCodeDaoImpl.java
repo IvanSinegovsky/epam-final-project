@@ -26,6 +26,8 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
             "UPDATE promo_codes SET is_active=0 WHERE promo_code=?;";
     private final String SELECT_ALL_FROM_PROMO_CODES_WHERE_PROMO_CODE_EQUALS =
             "SELECT * FROM promo_codes WHERE promo_code = ?;";
+    private final String SELECT_ALL_FROM_PROMO_CODES_WHERE_PROMO_CODE_ID_EQUALS =
+            "SELECT * FROM promo_codes WHERE promo_code_id = ?;";
 
     @Override
     public Optional<PromoCode> findByPromoCode(String promoCodeToFind) {
@@ -138,5 +140,30 @@ public class PromoCodeDaoImpl implements PromoCodeDao {
         }
 
         return allPromoCodes;
+    }
+
+    @Override
+    public Optional<PromoCode> findByPromoCodeId(Long promoCodeId) {
+        Optional<PromoCode> promoCodeOptional = Optional.empty();
+
+        try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(SELECT_ALL_FROM_PROMO_CODES_WHERE_PROMO_CODE_ID_EQUALS)) {
+
+            preparedStatement.setLong(1, promoCodeId);
+            ResultSet promoCodeResultSet = preparedStatement.executeQuery();
+
+            if (promoCodeResultSet.next()) {
+                promoCodeOptional = Optional.of(extractPromoCodeFromResultSet(promoCodeResultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.error("PromoCodeDaoImpl findByPromoCodeId(...): cannot extract promoCode from ResultSet");
+            throw new DaoException(e);
+        } catch (ConnectionException e) {
+            LOGGER.error("PromoCodeDaoImpl findByPromoCodeId(...): connection pool crashed");
+            throw new DaoException(e);
+        }
+
+        return promoCodeOptional;
     }
 }
