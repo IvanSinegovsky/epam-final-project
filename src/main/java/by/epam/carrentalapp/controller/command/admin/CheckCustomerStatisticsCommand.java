@@ -6,6 +6,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.CustomerService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -18,15 +19,12 @@ import java.io.IOException;
 public class CheckCustomerStatisticsCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(CheckCustomerStatisticsCommand.class);
 
-    private final CustomerService customerService;
+    @Autowired
+    private CustomerService customerService;
 
     private final String ORDER_REQUEST_ID_REQUEST_PARAMETER_NAME = "order_request_id";
     private final String CUSTOMER_STATISTICS_REQUEST_PARAMETER_NAME = "customer_statistics";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
-
-    public CheckCustomerStatisticsCommand() {
-        customerService = ApplicationContext.getObject(CustomerService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

@@ -7,6 +7,7 @@ import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -20,14 +21,11 @@ import java.util.List;
 public class ActiveOrderRequestListCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(ActiveOrderRequestListCommand.class);
 
-    private final OrderRequestService orderRequestService;
+    @Autowired
+    private OrderRequestService orderRequestService;
 
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
     private final String ORDER_REQUEST_INFOS_REQUEST_PARAMETER_NAME = "order_request_infos";
-
-    public ActiveOrderRequestListCommand() {
-        orderRequestService = ApplicationContext.getObject(OrderRequestService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

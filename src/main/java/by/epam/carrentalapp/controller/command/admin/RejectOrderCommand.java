@@ -7,6 +7,7 @@ import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -19,15 +20,13 @@ import java.util.List;
 
 public class RejectOrderCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(RejectOrderCommand.class);
-    private final OrderRequestService orderRequestService;
+
+    @Autowired
+    private OrderRequestService orderRequestService;
 
     private final String SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME = "selected_accepted_orders";
     private final String REJECTION_REASON_REQUEST_PARAMETER_NAME = "rejectionReason";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
-
-    public RejectOrderCommand() {
-        orderRequestService = ApplicationContext.getObject(OrderRequestService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -37,11 +36,13 @@ public class RejectOrderCommand implements Command {
         } else {
             String[] rejectedOrderRequestInfoStrings = request.getParameterValues(SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME);
             String rejectionReason = request.getParameter(REJECTION_REASON_REQUEST_PARAMETER_NAME);
-            List<OrderRequestInfoDto> orderRequestInfoDtos = OrderRequestInfoDto.valueOf(rejectedOrderRequestInfoStrings);
             Long adminRejectedId = (Long) request.getSession(true).getAttribute(LoginCommand.getUserIdSessionParameterName());
 
             try {
-                orderRequestService.rejectOrderRequests(orderRequestInfoDtos, adminRejectedId, rejectionReason);
+                if (rejectedOrderRequestInfoStrings.length != 0 && rejectionReason != null) {
+                    List<OrderRequestInfoDto> orderRequestInfoDtos = OrderRequestInfoDto.valueOf(rejectedOrderRequestInfoStrings);
+                    orderRequestService.rejectOrderRequests(orderRequestInfoDtos, adminRejectedId, rejectionReason);
+                }
 
                 redirect(Router.ORDER_REQUEST_LIST_REDIRECT_PATH.getPath(), response);
             } catch (ServiceException e) {

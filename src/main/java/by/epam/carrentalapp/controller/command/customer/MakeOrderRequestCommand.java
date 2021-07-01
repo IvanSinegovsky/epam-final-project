@@ -9,6 +9,7 @@ import by.epam.carrentalapp.controller.command.guest.LoginCommand;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.OrderRequestService;
 import by.epam.carrentalapp.service.ServiceException;
@@ -24,6 +25,11 @@ import java.time.format.DateTimeFormatter;
 public class MakeOrderRequestCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(MakeOrderRequestCommand.class);
 
+    @Autowired
+    private OrderRequestService orderRequestService;
+    @Autowired
+    private CarService carService;
+
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     private final String START_DATE_AND_TIME_REQUEST_PARAMETER_NAME = "start_date_and_time";
@@ -33,14 +39,6 @@ public class MakeOrderRequestCommand implements Command {
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
     private final String SAVED_ORDER_REQUEST_PARAMETER_NAME = "order_request_info";
     private final String EXPECTED_CAR_REQUEST_PARAMETER_NAME = "expected_car";
-
-    private final OrderRequestService orderRequestService;
-    private final CarService carService;
-
-    public MakeOrderRequestCommand() {
-        orderRequestService = ApplicationContext.getObject(OrderRequestService.class);
-        carService = ApplicationContext.getObject(CarService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

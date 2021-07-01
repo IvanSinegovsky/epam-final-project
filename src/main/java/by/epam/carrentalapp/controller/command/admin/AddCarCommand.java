@@ -6,6 +6,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -24,11 +25,8 @@ public class AddCarCommand implements Command {
     private final String ASSET_URL_REQUEST_PARAMETER_NAME = "asset_url";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
 
-    private final CarService carService;
-
-    public AddCarCommand() {
-        carService = ApplicationContext.getObject(CarService.class);
-    }
+    @Autowired
+    private CarService carService;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

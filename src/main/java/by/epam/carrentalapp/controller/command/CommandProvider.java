@@ -20,28 +20,28 @@ public class CommandProvider {
     private static final Map<String, Command> nameToCommand = new HashMap<>();
 
     static {
-        nameToCommand.put(CommandTitle.LOGIN.name(), new LoginCommand());
-        nameToCommand.put(CommandTitle.REGISTER.name(), new RegisterCommand());
-        nameToCommand.put(CommandTitle.HOME.name(), new HomeCommand());
-        nameToCommand.put(CommandTitle.CAR_CATALOG.name(), new CarCatalogCommand());
-        nameToCommand.put(CommandTitle.ERROR.name(), new ErrorCommand());
-        nameToCommand.put(CommandTitle.ORDER_REQUEST_LIST.name(), new OrderRequestListCommand());
-        nameToCommand.put(CommandTitle.LOGOUT.name(), new LogoutCommand());
-        nameToCommand.put(CommandTitle.ACCEPT_ORDER.name(), new AcceptOrderCommand());
-        nameToCommand.put(CommandTitle.REJECT_ORDER.name(), new RejectOrderCommand());
-        nameToCommand.put(CommandTitle.CAR_OCCUPATION.name(), new CarOccupationCommand());
-        nameToCommand.put(CommandTitle.MAKE_ORDER_REQUEST.name(), new MakeOrderRequestCommand());
-        nameToCommand.put(CommandTitle.GO_TO_REGISTER.name(), new GoToRegisterCommand());
-        nameToCommand.put(CommandTitle.ADD_CAR.name(), new AddCarCommand());
-        nameToCommand.put(CommandTitle.PROMO_CODE_LIST.name(), new PromoCodeListCommand());
-        nameToCommand.put(CommandTitle.UNDO_ORDER_REQUEST.name(), new UndoOrderRequestCommand());
-        nameToCommand.put(CommandTitle.CHECK_CUSTOMER_STATISTICS.name(), new CheckCustomerStatisticsCommand());
-        nameToCommand.put(CommandTitle.DISABLE_PROMO_CODE.name(), new DisablePromoCodeCommand());
-        nameToCommand.put(CommandTitle.ADD_PROMO_CODE.name(), new AddPromoCodeCommand());
-        nameToCommand.put(CommandTitle.ACTIVE_ORDER_REQUEST_LIST.name(), new ActiveOrderRequestListCommand());
-        nameToCommand.put(CommandTitle.ACTIVE_ACCEPTED_ORDER_LIST.name(), new ActiveAcceptedOrderListCommand());
-        nameToCommand.put(CommandTitle.COMPLETE_ACCEPTED_ORDER.name(), new CompleteAcceptedOrderCommand());
-        nameToCommand.put(CommandTitle.MAKE_REPAIR_BILL.name(), new MakeRepairBillCommand());
+        nameToCommand.put(CommandTitle.LOGIN.name(), ApplicationContext.getObject(LoginCommand.class));
+        nameToCommand.put(CommandTitle.REGISTER.name(), ApplicationContext.getObject(RegisterCommand.class));
+        nameToCommand.put(CommandTitle.HOME.name(),  ApplicationContext.getObject(HomeCommand.class));
+        nameToCommand.put(CommandTitle.CAR_CATALOG.name(), ApplicationContext.getObject(CarCatalogCommand.class));
+        nameToCommand.put(CommandTitle.ERROR.name(), ApplicationContext.getObject(ErrorCommand.class));
+        nameToCommand.put(CommandTitle.ORDER_REQUEST_LIST.name(), ApplicationContext.getObject(OrderRequestListCommand.class));
+        nameToCommand.put(CommandTitle.LOGOUT.name(), ApplicationContext.getObject(LogoutCommand.class));
+        nameToCommand.put(CommandTitle.ACCEPT_ORDER.name(), ApplicationContext.getObject(AcceptOrderCommand.class));
+        nameToCommand.put(CommandTitle.REJECT_ORDER.name(), ApplicationContext.getObject(RejectOrderCommand.class));
+        nameToCommand.put(CommandTitle.CAR_OCCUPATION.name(), ApplicationContext.getObject(CarOccupationCommand.class));
+        nameToCommand.put(CommandTitle.MAKE_ORDER_REQUEST.name(), ApplicationContext.getObject(MakeOrderRequestCommand.class));
+        nameToCommand.put(CommandTitle.GO_TO_REGISTER.name(), ApplicationContext.getObject(GoToRegisterCommand.class));
+        nameToCommand.put(CommandTitle.ADD_CAR.name(), ApplicationContext.getObject(AddCarCommand.class));
+        nameToCommand.put(CommandTitle.PROMO_CODE_LIST.name(), ApplicationContext.getObject(PromoCodeListCommand.class));
+        nameToCommand.put(CommandTitle.UNDO_ORDER_REQUEST.name(), ApplicationContext.getObject(UndoOrderRequestCommand.class));
+        nameToCommand.put(CommandTitle.CHECK_CUSTOMER_STATISTICS.name(), ApplicationContext.getObject(CheckCustomerStatisticsCommand.class));
+        nameToCommand.put(CommandTitle.DISABLE_PROMO_CODE.name(), ApplicationContext.getObject(DisablePromoCodeCommand.class));
+        nameToCommand.put(CommandTitle.ADD_PROMO_CODE.name(), ApplicationContext.getObject(AddPromoCodeCommand.class));
+        nameToCommand.put(CommandTitle.ACTIVE_ORDER_REQUEST_LIST.name(), ApplicationContext.getObject(ActiveOrderRequestListCommand.class));
+        nameToCommand.put(CommandTitle.ACTIVE_ACCEPTED_ORDER_LIST.name(), ApplicationContext.getObject(ActiveAcceptedOrderListCommand.class));
+        nameToCommand.put(CommandTitle.COMPLETE_ACCEPTED_ORDER.name(), ApplicationContext.getObject(CompleteAcceptedOrderCommand.class));
+        nameToCommand.put(CommandTitle.MAKE_REPAIR_BILL.name(), ApplicationContext.getObject(MakeRepairBillCommand.class));
     }
 
     /**

@@ -6,6 +6,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -19,16 +20,13 @@ import java.util.List;
 public class MakeRepairBillCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(MakeRepairBillCommand.class);
 
-    private final AcceptedOrderService acceptedOrderService;
+    @Autowired
+    private AcceptedOrderService acceptedOrderService;
 
     private final String SELECTED_ORDER_REQUESTS_REQUEST_PARAMETER_NAME = "selected_accepted_orders";
     private final String COMMENT_REQUEST_PARAMETER_NAME = "comment";
     private final String BILL_PARAMETER_NAME = "bill";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
-
-    public MakeRepairBillCommand() {
-        acceptedOrderService = ApplicationContext.getObject(AcceptedOrderService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

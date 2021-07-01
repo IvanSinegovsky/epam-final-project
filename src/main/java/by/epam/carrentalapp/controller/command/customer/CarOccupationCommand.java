@@ -6,6 +6,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.AcceptedOrderService;
 import org.apache.log4j.Logger;
 
@@ -18,15 +19,12 @@ import java.util.List;
 public class CarOccupationCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(CarOccupationCommand.class);
 
-    private final AcceptedOrderService acceptedOrderService;
+    @Autowired
+    private AcceptedOrderService acceptedOrderService;
 
     private final String CAR_ID_TO_CHECK_REQUEST_PARAMETER_NAME = "car_id_to_check";
     private final String CAR_OCCUPATION_REQUEST_PARAMETER_NAME = "car_occupation";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
-
-    public CarOccupationCommand() {
-        this.acceptedOrderService  = ApplicationContext.getObject(AcceptedOrderService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

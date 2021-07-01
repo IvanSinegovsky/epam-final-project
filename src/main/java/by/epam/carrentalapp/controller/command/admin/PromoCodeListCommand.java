@@ -6,6 +6,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.PromoCodeService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -18,14 +19,12 @@ import java.util.List;
 
 public class PromoCodeListCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(PromoCodeListCommand.class);
-    private final PromoCodeService promoCodeService;
+
+    @Autowired
+    private PromoCodeService promoCodeService;
 
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
     private final String ALL_PROMO_CODES_REQUEST_PARAMETER_NAME = "all_promo_codes";
-
-    public PromoCodeListCommand() {
-        promoCodeService = ApplicationContext.getObject(PromoCodeService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

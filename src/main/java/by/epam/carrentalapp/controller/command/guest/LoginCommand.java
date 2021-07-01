@@ -7,6 +7,7 @@ import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.UsersRolesService;
@@ -22,19 +23,16 @@ import java.util.Optional;
 public class LoginCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(LoginCommand.class);
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UsersRolesService usersRolesService;
+
     private static final String USER_ID_SESSION_PARAMETER_NAME = "userId";
 
     private final String EMAIL_REQUEST_PARAMETER_NAME = "email";
     private final String PASSWORD_REQUEST_PARAMETER_NAME = "password";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
-
-    private final UserService userService;
-    private final UsersRolesService usersRolesService;
-
-    public LoginCommand() {
-        userService = ApplicationContext.getObject(UserService.class);
-        usersRolesService = ApplicationContext.getObject(UsersRolesService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

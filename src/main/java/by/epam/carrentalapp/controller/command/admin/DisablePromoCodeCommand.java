@@ -5,6 +5,7 @@ import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.controller.command.security.AccessManager;
 import by.epam.carrentalapp.controller.command.security.RoleName;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.PromoCodeService;
 import by.epam.carrentalapp.service.ServiceException;
 import org.apache.log4j.Logger;
@@ -19,14 +20,11 @@ import java.util.List;
 public class DisablePromoCodeCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(DisablePromoCodeCommand.class);
 
+    @Autowired
+    private PromoCodeService promoCodeService;
+
     private final String SELECTED_PROMO_CODES_REQUEST_PARAMETER_NAME = "selected_promo_codes";
     private final String EXCEPTION_MESSAGE_REQUEST_PARAMETER_NAME = "exception_message";
-
-    private final PromoCodeService promoCodeService;
-
-    public DisablePromoCodeCommand() {
-        promoCodeService = ApplicationContext.getObject(PromoCodeService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

@@ -5,6 +5,7 @@ import by.epam.carrentalapp.controller.command.Command;
 import by.epam.carrentalapp.controller.command.CommandTitle;
 import by.epam.carrentalapp.controller.command.Router;
 import by.epam.carrentalapp.ioc.ApplicationContext;
+import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.CarService;
 import by.epam.carrentalapp.service.PaginationService;
 import by.epam.carrentalapp.service.ServiceException;
@@ -19,8 +20,10 @@ import java.util.List;
 public class CarCatalogCommand implements Command {
     private final Logger LOGGER = Logger.getLogger(CarCatalogCommand.class);
 
-    private final CarService carService;
-    private final PaginationService paginationService;
+    @Autowired
+    private CarService carService;
+    @Autowired
+    private PaginationService paginationService;
 
     private final String CURRENT_PAGE_REQUEST_PARAMETER_NAME = "currentPage";
     private final String LAST_PAGE_REQUEST_PARAMETER_NAME = "lastPage";
@@ -29,11 +32,6 @@ public class CarCatalogCommand implements Command {
     private final String COMMAND_REQUEST_PARAMETER_NAME = "command";
 
     private final int CARS_ON_PAGE_QUANTITY = 6;
-
-    public CarCatalogCommand() {
-        carService = ApplicationContext.getObject(CarService.class);
-        paginationService = ApplicationContext.getObject(PaginationService.class);
-    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
