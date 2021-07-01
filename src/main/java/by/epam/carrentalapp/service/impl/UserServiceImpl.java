@@ -12,6 +12,7 @@ import by.epam.carrentalapp.ioc.Autowired;
 import by.epam.carrentalapp.service.ServiceException;
 import by.epam.carrentalapp.service.UserService;
 import by.epam.carrentalapp.service.impl.password_encoder.BCryptPasswordEncoder;
+import by.epam.carrentalapp.service.impl.validator.Validator;
 import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 
@@ -54,6 +55,13 @@ public class UserServiceImpl implements UserService {
         try {
             if (userDao.findByEmail(email).isPresent()) {
                 throw new ServiceException("User with such email already exists");
+            }
+
+            if (!Validator.validateUser(new User(name, lastname, email, password))
+                    || !Validator.validateCustomerUserDetails(
+                            new CustomerUserDetails(passportNumber, INITIAL_CUSTOMER_RATE)
+            )) {
+                throw new ServiceException("Wrong register credentials");
             }
 
             customerUserDetailsDao.registerCustomer(
