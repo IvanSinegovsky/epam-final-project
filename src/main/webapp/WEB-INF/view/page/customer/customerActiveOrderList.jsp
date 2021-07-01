@@ -20,7 +20,7 @@
 <div class="container">
     <form method="POST" action="home">
         <div style="margin-top: 15px; margin-bottom: 15px">
-            <button type="submit" name="command" value="UNDO_ORDER_REQUEST" class="btn btn-outline-success">
+            <button type="submit" name="command" value="UNDO_ORDER_REQUEST" class="btn btn-outline-danger">
                 <c:out value="${undoButton}"/>
             </button>
         </div>
@@ -54,7 +54,7 @@
                 </tr>
             </c:forEach>
             </tbody
-        </div>>
+        </div>
         </table>
     </form>
 </div>

@@ -26,15 +26,15 @@
                     <img class="card-img-top" src="${all_cars.get(0).assetURL}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">${all_cars.get(0).model}</h5>
-                        <p class="card-text"><small class="text-muted">${all_cars.get(0).hourlyCost}</small></p>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(0).hourlyCost} BYN / hour</small></p>
                         <c:if test="${sessionScope.isCustomer == true}">
-                            <button type="button" class="btn btn-primary">
-                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(0).carId}"><c:out value="${makeAnOrderButton}"/></a>
-                            </button>
+                                <a class="btn btn-outline-success"
+                                   href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(0).carId}"
+                                   role="button"><c:out value="${makeAnOrderButton}"/></a>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
                             <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -48,14 +48,14 @@
                     <img class="card-img-top" src="${all_cars.get(1).assetURL}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">${all_cars.get(1).model}</h5>
-                        <p class="card-text"><small class="text-muted">${all_cars.get(1).hourlyCost}</small></p>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(1).hourlyCost} BYN / hour</small></p>
                         <c:if test="${sessionScope.isCustomer == true}">
-                            <button type="button" class="btn btn-primary">
-                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(1).carId}"><c:out value="${makeAnOrderButton}"/></a>
-                            </button>
+                            <a class="btn btn-outline-success"
+                               href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(1).carId}"
+                               role="button"><c:out value="${makeAnOrderButton}"/></a>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -69,15 +69,15 @@
                     <img class="card-img-top" src="${all_cars.get(2).assetURL}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">${all_cars.get(2).model}</h5>
-                        <p class="card-text"><small class="text-muted">${all_cars.get(2).hourlyCost}</small></p>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(2).hourlyCost} BYN / hour</small></p>
                         <c:if test="${sessionScope.isCustomer == true}">
-                            <button type="button" class="btn btn-primary">
-                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(2).carId}"><c:out value="${makeAnOrderButton}"/></a>
-                            </button>
+                            <a class="btn btn-outline-success"
+                               href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(2).carId}"
+                               role="button"><c:out value="${makeAnOrderButton}"/></a>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
                             <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -94,15 +94,15 @@
                     <img class="card-img-top" src="${all_cars.get(3).assetURL}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">${all_cars.get(3).model}</h5>
-                        <p class="card-text"><small class="text-muted">${all_cars.get(3).hourlyCost}</small></p>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(3).hourlyCost} BYN / hour</small></p>
                         <c:if test="${sessionScope.isCustomer == true}">
-                            <button type="button" class="btn btn-primary">
-                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(3).carId}"><c:out value="${makeAnOrderButton}"/></a>
-                            </button>
+                            <a class="btn btn-outline-success"
+                               href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(3).carId}"
+                               role="button"><c:out value="${makeAnOrderButton}"/></a>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
                             <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -116,15 +116,15 @@
                     <img class="card-img-top" src="${all_cars.get(4).assetURL}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">${all_cars.get(4).model}</h5>
-                        <p class="card-text"><small class="text-muted">${all_cars.get(4).hourlyCost}</small></p>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(4).hourlyCost} BYN / hour</small></p>
                         <c:if test="${sessionScope.isCustomer == true}">
-                            <button type="button" class="btn btn-primary">
-                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(4).carId}"><c:out value="${makeAnOrderButton}"/></a>
-                            </button>
+                            <a class="btn btn-outline-success"
+                               href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(4).carId}"
+                               role="button"><c:out value="${makeAnOrderButton}"/></a>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
                             <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>
@@ -138,15 +138,15 @@
                     <img class="card-img-top" src="${all_cars.get(5).assetURL}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">${all_cars.get(5).model}</h5>
-                        <p class="card-text"><small class="text-muted">${all_cars.get(5).hourlyCost}</small></p>
+                        <p class="card-text"><small class="text-muted">${all_cars.get(5).hourlyCost} BYN / hour</small></p>
                         <c:if test="${sessionScope.isCustomer == true}">
-                            <button type="button" class="btn btn-primary">
-                                <a href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(5).carId}"><c:out value="${makeAnOrderButton}"/></a>
-                            </button>
+                            <a class="btn btn-outline-success"
+                               href="home?command=CAR_OCCUPATION&car_id_to_check=${all_cars.get(5).carId}"
+                               role="button"><c:out value="${makeAnOrderButton}"/></a>
                         </c:if>
                         <c:if test="${sessionScope.isCustomer != true}">
                             <%@ include file="/WEB-INF/view/fragment/loginPopup.jspf"%>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">
                                 <c:out value="${makeAnOrderButton}"/>
                             </button>
                         </c:if>

@@ -24,7 +24,7 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPromoCodeModalModal">
             <c:out value="${addPromoCodeButton}"/>
         </button>
-        <button type="submit" name="command" value="DISABLE_PROMO_CODE" class="btn btn-outline-success">
+        <button type="submit" name="command" value="DISABLE_PROMO_CODE" class="btn btn-outline-danger">
             <c:out value="${disablePromoCodeButton}"/>
         </button>
         </div>

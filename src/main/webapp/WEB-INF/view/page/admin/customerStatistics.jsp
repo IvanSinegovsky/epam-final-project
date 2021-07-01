@@ -20,11 +20,17 @@
 
 <body>
 <jsp:useBean id="customer_statistics" scope="request" type="by.epam.carrentalapp.bean.dto.CustomerStatisticsDto"/>
-<a class="btn btn-primary"
-   href="home?command=ORDER_REQUEST_LIST"
-   role="button"><c:out value="${backToOrderRequestListButton}"/></a>
+
+
+<div style="margin-top: 15px; margin-bottom: 15px">
+    <a class="btn btn-primary"
+        href="home?command=ORDER_REQUEST_LIST"
+        role="button"><c:out value="${backToOrderRequestListButton}"/></a>
+</div>
+
 <h1><c:out value="${customerStatisticsSign}"/></h1>
-<div>
+
+<div style="margin-left: 20px">
     <h5><c:out value="${ridesQuantity}"/><c:out value="${customer_statistics.ridesQuantity}"/></h5>
     <h5><c:out value="${carAccidentsQuantity}"/><c:out value="${customer_statistics.carAccidentQuantity}"/></h5>
     <h5><c:out value="${undidOrderRequestsQuantity}"/><c:out value="${customer_statistics.undidOrderRequestQuantity}"/></h5>

@@ -24,7 +24,7 @@ public class RepairBillDaoImpl implements RepairBillDao {
 
     @Override
     public Optional<RepairBill> findByAcceptedOrderId(Long acceptedOrderId) {
-        Optional<RepairBill> repairBill;
+        Optional<RepairBill> repairBillOptional = Optional.empty();
 
         try(ProxyConnection connection = ConnectionPool.getInstance().getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -34,7 +34,11 @@ public class RepairBillDaoImpl implements RepairBillDao {
             preparedStatement.setLong(1, acceptedOrderId);
             ResultSet repairBillResultSet = preparedStatement.executeQuery();
 
-            repairBill = Optional.of(extractRepairBillsFromResultSet(repairBillResultSet));
+            RepairBill repairBill = extractRepairBillsFromResultSet(repairBillResultSet);
+
+            if (repairBill != null) {
+                repairBillOptional = Optional.of(repairBill);
+            }
         } catch (SQLException e) {
             LOGGER.error("RepairBillDaoImpl findAllByAcceptedOrderId(...): cannot extract repairBill from ResultSet");
             throw new DaoException(e);
@@ -43,7 +47,7 @@ public class RepairBillDaoImpl implements RepairBillDao {
             throw new DaoException(e);
         }
 
-        return repairBill;
+        return repairBillOptional;
     }
 
     @Override

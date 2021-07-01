@@ -26,7 +26,7 @@
         <button type="submit" name="command" value="COMPLETE_ACCEPTED_ORDER" class="btn btn-outline-success">
             <c:out value="${markAsCompleteButton}"/>
         </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#makeRepairBillModal">
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#makeRepairBillModal">
             <c:out value="${makeRepairBillButton}"/>
         </button>
         </div>

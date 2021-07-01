@@ -29,7 +29,7 @@
         <button type="submit" name="command" value="ACCEPT_ORDER" class="btn btn-outline-success">
             <c:out value="${acceptButton}"/>
         </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#rejectionReasonModal">
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#rejectionReasonModal">
             <c:out value="${rejectButton}"/>
         </button>
         </div>
@@ -91,7 +91,7 @@
                     <td><c:out value="${orderRequestInfo.expectedEndTime}"/></td>
                     <td><c:out value="${orderRequestInfo.totalCost}"/></td>
                     <td>
-                        <a class="btn btn-primary"
+                        <a class="btn btn-light"
                            href="home?command=CHECK_CUSTOMER_STATISTICS&order_request_id=${orderRequestInfo.orderRequestId}"
                            role="button"><c:out value="${checkButton}"/></a>
                     </td>
